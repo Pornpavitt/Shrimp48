@@ -1,0 +1,65 @@
+	1.Users
+		-user_ID
+		-user_FName
+		-user_LName
+		-user_Username
+		-user_Password
+		-user_Role
+	2.shrimp ponds
+		-pond_ID
+		-pond_number
+		-user_ID(FK)
+	3.shrimp pond details
+		-pondDetail_ID
+		-Shrimp_Quantity
+		-Shrimp_Weight
+		-pond_DissolvedOxygen
+		-pond_WaterHardness
+		-pond_pH
+		-pond_Temperature
+		-pond_TotalDays
+		-food_Quantity
+		-growth_Rate
+		-survival_Rate
+		-update_Date
+		-total_Date
+		-pond_ID(FK)
+		
+	4.shrimp species
+		-specie_ID
+		-specie_Name
+		-specie_Food
+		-specie_description
+		-user_ID(FK)
+	5.shrimp dseases
+		-disease_ID
+		-disease_Name
+		-disease_Symptom
+		-disease_Cause
+		-disease_Prevent
+		-disease_Treat
+		-user_ID(FK)
+	6.shrimp foods
+		-food_ID
+		-food_Name
+		-food_description
+		-user_ID(FK)
+	7.shrimp Prices
+		-price_ID
+		-price_specie
+		-price
+		-update_date
+		-user_ID(FK)ง
+    created_at = models.DateTimeField(default=datetime.datetime.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    delete_at = models.DateTimeField(null=True, blank=True, default=None)
+
+    def __str__(self) -> str:
+        return self.name
+    
+    def delete(self, *args, **kwargs):
+        self.delete_at = datetime.datetime.now()
+        self.save()
+
+    def hard_delete(self, *args, **kwargs):
+        super(ShrimpSpecies, self).delete(*args, **kwargs)

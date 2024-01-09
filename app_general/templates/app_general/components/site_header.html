@@ -1,0 +1,17 @@
+<header style="background-color: lightgray;">
+    <a href="{% url 'home' %}">Shrimp48</a>
+    <a  href="">หน้าแรก</a>
+    <a  href="{% url 'shrimptypes' %}">พันธ์กุ้ง</a>
+    <a  href="">โรคกุ้ง</a>
+    <a  href="">อาหารกุ้ง</a>
+    <a  href="{% url 'howtouse' %}">วิธีการใช้งาน</a>
+    <a  href="">บริการของเรา</a>
+    <a  href="">คำถามที่พบบ่อย</a>
+    {% if user.is_authenticated %}
+        <span>{{user.username}}</span>
+        <a  href="{% url 'logout' %}">ออกจากระบบ</a>
+    {% else %}
+        <a  href="{% url 'login' %}">เข้าสู่ระบบ</a>
+        <a  href="{% url 'register' %}">สมัครสมาชิก</a>
+    {%endif%}
+</header>
