@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('app_general.urls')),
     path('shrimptypes/', include('app_shrimp_type.urls')),
     path('admin/', admin.site.urls),
+    path('users/',include('app_users.urls'))
 ]

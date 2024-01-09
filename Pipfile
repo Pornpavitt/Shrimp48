@@ -6,8 +6,10 @@ name = "pypi"
 [packages]
 django = "*"
 pandas = "*"
+django-jazzmin = "*"
 
 [dev-packages]
+bpython = "*"
 
 [requires]
 python_version = "3.11"

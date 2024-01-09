@@ -1,0 +1,38 @@
+{% extends 'app_general/components/base.html' %}
+
+{% block title %}
+    สมัครสมาชิค
+{% endblock %}
+
+{% block content %}
+<div class=''>
+    <h3>สมัครสมาชิค</h3>
+    <form action = "{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div class = "form-field">
+            {{form.username.label_tag}}
+            {{form.username}}
+            {{form.username.errors}}
+        </div>
+        <div class = "form-field">
+            {{form.email.label_tag}}
+            {{form.email}}
+            {{form.email.errors}}
+        </div>
+        <div class = "form-field">
+            {{form.password1.label_tag}}
+            {{form.password1}}
+            {{form.password1.errors}}
+        </div>
+        <div class = "form-field">
+            {{form.password2.label_tag}}
+            {{form.password2}}
+            {{form.password2.errors}}
+        </div>
+        
+        <p>
+            <button type = 'submit'>สมัครสมาชิค</button>
+        </p>
+    </form>
+</div>
+{% endblock %}

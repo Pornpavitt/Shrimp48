@@ -1,38 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShrimpType</title>
-</head>
-<body>
-    <header style="background-color: lightgray;">
-        <a href="">Shrimp48</a>
-        <a  href="">หน้าแรก</a>
-        <a  href="">พันธ์กุ้ง</a>
-        <a  href="">โรคกุ้ง</a>
-        <a  href="">อาหารกุ้ง</a>
-        <a  href="">วิธีการใช้งาน</a>
-        <a  href="">บริการของเรา</a>
-        <a  href="">คำถามที่พบบ่อย</a>
-    </header>
-    <div>
-        <h3>พันธ์กุ้ง มีทั้งหมด :{{shrimp_id}}</h3>
-    </div>
-    <div>
-        <a href="">{{df}}</a>
-        <h1>ข้อมูลพันธ์กุ้ง</h1>
-    </div>
-    <footer style="background-color: lightgray;">
-        <p>
-            <a href="">วิธีการใช้งาน</a>
-            <a href="">เกี่ยวกับเรา</a>
-            <a href="">บริการ</a>
-            <a href="">คำถามที่พบบ่อย</a>
-            <a href="">ติดต่อเรา</a>
-        </p>
+{% extends 'app_general/components/base.html' %}
 
-        <p>Copyright © 2023 IT48 All rights reserved.</p>
-    </footer>
-</body>
-</html>
+{% block title %}
+    พันธ์กุ้ง
+{% endblock %}
+
+{% block content %}
+
+<div>
+    <a href="">{{df}}</a>
+    <h1>ข้อมูลพันธ์กุ้ง</h1>
+    {% for shrimptype in shrimptypes %}
+        <h3><a href="{% url 'shrimp' shrimptype.id %}">{{ shrimptype.title }}</a></h3>
+        <p name = 'description'></p>
+        <p>{{ shrimptype.Price|floatformat:'g' }} บาท/KG</p>
+        {% if shrimptype.is_pop %}
+            <p>*** ยอดนิยมในตลาด</p>
+        {% endif %}
+        <p>ยอดนิยมถึงวันที่ {{shrimptype.pop_end_at|date:'j N Y'}}</p>
+    {% empty %}
+        <p>ไม่มีข้อมูลในตอนนี้</p>
+    {% endfor %}
+</div>
+{{dbShrimp}}
+{% endblock %}
