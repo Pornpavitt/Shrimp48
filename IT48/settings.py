@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +41,10 @@ INSTALLED_APPS = [
     'app_shrimp_type.apps.AppShrimpTypeConfig',
     'app_users.apps.AppUsersConfig',
     'app_model.apps.AppModelConfig',
+    'tailwind',
+    'theme',
+    'customadmin',
+    "django_icons",
 ]
 
 MIDDLEWARE = [
@@ -140,8 +143,17 @@ JAZZMIN_SETTINGS = {
 }
     
 
+#Tailwind
+TAILWIND_APP_NAME = 'theme'
+
 
 #Auth
-
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
+
+DJANGO_ICONS = {
+    "ICONS": {
+        "edit": {"name": "far fa-pencil"},
+    },
+}
+

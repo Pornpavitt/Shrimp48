@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="bg-gray-200 p-4">
+        <a href="{% url 'dashboard' %}" class="text-lg font-semibold">Shrimp48</a>
+        <a href="{% url 'dashboard' %}" class="ml-4">หน้าแรก</a>
+        <a href="{% url 'logout' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md" >Logout</a>
+    </header>
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white border-r border-gray-200">
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold">Admin Dashboard</h2>
+            </div>
+            <nav class="mt-4">
+                <ul>
+                    <li class="px-4 py-2 hover:bg-gray-200">
+                        <a href="#" class="block text-gray-800">Dashboard</a>
+                    </li>
+                    <li class="px-4 py-2 hover:bg-gray-200">
+                        <a href="{% url 'user' %}" class="block text-gray-800">Users</a>
+                    </li>
+                    <li class="px-4 py-2 hover:bg-gray-200">
+                        <a href="#" class="block text-gray-800">Settings</a>
+                    </li>
+                    <!-- Add more sidebar items as needed -->
+                </ul>
+            </nav>
+        </div>
+        <!-- Content area -->
+        {% block content%} {% endblock %}
+        </div>
+    </div>
+    
+</body>
+</html>
