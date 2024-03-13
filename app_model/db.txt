@@ -5,6 +5,7 @@
 		-user_Username
 		-user_Password
 		-user_Role
+		-user_Image
 	2.shrimp ponds
 		-pond_ID
 		-pond_number

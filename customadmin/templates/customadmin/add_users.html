@@ -1,0 +1,44 @@
+{% extends 'customadmin/components/site_header.html' %}
+
+{% block title %} Add Users{% endblock %}
+
+{% block content %}
+
+<h1 class="text-3xl font-bold mb-6 text-blue-500">Add New User</h1>
+<form method="post" class="space-y-6">
+    {% csrf_token %}
+    <div class="mb-6">
+        <label for="is_superuser" class="block text-gray-700">SuperUser</label>
+        <input type="number" name="is_superuser" id="is_superuser"
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+    <div class="mb-6">
+        <label for="username" class="block text-gray-700">Username</label>
+        <input type="text" name="username" id="username" required
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+    <div class="mb-6">
+        <label for="password" class="block text-gray-700">Password</label>
+        <input type="password" name="password" id="password"
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+    <div class="mb-6">
+        <label for="first_name" class="block text-gray-700">First Name</label>
+        <input type="text" name="first_name" id="first_name"
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+    <div class="mb-6">
+        <label for="last_name" class="block text-gray-700">Last Name</label>
+        <input type="text" name="last_name" id="last_name"
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+    <div class="mb-6">
+        <label for="email" class="block text-gray-700">E-Mail</label>
+        <input type="email" name="email" id="email"
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Create</button>
+</form>
+
+
+{% endblock %}

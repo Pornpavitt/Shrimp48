@@ -1,0 +1,19 @@
+{% extends 'customadmin/components/site_header.html' %}
+
+{% block title %} Add Users{% endblock %}
+
+{% block content %}
+<h1>Edit User</h1>
+<form method="post">
+    {% csrf_token %}
+    <div>
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ users.first_name }}">
+    </div>
+    <div>
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ users.last_name }}">
+    </div>
+    <button type="submit">Save Changes</button>
+</form>
+{% endblock %}

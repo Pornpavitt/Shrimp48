@@ -1,0 +1,28 @@
+{% extends 'customadmin/components/site_header.html' %}
+
+{% block title %} Add Users{% endblock %}
+
+{% block content %}
+<div class="flex-1 p-4">
+    <div class="container mx-auto mt-8 px-4">
+        <h1 class="text-2xl font-semibold mb-4">Add User</h1>
+        <a href="{% url 'add_users' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md">Add User</a>
+        <ul>
+        </ul>
+        <h1 class="text-2xl font-semibold mt-8 mb-4">Shrimp Species</h1>
+        <a href="{% url 'create_shrimp_species' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md">Add Shrimp Species</a>
+        <ul>
+            {% for species in shrimp_species %}
+                <li>{{ species.name }} - <a href="{% url 'edit_shrimp_species' species.id %}">Edit</a> | <a href="{% url 'delete_shrimp_species' species.id %}">Delete</a></li>
+            {% endfor %}
+        </ul>
+
+        <h1 class="text-2xl font-semibold mt-8 mb-4">Shrimp Foods</h1>
+        <ul>
+            {% for food in shrimp_foods %}
+                <li>{{ food.name }} - <a href="{% url 'edit_shrimp_food' food.id %}">Edit</a> | <a href="{% url 'delete_shrimp_food' food.id %}">Delete</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
