@@ -7,13 +7,19 @@
 <form method="post">
     {% csrf_token %}
     <div>
-        <label for="first_name">First Name:</label>
+        <label>First Name:</label>
         <input type="text" id="first_name" name="first_name" value="{{ users.first_name }}">
     </div>
     <div>
-        <label for="last_name">Last Name:</label>
+        <label>Last Name:</label>
         <input type="text" id="last_name" name="last_name" value="{{ users.last_name }}">
     </div>
-    <button type="submit">Save Changes</button>
+    <div>
+        <label>Image:</label>
+            <input type="file" name="image" value="{{users.image}}">
+    </div>
+    <div>
+        <button type="submit">Save Changes</button>
+    </div>
 </form>
 {% endblock %}

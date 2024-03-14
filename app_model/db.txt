@@ -50,7 +50,7 @@
 		-price_specie
 		-price
 		-update_date
-		-user_ID(FK)ง
+		-user_ID(FK)
     created_at = models.DateTimeField(default=datetime.datetime.now)
     updated_at = models.DateTimeField(auto_now=True)
     delete_at = models.DateTimeField(null=True, blank=True, default=None)

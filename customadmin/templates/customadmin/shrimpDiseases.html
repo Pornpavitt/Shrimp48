@@ -1,0 +1,53 @@
+{% extends 'customadmin/components/site_header.html' %}
+
+{% block title %} Add Diseases {% endblock %}
+
+{% block content %}
+<div class="mb-4 w-full">
+    <div class="flex justify-between items-center mb-4">
+        <input type="text" id="searchInput" placeholder="Search..." class="px-4 py-2 border rounded-md w-1/2">
+        <a href="{% url 'add_shrimpdisease' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add New Disease</a>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Symptom</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prevention</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Treatment</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cause</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delete</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+                {% for disease in diseases %}
+                <tr>
+                    <td class="px-6 py-4">{{ disease.disease_name }}</td>
+                    <td class="px-6 py-4">{{ disease.disease_symptom }}</td>
+                    <td class="px-6 py-4">{{ disease.disease_prevent }}</td>
+                    <td class="px-6 py-4">{{ disease.disease_treat }}</td>
+                    <td class="px-6 py-4">{{ disease.disease_cause }}</td>
+                    <td class="px-6 py-4">
+                        {% if disease.disease_image %}
+                        <img src="{{ disease.disease_image.url }}" alt="">
+                        {% else %}
+                        <span>Not Showing</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4">
+                        <button class="text-blue-500 hover:text-blue-700"><a href="{% url 'edit_shrimpDisease' disease.id %}">Edit</a></button>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button class="text-red-500 hover:text-red-700 ml-2"><a href="{% url 'delete_shrimpDisease' disease.id %}">Delete</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

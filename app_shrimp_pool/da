@@ -1,0 +1,8 @@
+{% for users in user %}
+    {{user.name}}
+        { % for pools in pool % }
+            {{pools.pond_name}}
+        {% endfor %}
+        <div class="max-w-md mx-auto bg-white shadow-md rounded p-6">
+            <a href="{% url 'add_shrimp_pool' user.id %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">เพิ่มบ่อกุ้ง</a>
+        </div>

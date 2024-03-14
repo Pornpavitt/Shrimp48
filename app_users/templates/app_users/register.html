@@ -5,44 +5,32 @@
 {% endblock %}
 
 {% block content %}
-<div class=''>
-    <h3>สมัครสมาชิค</h3>
-    <form action = "{% url 'register' %}" method="post">
+<div class='max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6'>
+    <h3 class="text-2xl font-semibold mb-4">สมัครสมาชิค</h3>
+    <form action="{% url 'register' %}" method="post" class="space-y-4">
         {% csrf_token %}
-        <div class = "form-field">
-            {{form.username.label_tag}}
-            {{form.username}}
-            {{form.username.errors}}
+        <div class="flex flex-col">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.username.errors }}
         </div>
-        <div class = "form-field">
-            {{form.email.label_tag}}
-            {{form.email}}
-            {{form.email.errors}}
+        <div class="flex flex-col">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
         </div>
-        {% comment %} <div class = "form-field">
-            {{form.first_name.label_tag}}
-            {{form.first_name}}
-            {{form.first_name.errors}}
+        <div class="flex flex-col">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            {{ form.password1.errors }}
         </div>
-        <div class = "form-field">
-            {{form.last_name.label_tag}}
-            {{form.last_name}}
-            {{form.last_name.errors}}
-        </div> {% endcomment %}
-        <div class = "form-field">
-            {{form.password1.label_tag}}
-            {{form.password1}}
-            {{form.password1.errors}}
-        </div>
-        <div class = "form-field">
-            {{form.password2.label_tag}}
-            {{form.password2}}
-            {{form.password2.errors}}
+        <div class="flex flex-col">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            {{ form.password2.errors }}
         </div>
         
-        <p>
-            <button type = 'submit'>สมัครสมาชิค</button>
-        </p>
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">สมัครสมาชิค</button>
     </form>
 </div>
 {% endblock %}

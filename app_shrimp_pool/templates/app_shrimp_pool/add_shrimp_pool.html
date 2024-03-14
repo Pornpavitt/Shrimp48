@@ -1,0 +1,14 @@
+{% extends 'app_general/components/base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form method="post" action="" class="space-y-4">
+        {% csrf_token %}
+        <div>
+            <label for="pond_name" class="block text-gray-700 font-bold mb-2">Pond Name</label>
+            <input type="text" class="form-input w-full" id="pond_name" name="pond_name" required>
+        </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create</button>
+    </form>
+</div>
+{% endblock %}

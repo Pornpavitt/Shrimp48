@@ -1,15 +1,9 @@
-from django.db import models
+from django.db import models , migrations
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
-import datetime
-import os
 
-def filepath(request, filename):
-    old_filename = filename
-    timeNow = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    filename = f"{timeNow}{old_filename}"
-    return os.path.join('uploads/', filename)
+
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -22,48 +16,47 @@ class BaseModel(models.Model):
 
 
 class ShrimpPonds(BaseModel):
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    pond_number = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    pond_name = models.TextField(max_length=255 , null = True)
 
 class ShrimpPondsDetail(BaseModel):
-    pondID = models.ForeignKey(ShrimpPonds, on_delete=models.CASCADE)
-    shrimp_Quantity = models.IntegerField()
-    Shrimp_Weight = models.IntegerField()
-    pond_DissolvedOxygen = models.FloatField(max_length=100)
-    pond_WaterHardness = models.FloatField(max_length=100)
+    pond = models.ForeignKey(ShrimpPonds, on_delete=models.CASCADE)
+    shrimp_quantity = models.IntegerField()
+    shrimp_weight = models.IntegerField()
+    pond_dissolvedOxygen = models.FloatField(max_length=100)
+    pond_waterHardness = models.FloatField(max_length=100)
     pond_pH = models.FloatField(max_length=100)
-    pond_Temperature = models.FloatField(max_length=100)
-    pond_TotalDays = models.IntegerField()
-    food_Quantity = models.FloatField(max_length=100)
-    growth_Rate = models.FloatField(max_length=100)
-    survival_Rate = models.FloatField(max_length=100)
-    total_Date = models.IntegerField()
+    pond_temperature = models.FloatField(max_length=100)
+    pond_totalDays = models.IntegerField()
+    food_quantity = models.FloatField(max_length=100)
+    growth_rate = models.FloatField(max_length=100)
+    survival_rate = models.FloatField(max_length=100)
+    total_date = models.IntegerField()
 
 class ShrimpFoods(BaseModel):
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    food_Name = models.TextField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    food_name = models.TextField(max_length=255)
     food_description = models.TextField(max_length=255)
     food_image = models.ImageField(upload_to='shrimp_foods_images', blank=True, null=True)
 
 
 class ShrimpSpecies(BaseModel):
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    FoodID = models.ForeignKey(ShrimpFoods, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.TextField(max_length=255)
+    specie_food = models.TextField(max_length=255)
     description = models.TextField(max_length=255)
     image = models.ImageField(upload_to='shrimp_species_images', blank=True, null=True)
 
 
 class ShrimpDiseases(BaseModel):
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    disease_Name = models.TextField(max_length=255)
-    disease_Symptom = models.TextField(max_length=255)
-    disease_Cause = models.TextField(max_length=255)
-    disease_Prevent = models.TextField(max_length=255)
-    disease_Treat = models.TextField(max_length=255)
-    disease_Image = models.ImageField(upload_to='shrimp_diseases_images', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    disease_name = models.TextField(max_length=255)
+    disease_symptom = models.TextField(max_length=255)
+    disease_cause = models.TextField(max_length=255)
+    disease_prevent = models.TextField(max_length=255)
+    disease_treat = models.TextField(max_length=255)
+    disease_image = models.ImageField(upload_to='shrimp_diseases_images', blank=True, null=True)
 
 class ShrimpPrices(BaseModel):
-    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
-    ShrimpSpeciesID = models.ForeignKey(ShrimpSpecies, on_delete=models.CASCADE)
+    price_specie = models.TextField(max_length=255, null = True)
     price = models.IntegerField()
