@@ -1,0 +1,27 @@
+{% extends 'app_general/components/base.html' %}
+
+{%block title%} บ่อกุ้ง {%endblock%}
+{% block content %}
+
+
+<div class="max-w-md mx-auto bg-white shadow-md rounded p-6">
+    <a href="{% url 'add_shrimp_pool' user.id %}"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">เพิ่มบ่อกุ้ง</a>
+</div>
+
+<div class="max-w-md mx-auto">
+    <div class="bg-white shadow-md rounded p-4 mb-4">
+        <p class="font-semibold mb-2">User: {{ user.username }}</p>
+        <ul class="ml-6">
+            {% for pools in pool %}
+                {% if pools.user_id == user.id %}
+                    <li>บ่อกุ้งชื่อ : {{ pools.pond_name }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+
+{% endblock %}

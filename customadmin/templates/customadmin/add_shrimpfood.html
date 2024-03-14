@@ -1,6 +1,29 @@
 {% extends 'customadmin/components/site_header.html' %}
 
-{% block title %} Add Users{% endblock %}
+{% block title %} Add Foods{% endblock %}
 
 {% block content %}
+<h1 class="text-3xl font-bold mb-6 text-blue-500">Add New Foods</h1>
+<form method="post" class="space-y-6"enctype="multipart/form-data" >
+    {% csrf_token %}
+    <input type="hidden" name="userid" value="{{ request.user.id }}">
+    <div class="mb-6">
+        <label class="block text-gray-700">Name</label>
+        <input type="text" name="food_name" 
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+    <div class="mb-6">
+        <label class="block text-gray-700">Description</label>
+        <input type="text" name="food_description" 
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+    <div class="mb-6">
+        <label class="block text-gray-700">image</label>
+        <input type="file" name="food_image"
+            class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+    </div>
+
+    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Create</button>
+</form>
+
 {% endblock %}

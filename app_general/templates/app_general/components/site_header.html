@@ -1,17 +1,26 @@
-<header style="background-color: lightgray;">
-    <a href="{% url 'home' %}">Shrimp48</a>
-    <a  href="">หน้าแรก</a>
-    <a  href="{% url 'shrimptypes' %}">พันธ์กุ้ง</a>
-    <a  href="">โรคกุ้ง</a>
-    <a  href="">อาหารกุ้ง</a>
-    <a  href="{% url 'howtouse' %}">วิธีการใช้งาน</a>
-    <a  href="">บริการของเรา</a>
-    <a  href="">คำถามที่พบบ่อย</a>
-    {% if user.is_authenticated %}
-        <span>{{user.username}}</span>
-        <a  href="{% url 'logout' %}">ออกจากระบบ</a>
-    {% else %}
-        <a  href="{% url 'login' %}">เข้าสู่ระบบ</a>
-        <a  href="{% url 'register' %}">สมัครสมาชิก</a>
-    {%endif%}
+<header class="bg-blue-500 p-4 rounded-b-xl">
+    <div class="flex justify-center">
+        <div class="flex items-center space-x-4">
+            <a href="{% url 'home' %}" class="text-white font-bold">Shrimp48</a>
+            <a href="{% url 'home' %}" class="text-white mx-2">หน้าแรก</a>
+            <a href="" class="text-white mx-2">พันธ์กุ้ง</a>
+            <a href="" class="text-white mx-2">โรคกุ้ง</a>
+            <a href="" class="text-white mx-2">อาหารกุ้ง</a>
+            <a href="{% url 'howtouse' %}" class="text-white mx-2">วิธีการใช้งาน</a>
+            <a href="" class="text-white mx-2">บริการของเรา</a>
+            <a href="" class="text-white mx-2">คำถามที่พบบ่อย</a>
+        </div>
+        <div class="flex items-center">
+            {% if user.is_authenticated %}
+                <button class="bg-white py-2 px-4 border rounded-full ml-4" >{{user.username}}</button>
+                <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border rounded-full">
+                    <a href="{% url 'logout' %}" class="">ออกจากระบบ</a>
+                </button>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-white hover:text-black ml-4">เข้าสู่ระบบ</a>
+                <a href="{% url 'register' %}" class="text-white hover:text-black ml-4">สมัครสมาชิก</a>
+            {% endif %}
+        </div>
+    </div>
+    
 </header>

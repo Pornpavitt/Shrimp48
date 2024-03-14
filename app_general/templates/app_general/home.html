@@ -1,8 +1,13 @@
 {% extends 'app_general/components/base.html' %}
 
 {% block content %}
-
-<div>
-    <h1>Welcome,{{user_name}} to Shrimp48</h1>
+<div class="max-w-md mx-auto mt-8">
+    <h1 class="text-3xl font-bold mb-4">Welcome, {{ user.username }} to Shrimp48</h1>
+    <div class="bg-white shadow-md rounded-lg p-4">
+        <p class="text-lg font-semibold">User Name: {{ user.username }}</p>
+    </div>
+    <div class="mt-4">
+        <a href="{% url 'shrimpool_dashbord' user.id %}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">เพิ่มบ่อกุ้ง</a>
+    </div>
 </div>
 {% endblock %}
