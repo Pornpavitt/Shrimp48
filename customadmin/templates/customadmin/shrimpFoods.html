@@ -36,7 +36,7 @@
                     </td>
                     {% endif %}
                     <td class="px-6 py-4 whitespace-nowrap"><button class="text-blue-500 hover:text-blue-700"><a href="{% url 'edit_shrimpFood' food.id %}" >Edit</a></button></td>
-                    <td class="px-6 py-4 whitespace-nowrap"><button class="text-red-500 hover:text-red-700 ml-2" ><a href="{% url 'delete_shrimpFoods' food.id %}" >Delete</a></button></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><button class="text-red-500 hover:text-red-700 ml-2 delete-btn" ><a href="{% url 'delete_shrimpFoods' food.id %}" >Delete</a></button></td>
                 </tr>
         {% endfor %}
         </tbody>

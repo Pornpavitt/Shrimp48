@@ -1,36 +1,42 @@
 {% extends 'app_general/components/base.html' %}
 
 {% block title %}
-    สมัครสมาชิค
+สมัครสมาชิค
 {% endblock %}
 
 {% block content %}
-<div class='max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6'>
-    <h3 class="text-2xl font-semibold mb-4">สมัครสมาชิค</h3>
-    <form action="{% url 'register' %}" method="post" class="space-y-4">
-        {% csrf_token %}
-        <div class="flex flex-col">
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {{ form.username.errors }}
-        </div>
-        <div class="flex flex-col">
-            {{ form.email.label_tag }}
-            {{ form.email }}
-            {{ form.email.errors }}
-        </div>
-        <div class="flex flex-col">
-            {{ form.password1.label_tag }}
-            {{ form.password1 }}
-            {{ form.password1.errors }}
-        </div>
-        <div class="flex flex-col">
-            {{ form.password2.label_tag }}
-            {{ form.password2 }}
-            {{ form.password2.errors }}
-        </div>
-        
-        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">สมัครสมาชิค</button>
-    </form>
+<div class="bg-scroll h-screen" style="background-image: url(https://previews.123rf.com/images/epine/epine1607/epine160700098/60100800-shrimp-vector-drawing-seamless-seafood-pattern-shrimp-food-background-great-for-seafood-restaurant.jpg)">
+    <br>
+    <br>
+    <br>
+    <div class='max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6 border-blue-500 border-2'>
+        <h3 class="text-2xl font-semibold mb-4">สมัครสมาชิก</h3>
+        <form action="{% url 'register' %}" method="post" class="space-y-4">
+            {% csrf_token %}
+            <div class="flex flex-col">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="flex flex-col">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+            <div class="flex flex-col">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+            <div class="flex flex-col">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+
+            <button type="submit"
+                class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">สมัครสมาชิก</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'app_general/components/base.html' %}
+
+{% block title %}
+    โรคกุ้ง
+{% endblock %}
+
+{% block content %}
+    {% for diseases in disease %}
+        <p>{{ diseases.disease_name }}</p>
+        <p>{{ diseases.disease_symptom }}</p>
+        <p>{{ diseases.disease_cause }}</p>
+        <p>{{ diseases.disease_prevent }}</p>
+        <p>{{ diseases.disease_treat }}</p>
+        <img src="{{ diseases.disease_image.url }}" alt="" class="w-50"><p>{{ diseases.disease_image }}</p>
+    {% endfor %}
+{% endblock %}

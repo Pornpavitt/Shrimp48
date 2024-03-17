@@ -1,0 +1,17 @@
+{% extends 'app_general/components/base.html' %}
+
+{% block title %}
+    อาหารกุ้ง
+{% endblock %}
+
+{% block content %}
+    {% for foods in food %}
+        <p>{{ foods.food_name }}</p>
+        <p>{{ foods.food_description }}</p>
+        {% if foods.food_image %}
+        <img src="{{ foods.food_image.url }}" alt="" class="w-20"><p></p>
+        {% else %}
+        <span>Not Showing</span>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

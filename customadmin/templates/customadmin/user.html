@@ -40,7 +40,7 @@
                     <td class="px-6 py-4 whitespace-nowrap w-60"><span>No image available</span></td>
                     {% endif %}
                     <td class="px-6 py-4 whitespace-nowrap"><button class="text-blue-500 hover:text-blue-700"><a href="{% url 'edit_user' user.id %}" >Edit</a></button></td>
-                    <td class="px-6 py-4 whitespace-nowrap"><button class="text-red-500 hover:text-red-700 ml-2" ><a href="{% url 'delete_user' user.id %}" >Delete</a></button></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><button class="text-red-500 hover:text-red-700 ml-2 delete-btn " ><a href="{% url 'delete_user' user.id %}" >Delete</a></button></td>
                 </tr>
             {% endif %}
         {% endfor %}
@@ -48,16 +48,4 @@
     </table>
 </div>
 
-<!-- JavaScript for the confirmation popup -->
-<script>
-    function confirmDelete(userId) {
-        if (confirm("Are you sure you want to delete this user?")) {
-            // If user confirms deletion, redirect to delete URL
-            window.location.href = "{% url 'delete_user' user.id %}?user_id=" + userId;
-        } else {
-            // If user cancels deletion, do nothing
-            return false;
-        }
-    }
-</script>
 {% endblock %}

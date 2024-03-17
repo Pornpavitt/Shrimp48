@@ -1,16 +1,23 @@
 {% extends 'app_general/components/base.html' %}
 
+{% block title %} ราคากุ้ง {% endblock %}
+
 {% block content %}
 
-    <h1 class="text-2xl font-bold mb-4">{{ product_name }} Prices</h1>
-    <ul class="space-y-4">
-        {% for datas in data.price_list %}
-            <li class="bg-white shadow-md rounded-md p-4">
-                <p><strong class="text-gray-700">Date:</strong> {{ datas.date }}</p>
-                <p><strong class="text-gray-700">Minimum Price:</strong> {{ datas.price_min }}</p>
-                <p><strong class="text-gray-700">Maximum Price:</strong> {{ datas.price_max }}</p>
-            </li>
-        {% endfor %}
-    </ul>
+<form action="{% url 'price_view' %}" method="GET">
+    <label for="calendar">Select Date:</label>
+    <input type="date" id="calendar" name="calendar" value="{{ selected_date }}">
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+    <h2>Shrimp Price</h2>
+        
+        {% if data %}
+            <p>Price for {{ data.date }}:</p>
+            <p>{{ data.price }}</p>
+        {% else %}
+            <p>No data available for the selected date.</p>
+        {% endif %}
 
+        <a href="{% url 'price_view' %}">Back to form</a>
 {% endblock %}
