@@ -5,13 +5,18 @@
 {% endblock %}
 
 {% block content %}
+<div class="grid grid-cols-3 gap-x-16 gap-y-4 ml-44 mt-5 mb-5 mr-44">
+    <div>01</div>
+    <div>02</div>
+    <div>03</div>
     {% for foods in food %}
-        <p>{{ foods.food_name }}</p>
-        <p>{{ foods.food_description }}</p>
+        <p class="text-3xl">{{ foods.food_name }}</p>
+        <p class="text-xl">{{ foods.food_description }}</p>
         {% if foods.food_image %}
-        <img src="{{ foods.food_image.url }}" alt="" class="w-20"><p></p>
+        <img src="{{ foods.food_image.url }}" alt="" class="w-20 ml-36">
         {% else %}
         <span>Not Showing</span>
         {% endif %}
     {% endfor %}
+</div>
 {% endblock %}

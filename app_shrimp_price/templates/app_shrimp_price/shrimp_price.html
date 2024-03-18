@@ -4,20 +4,23 @@
 
 {% block content %}
 
-<form action="{% url 'price_view' %}" method="GET">
-    <label for="calendar">Select Date:</label>
-    <input type="date" id="calendar" name="calendar" value="{{ selected_date }}">
-    <br><br>
-    <input type="submit" value="Submit">
-</form>
-    <h2>Shrimp Price</h2>
-        
-        {% if data %}
-            <p>Price for {{ data.date }}:</p>
-            <p>{{ data.price }}</p>
-        {% else %}
-            <p>No data available for the selected date.</p>
-        {% endif %}
-
-        <a href="{% url 'price_view' %}">Back to form</a>
+<h2>Select Date for Shrimp Price</h2>
+    
+    <form action="{% url 'shrimpprice' %}" method="GET">
+        <label for="calendar">Select Date:</label>
+        <input type="date" id="calendar" name="calendar">
+        <input type="submit" value="Show Price">
+    </form>
+    
+    {% if data.price_list %}
+        {% for entry in data.price_list %}
+            <h3>Shrimp Price for {{ entry.date }}</h3>
+            <p>Date: {{ entry.date }}</p>
+            <p>Minimum Price: {{ entry.price_min }}</p>
+            <p>Maximum Price: {{ entry.price_max }}</p>
+        {% endfor %}
+    {% else %}
+        <p>No shrimp price data available.</p>
+    {% endif %}
+    
 {% endblock %}

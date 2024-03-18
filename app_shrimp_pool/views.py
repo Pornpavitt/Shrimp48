@@ -25,3 +25,4 @@ def create_shrimppool(request ,user_id):
     
     elif request.method == 'GET':
         return render(request, 'app_shrimp_pool/add_shrimp_pool.html') 
+    

@@ -59,4 +59,6 @@ class ShrimpDiseases(BaseModel):
 
 class ShrimpPrices(BaseModel):
     price_specie = models.TextField(max_length=255, null = True)
-    price = models.IntegerField()
+    price_min = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    price_max = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    date = models.DateTimeField(null=True)

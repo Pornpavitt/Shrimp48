@@ -5,13 +5,16 @@
 {% endblock %}
 
 {% block content %}
+<div class="grid grid-cols-4 gap-x-8 gap-y-4 ml-20 mt-5 mb-5">
     {% for speciess in species %}
-        <p>{{ speciess.food_name }}</p>
-        <p>{{ speciess.food_description }}</p>
+        <p class="text-3xl">{{ speciess.name }}</p>
+        <p>{{ speciess.description }}</p>
+        <p>{{ speciess.specie_food }}</p>
         {% if speciess.image %}
-        <img src="{{ speciess.image.url }}" alt="" class="w-20"><p></p>
+        <img src="{{ speciess.image.url }}" alt="" class="w-40">
         {% else %}
         <span>Not Showing</span>
         {% endif %}
     {% endfor %}
+</div>
 {% endblock %}
