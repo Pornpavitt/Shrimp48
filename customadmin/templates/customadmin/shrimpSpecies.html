@@ -22,7 +22,7 @@
                     </th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase object-cover h-48 w-48">Image</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Edit</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Delete</th>
                 </tr>
@@ -35,7 +35,7 @@
                     <td class="px-6 py-4">{{ specie.description }}</td>
                     <td class="px-6 py-4">
                         {% if specie.image %}
-                        <img src="{{ specie.image.url }}" alt="Specie Image" class="max-w-xs">
+                        <img src="{{ specie.image.url }}" alt="Specie Image" class="object-fill">
                         {% else %}
                         <span>No image available</span>
                         {% endif %}

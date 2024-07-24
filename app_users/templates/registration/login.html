@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="flex justify-center items-center h-screen bg-scroll" style="background-image: url(https://static.vecteezy.com/system/resources/previews/002/511/320/original/hand-drawn-seafood-seamless-pattern-shrimp-background-sketch-style-prawn-illustration-texture-for-healthy-food-seamless-pattern-for-kitchen-for-printing-on-summer-textiles-and-phone-case-vector.jpg)">
-    <div class="bg-white shadow-md rounded-t-xl px-8 pt-6 pb-8 mb-4 border-indigo-400 border-2">
+<div class="flex justify-center items-center h-screen bg-scroll" style="background-image: url(/media/extra/register.jpg)">
+    <div class="bg-white shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 border-indigo-400 border-2">
         <h2 class="text-2xl mb-4">เข้าสู่ระบบ</h2>
         <form action="{% url 'login' %}" method="post">
             {% csrf_token %}

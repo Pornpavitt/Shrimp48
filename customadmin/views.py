@@ -14,19 +14,19 @@ def admin(request):
     else:
         return  HttpResponse("You are not authorized to access this page.")
 
-@staff_member_required
-def admin_login(request,):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password )
-        if user is not None:
-            login(request, user)
-            return redirect("dashboard/")  # Corrected the redirect URL
-        else:
-            return render(request, 'customadmin/login.html', {'error_message': 'Invalid login'})
-    else:
-        return render(request, 'customadmin/login.html')
+# @staff_member_required
+# def admin_login(request,):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         user = authenticate(request, username=username, password=password )
+#         if user is not None:
+#             login(request, user)
+#             return redirect("dashboard/")  # Corrected the redirect URL
+#         else:
+#             return render(request, 'customadmin/login.html', {'error_message': 'Invalid login'})
+#     else:
+#         return render(request, 'customadmin/login.html')
 
 @staff_member_required
 def dashboard(request):
@@ -94,6 +94,7 @@ def edit_user(request, user_id):
         users = User.objects.get(id=user_id)
         users.first_name = request.POST['first_name']
         users.last_name = request.POST['last_name']
+        users.image = request.FILES['image']
         users.save()
         return redirect('user')
     else:
@@ -267,3 +268,28 @@ def delete_shrimp_diseases(request, disease_id):
     disease.deleted_at = datetime.datetime.now()
     disease.save()
     return redirect('shrimpDiseases')
+
+###################
+####shrimpPrice####
+###################
+
+@staff_member_required
+def shrimpprice(request):
+    price = ShrimpPrices.objects.filter(deleted_at=None)
+    return render(request, 'customadmin/shrimpprice.html', {'price' : price})
+
+@staff_member_required
+def delete_shrimp_price(request, id):
+    price = ShrimpPrices.objects.get(id=id)
+    price.deleted_at = datetime.datetime.now()
+    price.save()
+    return redirect('shrimpprice.ad')
+
+###################
+####shrimpPond####
+###################
+
+@staff_member_required
+def shrimppond(request):
+    pond = ShrimpPonds.objects.filter(deleted_at=None)
+    return render(request, 'customadmin/shrimppond.html', {'pond' : pond})

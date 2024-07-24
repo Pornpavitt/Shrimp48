@@ -3,13 +3,9 @@
 {% block title %} Add Users {% endblock %}
 
 {% block content %}
-<div class="flex-1 p-4">
-    <div class="container mx-auto mt-8 px-4">
-        <h1 class="text-2xl font-semibold mb-4">Add User</h1>
-        <a href="{% url 'add_users' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md">Add User</a>
-        <ul>
-        </ul>
- 
+<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 class="text-3xl font-bold mb-6 text-blue-500">Welcome,{{ user.username | upper }} to Admin Dashbord</h1>
     </div>
 </div>
 {% endblock %}

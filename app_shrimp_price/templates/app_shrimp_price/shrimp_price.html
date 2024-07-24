@@ -3,23 +3,64 @@
 {% block title %} ราคากุ้ง {% endblock %}
 
 {% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
+    <h2 class="text-2xl font-semibold mb-6">ดูราคากุ้ง ตามวันที่</h2>
 
-<h2>ดูราคากุ้ง ตามวันที่</h2>
-    
     <form action="{% url 'shrimpprice' %}" method="GET">
-        <label for="calendar">เลือกวันที่ ที่ต้องการ :</label>
-        <input type="date" id="calendar" name="calendar">
-        <input type="submit" value="Show Price">
-    </form>
-    
-    {% if data.price_list %}
-        {% for entry in data.price_list %}
+        <div class="mb-4">
+            <label for="calendar" class="block text-gray-600 text-sm font-medium mb-2">เลือกวันที่ ที่ต้องการ :</label>
+            <input type="date" id="calendar" name="calendar" class="border rounded-md p-2 w-full">
+        </div>
+
+        <div class="flex justify-end">
+            <button
+                class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                type="submit" value="Show Price">
+                แสดงราคา
+            </button>
+        </div>
+        <div>
+            {% if data.price_list %}
+            {% for entry in data.price_list %}
             <p>ราคาวันที่ : {{ entry.date }}</p>
-            <p>ราคาต่ำสุด / กก. : {{ entry.price_min }}</p>
-            <p>ราคาสูงสุด / กก. : {{ entry.price_max }}</p>
-        {% endfor %}
-    {% else %}
-        <p>วันนี้ไม่มีราคากุ้ง.</p>
-    {% endif %}
-    
+            <p>ราคาต่ำสุด / กก. : {{ entry.price_min }} บาท</p>
+            <p>ราคาสูงสุด / กก. : {{ entry.price_max }} บาท</p>
+            {% endfor %}
+            {% else %}
+            <p>วันนี้ไม่มีราคากุ้ง.</p>
+            {% endif %}
+        </div>
+    </form>
+    <h2 class="text-2xl font-semibold mb-6 my-5">ดูการพยากรณ์ราคากุ้ง ตามเดือนและปี</h2>
+    <form action="{% url 'shrimpprice' %}" method="GET">
+        <div>
+            <label for="year">ระบุปีที่จะพยากรณ์ : </label>
+            <select name="yearX" id="year" aria-placeholder="2020">
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+            </select>
+        </div>
+        <div>
+            <label for="month">ระบุเดือนที่จะพยากรณ์ : </label>
+            <input type="number" name="monthX" id="monthX" placeholder="1-13">
+        </div>
+        <div class="flex justify-end">
+            <button
+                class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                type="submit" value="Show Predict">
+                พยาการณ์
+            </button>
+        </div>
+        <div>
+            {% if M %}
+            <p>ค่าการพยากรณ์ของเดือน {{M}} มีราคาเฉลี่ยเท่ากับ {{pre}}</p>
+            {% else %}
+            <p>ไม่มีค่าการพยากรณ์.</p>
+            {% endif %}
+        </div>
+    </form>
+</div>
 {% endblock %}

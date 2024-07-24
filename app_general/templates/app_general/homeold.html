@@ -1,0 +1,87 @@
+{% extends 'app_general/components/base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-8">
+    <h1 class="text-3xl font-bold mb-4">สวัสดีคุณ {{ user.username }}</h1>
+    <div class="bg-white shadow-md rounded-lg p-4">
+        <p class="text-lg font-semibold">User Name: {{ user.username }}</p>
+    </div>
+    <div class="mt-4 grid grid-cols-2">
+        <div>
+            <a href="{% url 'shrimpool_dashbord' user.id %}"
+                class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">เพิ่มบ่อกุ้ง</a><br><br>
+        </div>
+        <div>
+            <a href="{% url 'shrimpprice' %} "
+                class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">ดูราคากุ้ง</a>
+        </div>
+    </div>
+    <p class="text-3xl">ตัวอย่างพันธุ์กุ้ง</p>
+    <div class="grid grid-cols-2 my-5">
+        {% for speciess in species %}
+        {% if speciess.name == "กุ้งขาว" %}
+        <div>
+            {% if speciess.image %}
+            <img src="{{ speciess.image.url }}" alt="" class="w-52 h-52 rounded-full border border-black">
+            {% else %}
+            <span>Not Showing</span>
+            {% endif %}
+            <p class="text-3xl flex justify-center">{{ speciess.name }}</p>
+        </div>
+        {% elif speciess.name == "กุ้งก้ามกราม" %}
+        <div>
+            {% if speciess.image %}
+            <img src="{{ speciess.image.url }}" alt="" class="w-52 h-52 rounded-full border border-black">
+            {% else %}
+            <span>Not Showing</span>
+            {% endif %}
+            <p class="text-3xl flex justify-center">{{ speciess.name }}</p>
+        </div>
+        {% else %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<div class="max-w-2xl mx-auto my-10">
+    <p class="text-3xl">ตัวอย่างโรคกุ้ง</p>
+    <div class="grid grid-cols-4 my-5">
+        {% for diseases in disease %}
+        {% if diseases.disease_image == "shrimp_diseases_images/โรคดวงขาว.jpg" %}
+        <div class="col-span-2 justify-center">
+            {% if diseases.disease_image %}
+            <img src="{{ diseases.disease_image.url }}" alt="" class="w-52 h-52 rounded border border-black">
+            {% else %}
+            <span>Not Showing</span>
+            {% endif %}
+        </div>
+        <div class="grid-rows-3 col-span-2">
+            <p class="text-3xl">{{ diseases.disease_name }}</p>
+            <p>อาการ : {{ diseases.disease_symptom }}</p>
+        </div>
+        {% else %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<div class="max-w-2xl mx-auto my-10">
+    <p class="text-3xl">ตัวอย่างอาหารกุ้ง</p>
+    <div class="grid grid-cols-2 my-5">
+        <div>
+            {% for foods in food %}
+            {% if foods.food_image %}
+            <p class="text-xl ml-5">{{ foods.food_name }}</p>
+            {% else %}
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div>
+            {% for foods in food %}
+            {% if foods.food_image == "shrimp_foods_images/navy.jpg" %}
+            <img src="{{ foods.food_image.url }}" alt="" class="w-52  rounded ">
+            {% else %}
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

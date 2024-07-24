@@ -8,4 +8,5 @@ urlpatterns = [
     path('shrimp_diseases', views.shrimp_diseases, name='shrimp_diseases'),
     path('shrimp_food', views.shrimp_food, name='shrimp_food'),
     path('shrimp_species', views.shrimp_species, name='shrimp_species'),
+    path('homeold', views.hometest , name='hometest')
 ]   

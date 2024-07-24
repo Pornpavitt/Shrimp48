@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'customadmin',
     "django_icons",
     'app_shrimp_pool.apps.AppShrimpPoolConfig',
-    'app_shrimp_price.apps.AppShrimpPriceConfig'
+    'app_shrimp_price.apps.AppShrimpPriceConfig',
+    
 ]
 
 MIDDLEWARE = [
@@ -123,6 +124,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'th'
 
 TIME_ZONE = 'Asia/Bangkok'
+
+USE_L10N = True
 
 USE_I18N = True
 

@@ -14,36 +14,48 @@
         <a href="{% url 'dashboard' %}" class="ml-4">หน้าแรก</a>
         <a href="{% url 'logout' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md">Logout</a>
     </header>
-    <div class="flex h-screen bg-gray-100">
+    <div class="flex bg-white-900">
         <!-- Sidebar -->
-        <div class="w-64 bg-white border-r border-gray-200">
-            <div class="p-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold">Admin Dashboard</h2>
+        <div class="flex bg-gray-800 ">
+            <!-- Sidebar content -->
+            <div class="p-4 text-white h-screen">
+                <h2 class="text-xl font-bold mb-4">Admin Dashboard</h2>
+                <nav class="">
+                    <h3 class="mb-5 ml-4 mt-10 text-sm font-medium text-bodydark2">Menu</h3>
+                    <ul class="mb-6 flex flex-col gap-1.5">
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'dashboard' %}" class="block text-white">Dashboard</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'user' %}" class="block text-white">Users</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimpSpecies' %}" class="block text-white">Shrimp Species</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimpFoods' %}" class="block text-white">Shrimp Foods</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimpDiseases' %}" class="block text-white">Shrimp Diseases</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimpprice.ad' %}" class="block text-white">Shrimp Price</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimppond' %}" class="block text-white">Shrimp Ponds</a>
+                        </li>
+                    </ul>
+                </nav>
+
             </div>
-            <nav class="mt-4">
-                <ul>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="#" class="block text-gray-800">Dashboard</a>
-                    </li>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="{% url 'user' %}" class="block text-gray-800">Users</a>
-                    </li>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="{% url 'shrimpSpecies' %}" class="block text-gray-800">Shrimp Species</a>
-                    </li>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="{% url 'shrimpFoods' %}" class="block text-gray-800">Shrimp Foods</a>
-                    </li>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="{% url 'shrimpDiseases' %}" class="block text-gray-800">Shrimp Diseases</a>
-                    </li>
-                    <!-- Add more sidebar items as needed -->
-                </ul>
-            </nav>
         </div>
-        {% block content%} {% endblock %}
+        <!-- Main content -->
+        <div class="flex-1 p-10">
+            <!-- Your main content here -->
+            {% block content %} {% endblock %}
+        </div>
     </div>
-    </div>
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://kit.fontawesome.com/a7046885ac.js" crossorigin="anonymous"></script>
@@ -80,6 +92,7 @@
             });
         });
     </script>
+
 </body>
 
 </html>

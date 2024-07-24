@@ -3,8 +3,25 @@
 {% block title %} Edit Foods {% endblock %}
 
 {% block content %}
+<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 class="text-3xl font-bold mb-6 text-blue-500">Add New Diseases</h1>
+        <nav>
+            <ol class="flex text-right gap-2">
+                <li>
+                    <a href="{% url 'dashboard' %}" class="font-medium">Dashboard /</a>
+                </li>
+                <li>
+                    <a href="{% url 'shrimpFoods' %}" class="font-medium">Shrimp Food /</a>
+                </li>
+                <li>
+                    <a href="{% url 'edit_shrimpFood' foods.id %}" class="font-medium text-blue-500">Edit Foods</a>
+                </li>
+            </ol>
+        </nav>
+    </div>
 <div class="mb-4">
-    <h1 class="mb-4">Edit Foods</h1>
+    <h1 class="mb-4"></h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="userid" value="{{ request.user.id }}">
@@ -12,13 +29,14 @@
             <label for="food_name" class="block mb-2">Foods Name:</label>
             <input type="text" id="food_name" name="food_name" value="{{ foods.food_name }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full px-4 py-2">
         </div>
-        <div class="mb-4">
-            <label for="food_description" class="block mb-2">Foods Description:</label>
-            <input type="text" id="food_description" name="food_description" value="{{ foods.food_description }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full px-4 py-2">
+        <div class="mb-6">
+            <label class="block text-gray-700">Foods Description:</label>
+            <textarea name="food_description" id="" cols="30" rows="6" required
+                class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">{{ foods.food_description }}</textarea>
         </div>
         <div class="mb-4">
             {% if foods.food_image %}
-                <img src="{{ foods.food_image.url }}" alt="Food Image" style="max-width: 200px; max-height: 200px;" class="mb-2">
+                <img src="{{ foods.food_image.url }}" alt="Food Image" style="max-width: 300px; max-height: 300px;" class="mb-2">
             {% else %}
                 <p>No image available</p>
             {% endif %}

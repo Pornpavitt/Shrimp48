@@ -1,22 +1,27 @@
 {% extends 'app_general/components/base.html' %}
 
 {% block title %}
-    อาหารกุ้ง
+อาหารกุ้ง
 {% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-3 gap-x-16 gap-y-4 ml-44 mt-5 mb-5 mr-44">
-    <div>01</div>
-    <div>02</div>
-    <div>03</div>
-    {% for foods in food %}
-        <p class="text-3xl">{{ foods.food_name }}</p>
-        <p class="text-xl">{{ foods.food_description }}</p>
-        {% if foods.food_image %}
-        <img src="{{ foods.food_image.url }}" alt="" class="w-20 ml-36">
-        {% else %}
-        <span>Not Showing</span>
-        {% endif %}
-    {% endfor %}
+<div class="">
+    <div class="grid grid-cols-4 gap-4 my-5 max-w-5xl mx-auto">
+        {% for foods in food %}
+        <div class="col-span-2 flex gap-4 border-black rounded-md shadow-lg max-w-2xl p-7">
+            <div>
+                {% if foods.food_image %}
+                <img src="{{ foods.food_image.url }}" alt="" class="w-24 h-40 rounded ">
+                {% else %}
+                <span>Not Showing</span>
+                {% endif %}
+            </div>
+            <div>
+                <p class="text-3xl ml-5">{{ foods.food_name }}</p>
+                <p class="text-xl ml-5">{{ foods.food_description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

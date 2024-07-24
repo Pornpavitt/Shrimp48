@@ -3,41 +3,72 @@
 {% block title %} Edit Diseases {% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h1 class="text-2xl font-bold mb-4">Edit Diseases</h1>
-    <form method="post" enctype="multipart/form-data">
+<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 class="text-3xl font-bold mb-6 text-blue-500">Edit Diseases</h1>
+        <nav>
+            <ol class="flex text-right gap-2">
+                <li>
+                    <a href="{% url 'dashboard' %}" class="font-medium">Dashboard /</a>
+                </li>
+                <li>
+                    <a href="{% url 'shrimpDiseases' %}">Shrimp Disease /s</a>
+                </li>
+                <li>
+                    <a href="{% url 'edit_shrimpDisease' disease.id %}" class="font-medium text-blue-500">Add
+                        Diseases</a>
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <form method="post" class="space-y-6" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="hidden" name="userid" value="{{ request.user.id }}">
-        <div class="mb-4">
-            <label class="block text-gray-700">Disease Name:</label>
-            <input type="text" name="disease_name" value="{{ disease.disease_name }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+        <div class="grid grid-cols-1 gap-9 sm:grid-cols-2">
+            <div class="flex flex-col gap-9">
+                <input type="hidden" name="userid" value="{{ request.user.id }}">
+                <div class="mb-6">
+                    <label class="block text-gray-700">Disease Name</label>
+                    <input type="text" name="disease_name" value="{{ disease.disease_name }}"
+                        class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700">Disease Symptom</label>
+                    <textarea name="disease_symptom" id="" cols="30" rows="6" 
+                        class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">{{ disease.disease_symptom }}</textarea>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700">Disease Cause</label>
+                    <textarea name="disease_cause" id="" cols="30" rows="6" 
+                        class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">{{ disease.disease_cause }}
+                    </textarea>
+
+                </div>
+            </div>
+            <div class="flex flex-col gap-9 ">
+                <div class="mb-6">
+                    <label class="block text-gray-700">Disease Prevention</label>
+                    <textarea name="disease_prevent" id="" cols="30" rows="6" 
+                        class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">{{ disease.disease_prevent }}</textarea>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700">Disease Treatment</label>
+                    <textarea name="disease_treat" id="" cols="30" rows="6" 
+                        class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">{{ disease.disease_treat }}</textarea>
+                </div>
+                <div class="mb-6">
+                    {% if disease.disease_image %}
+                        <img src="{{ disease.disease_image.url }}" alt="Disease Image"
+                            style="max-width: 200px; max-height: 200px;" class="mb-2">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                    <label class="block text-gray-700">Disease Image</label>
+                    <input type="file" name="disease_image"
+                        class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+                </div>
+            </div>
         </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Disease Symptom:</label>
-            <input type="text" name="disease_symptom" value="{{ disease.disease_symptom }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Disease Image:</label>
-            {% if disease.disease_image %}
-                <img src="{{ disease.disease_image.url }}" alt="Disease Image" style="max-width: 200px; max-height: 200px;" class="mb-2">
-            {% else %}
-                <p>No image available</p>
-            {% endif %}
-            <input type="file" name="disease_image" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Disease Prevention:</label>
-            <input type="text" name="disease_prevent" value="{{ disease.disease_prevent }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Disease Treatment:</label>
-            <input type="text" name="disease_treat" value="{{ disease.disease_treat }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Disease Cause:</label>
-            <input type="text" name="disease_cause" value="{{ disease.disease_cause }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
-        </div>
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Changes</button>
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Save Changes</button>
     </form>
 </div>
 {% endblock %}

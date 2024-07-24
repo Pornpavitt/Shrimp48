@@ -5,12 +5,26 @@
 {% endblock %}
 
 {% block content %}
-    {% for diseases in disease %}
-        <p>{{ diseases.disease_name }}</p>
-        <p>{{ diseases.disease_symptom }}</p>
-        <p>{{ diseases.disease_cause }}</p>
-        <p>{{ diseases.disease_prevent }}</p>
-        <p>{{ diseases.disease_treat }}</p>
-        <img src="{{ diseases.disease_image.url }}" alt="" class="w-50"><p>{{ diseases.disease_image }}</p>
+<div class="">
+    <div class="grid grid-cols-4 gap-4 my-5 max-w-5xl mx-auto">
+        {% for diseases in disease %}
+        <div class="col-span-4 flex gap-4 border-black rounded-md shadow-lg max-w-5xl p-7">
+            <div>
+                {% if diseases.disease_image %}
+                <img src="{{ diseases.disease_image.url }}" alt="" class="w-72 h-40 rounded ">
+                {% else %}
+                <span>Not Showing</span>
+                {% endif %}
+            </div>
+            <div>
+                <p class="text-3xl">{{ diseases.disease_name }}</p>
+                <p>อาการ : {{ diseases.disease_symptom }}</p>
+                <p>สาเหตุ : {{ diseases.disease_cause }}</p>
+                <p>วิธีการป้องกัน : {{ diseases.disease_prevent }}</p>
+                <p>วิธีการรักษา : {{ diseases.disease_treat }}</p>
+            </div>
+        </div>
         {% endfor %}
+    </div>
+</div>
 {% endblock %}

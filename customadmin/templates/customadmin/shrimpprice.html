@@ -1,0 +1,40 @@
+{% extends 'customadmin/components/site_header.html' %}
+
+{% block title %} Add Users {% endblock %}
+
+{% block content %}
+<div class="mb-4 w-full">
+    <div class="flex justify-between items-center mb-4">
+        <div>
+            <input type="text" id="searchInput" placeholder="Search..." class="px-4 py-2 border rounded-md">
+        </div> 
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price Specie</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price Min</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price Max</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Delete</th>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+                {% for prices in price %}
+                <tr>
+                    <td class="px-6 py-4">{{ prices.price_specie }}</td>
+                    <td class="px-6 py-4">{{ prices.price_min }}</td>
+                    <td class="px-6 py-4">{{ prices.price_max }}</td>
+                    <td class="px-6 py-4">{{ prices.date }}</td>
+                    <td class="px-6 py-4">
+                        <button class="text-red-500 hover:text-red-700 ml-2 delete-btn delete-btn"><a
+                                href="{% url 'delete_shrimp_price' prices.id %}">Delete</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

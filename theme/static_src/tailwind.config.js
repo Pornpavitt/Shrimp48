@@ -42,7 +42,11 @@ module.exports = {
         // '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {
+            backgroundImage: {
+                'home-bg': "url('media/extra/home02.jpg')",
+              }
+        },
     },
     plugins: [
         /**
@@ -54,4 +58,5 @@ module.exports = {
         require('@tailwindcss/typography'),
         require('@tailwindcss/aspect-ratio'),
     ],
+    
 }

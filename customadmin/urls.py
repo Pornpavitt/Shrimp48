@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.admin_login , name='login'),
+    # path('', views.admin_login , name='login'),
     path('dashboard/', views.dashboard , name='dashboard'),
 
     #User
@@ -26,12 +26,17 @@ urlpatterns = [
     path('edit_shrimpFoods/<food_id>', views.edit_shrimpFoods, name='edit_shrimpFood'),
     path('delete_shrimpFoods/<food_id>' , views.delete_shrimpFoods, name="delete_shrimpFoods"),
     
-    # Diseases
+    #Diseases
     path('shrimpDiseases/', views.shrimpDiseases, name="shrimpDiseases"),
     path('add_shrimpdisease/', views.add_shrimpDiseases, name="add_shrimpdisease"),
     path('edit_shrimpDisease/<disease_id>', views.edit_shrimp_diseases, name='edit_shrimpDisease'),
     path('delete_shrimpDisease/<disease_id>', views.delete_shrimp_diseases, name="delete_shrimpDisease"),
 
-   
+    #Price
+    path('shrimpprice/', views.shrimpprice, name="shrimpprice.ad"),
+    path('delete_shrimp_price/<id>', views.delete_shrimp_price, name="delete_shrimp_price"),
+
+    #Price
+    path('shrimppond/', views.shrimppond, name="shrimppond"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

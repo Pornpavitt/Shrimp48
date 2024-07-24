@@ -5,12 +5,20 @@
 {% endblock %}
 
 {% block content %}
-<div class="bg-scroll h-screen" style="background-image: url(https://previews.123rf.com/images/epine/epine1607/epine160700098/60100800-shrimp-vector-drawing-seamless-seafood-pattern-shrimp-food-background-great-for-seafood-restaurant.jpg)">
-    <br>
-    <br>
-    <br>
-    <div class='max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6 border-blue-500 border-2'>
-        <h3 class="text-2xl font-semibold mb-4">สมัครสมาชิก</h3>
+
+
+<!-- <img src="/media/extra/register.jpg" alt="" class=""> -->
+<div class="bg-scroll h-screen"  style="background-image: url('/media/extra/MAX_5921ps1-scaled.jpg');  background-size: cover; background-repeat: no-repeat; background-position: center center;">
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class='max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6  border-blue-500 border-2'>
+    <h3 class="text-2xl font-semibold mb-4">สมัครสมาชิก</h3>
         <form action="{% url 'register' %}" method="post" class="space-y-4">
             {% csrf_token %}
             <div class="flex flex-col">
@@ -36,7 +44,9 @@
 
             <button type="submit"
                 class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">สมัครสมาชิก</button>
-        </form>
+            </form>
+            
     </div>
+
 </div>
 {% endblock %}
