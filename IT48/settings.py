@@ -84,8 +84,12 @@ WSGI_APPLICATION = 'IT48.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+import os
+import dj_database_url  
 
 DATABASES = {
+    
+    # 'default': dj_database_url.config(default=os.getenv("mysql://root:RgVzKYVBQssYFKRMNWKoLzfICCrKwaHS@hopper.proxy.rlwy.net:22509/railway"))
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME' : 'bit07_shrimp',
@@ -98,7 +102,7 @@ DATABASES = {
     }
 }
 
-
+#mysql://root:RgVzKYVBQssYFKRMNWKoLzfICCrKwaHS@hopper.proxy.rlwy.net:22509/railway
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
