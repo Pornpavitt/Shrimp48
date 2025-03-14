@@ -3,33 +3,52 @@
 {% block title %} Edit Species {% endblock %}
 
 {% block content %}
+<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 class="text-3xl font-bold mb-6 text-blue-500">แก้ไขพันธุ์กุ้ง</h1>
+        <nav>
+            <ol class="flex text-right gap-2">
+                <li>
+                    <a href="{% url 'dashboard' %}" class="font-medium">หน้าหลัก /</a>
+                </li>
+                <li>
+                    <a href="{% url 'shrimpSpecies' %}" class="font-medium">พันธ์ุกุ้ง /</a>
+                </li>
+                <li>
+                    <a href="{% url 'edit_shrimpSpecies' species.id %}" class="font-medium text-blue-500">แก้ไขพันธุ์กุ้ง</a>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
 <div class="mb-4">
-    <h1 class="mb-4">Edit Species</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="userid" value="{{ request.user.id }}">
         <div class="mb-4">
-            <label for="name" class="block mb-2">Species Name:</label>
+            <label for="name" class="block mb-2">ชื่อพันธุ์กุ้ง:</label>
             <input type="text" id="name" name="name" value="{{ species.name }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full px-4 py-2">
         </div>
-        <div class="mb-4">
-            <label for="description" class="block mb-2">Species Description:</label>
-            <input type="text" id="description" name="description" value="{{ species.description }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full px-4 py-2">
+        <div class="mb-6">
+            <label class="block text-gray-700">รายละเอียด:</label>
+            <textarea name="description" id="" cols="30" rows="6" required
+                class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">{{ species.description }}</textarea>
         </div>
         <div class="mb-4">
-            <label for="specie_food" class="block mb-2">Species Food:</label>
+            <label for="specie_food" class="block mb-2">อาหารกุ้ง:</label>
             <input type="text" id="specie_food" name="specie_food" value="{{ species.specie_food }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full px-4 py-2">
         </div>
         {% if species.image %}
             <img src="{{ species.image.url }}" alt="species image" style="max-width: 200px; max-height: 200px;" class="mb-2">
         {% else %}
-            <p>No image available</p>
+            <p class="text-xl font-bold mb-6 text-blue-500">ไม่มีรูปแสดง</p>
         {% endif %}
         <div class="mb-4">
-            <label for="image" class="block mb-2">Species Image:</label>
+            <label for="image" class="block mb-2">รูปพันธ์ุกุ้ง:</label>
             <input type="file" id="image" name="image" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full px-4 py-2">
         </div>
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Changes</button>
+        <input type="checkbox" name="allow_show" class="" value="1"> แสดงหน้าเว็ปไซต์ด้วยหรือไม่? <br>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">บันทึกและแก้ไข</button>
     </form>
 </div>
 {% endblock %}

@@ -1,0 +1,496 @@
+{% extends 'app_general/components/base.html' %}
+
+{% block title %} รายละเอียดบ่อกุ้ง {% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">รายละเอียดบ่อกุ้ง: {{ pond.pond_name }}</h1>
+
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="p-6 space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="dropdownRadioButton"
+                            class="inline-flex items-center text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none hover:bg-gray-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 transition-colors duration-200">
+                            <span class="mr-2">พยากรณ์อัตราการเติบโต</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="dropdownRadio"
+                            class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-48 mt-2">
+                            <ul class="p-3 space-y-1 text-sm text-gray-700" aria-labelledby="dropdownRadioButton">
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
+                                        <input id="filter-radio-example-1" type="radio" value="" name="filter-radio"
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                                        <label for="filter-radio-example-1"
+                                            class="w-full ml-2 text-sm font-medium text-gray-900 rounded">พยากรณ์จากคุณภาพน้ำ</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
+                                        <input id="filter-radio-example-2" type="radio" value="" name="filter-radio"
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                                        <label for="filter-radio-example-2"
+                                            class="w-full ml-2 text-sm font-medium text-gray-900 rounded">พยากรณ์จากวันที่เลี้ยง</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
+                                        <input checked id="filter-radio-example-3" type="radio" value=""
+                                            name="filter-radio"
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                                        <label for="filter-radio-example-3"
+                                            class="w-full ml-2 text-sm font-medium text-gray-900 rounded">พยากรณ์จากน้ำหนักเฉลี่ย</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <input type="text" id="table-search"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                            placeholder="ค้นหา">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-2">
+                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าออกซิเจนที่ละลายในน้ำ</h5>
+                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_dissolvedOxygen.value|floatformat:2 }}</p>
+                    </a>
+                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่า pH</h5>
+                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_pH.value |floatformat:2}}</p>
+                    </a>
+                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าความเค็มของน้ำ</h5>
+                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_salinity.value|floatformat:2 }}</p>
+                    </a>
+                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าอัลคาลินิตี้</h5>
+                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_alkalinity.value|floatformat:2 }}</p>
+                    </a>
+                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าไนไตรต์</h5>
+                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_nitrite.value|floatformat:2 }}</p>
+                    </a>
+                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าแอมโมเนียรวม</h5>
+                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_TAN.value|floatformat:2 }}</p>
+                    </a>
+                </div>
+                {% if pond.user_id == user.id %}
+                <button onclick="showEditShrimpForm('{{ pond.id }}', '{{ pond.pond_name }}')"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    บันทึกข้อมูล
+                </button>
+                {% endif %}
+            </div>
+
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">สร้างเมื่อ</th>
+                            <th scope="col" class="px-6 py-3">วันที่บันทึกข้อมูล</th>
+                            <th scope="col" class="px-6 py-3">จำนวนกุ้ง</th>
+                            <th scope="col" class="px-6 py-3">ออกซิเจนที่ละลายในน้ำ (มก./ลิตร)</th>
+                            <th scope="col" class="px-6 py-3">ความกระด้างของน้ำ (มก./ลิตร)</th>
+                            <th scope="col" class="px-6 py-3">ค่าพีเอชของน้ำ</th>
+                            <th scope="col" class="px-6 py-3">อุณหภูมิของน้ำ (°C)</th>
+                            <th scope="col" class="px-6 py-3">TAN (มก./ลิตร)</th>
+                            <th scope="col" class="px-6 py-3">อัลคาลินิตี้ (มก./ลิตร)</th>
+                            <th scope="col" class="px-6 py-3">ไนไตรต์ (มก./ลิตร)</th>
+                            <th scope="col" class="px-6 py-3">ความเค็มของน้ำ (1/1000)</th>
+                            <th scope="col" class="px-6 py-3">ความใสของน้ำ (ซม.)</th>
+                            <th scope="col" class="px-6 py-3">น้ำหนักกุ้ง (กรัม)</th>
+                            <th scope="col" class="px-6 py-3">อัตราการเติบโต (ADG)</th>
+                            <th scope="col" class="px-6 py-3" data-column="quality">คาดการณ์อัตราการเติบโต (ADG)</th>
+                            <th scope="col" class="px-6 py-3" data-column="date">คาดการณ์อัตราการเติบโต (ADG)</th>
+                            <th scope="col" class="px-6 py-3" data-column="weight">คาดการณ์อัตราการเติบโต (ADG)</th>                            
+                            <th scope="col" class="px-6 py-3">คาดการณ์อัตราการรอด (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detail in pond_details %}
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4">{{ detail.created_at | date:"j N Y "}}</td>
+                            <td class="px-6 py-4">{{ detail.total_date }}</td>
+                            <td class="px-6 py-4">{{ detail.shrimp_quantity }}</td>
+                            <td class="px-6 py-4"
+                                {% if detail.id == latest_detail_id %}
+                                    style ="color: {{ data_dissolvedOxygen.color }};"
+                                {% endif %}>
+                                {{ detail.pond_dissolvedOxygen }}
+                                {% if detail.id == latest_detail_id %}
+                                    {% if data_dissolvedOxygen.color == 'green' %}
+                                        <span style="color: green;">⬆</span>
+                                    {% elif data_dissolvedOxygen.color == 'red' %}
+                                        <span style="color: red;">⬇</span>
+                                    {% endif %}
+                                {% endif %}</td>
+                            <td class="px-6 py-4">{{ detail.pond_waterHardness }}</td>
+                            <td class="px-6 py-4"
+                                {% if detail.id == latest_detail_id %}
+                                    style ="color: {{ data_pH.color }};"
+                                {% endif %}>
+                                {{ detail.pond_pH }}
+                                {% if detail.id == latest_detail_id %}
+                                    {% if data_pH.color == 'green' %}
+                                        <span style="color: green;">⬆</span>
+                                    {% elif data_pH.color == 'red' %}
+                                        <span style="color: red;">⬇</span>
+                                    {% endif %}
+                                {% endif %}</td>
+                            <td class="px-6 py-4">{{ detail.pond_temperature }}</td>
+                            <td class="px-6 py-4"
+                                {% if detail.id == latest_detail_id %}
+                                    style ="color: {{ data_TAN.color }};"
+                                {% endif %}>
+                                {{ detail.TAN }}
+                                    {% if detail.id == latest_detail_id %}
+                                        {% if data_TAN.color == 'green' %}
+                                            <span style="color: green;">⬆</span>
+                                        {% elif data_TAN.color == 'red' %}
+                                            <span style="color: red;">⬇</span>
+                                        {% endif %}
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4"
+                                {% if detail.id == latest_detail_id %}
+                                    style ="color: {{ data_alkalinity.color }};"
+                                {% endif %}>
+                                {{ detail.alkalinity }}
+                                    {% if detail.id == latest_detail_id %}
+                                        {% if data_alkalinity.color == 'green' %}
+                                            <span style="color: green;">⬆</span>
+                                        {% elif data_alkalinity.color == 'red' %}
+                                            <span style="color: red;">⬇</span>
+                                        {% endif %}
+                                {% endif %}
+                            </td>
+
+                            <td class="px-6 py-4"
+                                {% if detail.id == latest_detail_id %}
+                                    style ="color: {{ data_nitrite.color }};"
+                                {% endif %}>
+                                {{ detail.nitrite }}
+                                {% if detail.id == latest_detail_id %}
+                                    {% if data_nitrite.color == 'green' %}
+                                        <span style="color: green;">⬆</span>
+                                    {% elif data_nitrite.color == 'red' %}
+                                        <span style="color: red;">⬇</span>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+
+                            <td class="px-6 py-4"
+                                {% if detail.id == latest_detail_id %}
+                                    style ="color: {{ data_salinity.color }};"
+                                {% endif %}>
+                                {{ detail.salinity }}
+                                    {% if detail.id == latest_detail_id %}
+                                        {% if data_salinity.color == 'green' %}
+                                            <span style="color: green;">⬆</span>
+                                        {% elif data_salinity.color == 'red' %}
+                                            <span style="color: red;">⬇</span>
+                                        {% endif %}
+                                {% endif %}
+                            </td>
+
+                            <td class="px-6 py-4">{{ detail.transparency }}</td>
+                            <td class="px-6 py-4">{{ detail.shrimp_weight }}</td>
+                            <td class="px-6 py-4">{{ detail.growth_rate|floatformat:2 }}</td>
+                            <td class="px-6 py-4" data-column="quality" >{{ detail.predicted_growth_rate|floatformat:2 }}{{MAE.MAE}}</td>
+                            <td class="px-6 py-4" data-column="date">{{ detail.predicted_growth_rate_date_base|floatformat:2 }}</td>
+                            <td class="px-6 py-4" data-column="weight">{{ detail.predicted_growth_rate_weight_base|floatformat:2 }}</td>
+                            <td class="px-6 py-4">{{ detail.survival_rate|floatformat:2 }}</td>
+                        </tr>
+                        
+                        {% empty %}
+                        <tr>
+                            <td colspan="14" class="px-6 py-4 text-center text-gray-500">ไม่มีข้อมูลบ่อกุ้งในขณะนี้</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div>
+                    <canvas id="pondChart" width="550" height="150"></canvas>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="edit_shrimp_pool" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden"
+    style="z-index: 1000;">
+    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-center pb-3 border-b">
+            <h3 id="modal_title" class="text-2xl font-bold text-gray-900">รายละเอียดบ่อกุ้ง: </h3>
+            <button onclick="hideeditShrimpForm()"
+                class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <form method="post" action="" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="create_shrimp_pool_detail">
+            <input type="hidden" id="pond_id" name="pond_id">
+            <input type="hidden" name="growth_rate" id="growth_rate" value="0">
+            <input type="hidden" name="survival_rate" id="survival_rate" value="0">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="mb-4">
+                    <label for="shrimp_quantity" class="block text-gray-700 text-sm font-bold mb-2 ">จำนวนกุ้ง
+                        (ตัว)</label>
+                    <input type="number" id="shrimp_quantity" name="shrimp_quantity"
+                        value="{{ detail.shrimp_quantity }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="shrimp_weight" class="block text-gray-700 text-sm font-bold mb-2  ">น้ำหนักกุ้ง
+                        (กรัม)</label>
+                    <input type="number" step="0.01" id="shrimp_weight" name="shrimp_weight"
+                        value="{{ detail.shrimp_weight }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="pond_dissolvedOxygen"
+                        class="block text-gray-700 text-sm font-bold mb-2  ">ออกซิเจนที่ละลายในน้ำ (mg/L)</label>
+                    <input type="number" step="0.01" id="pond_dissolvedOxygen" name="pond_dissolvedOxygen"
+                        value="{{ detail.pond_dissolvedOxygen }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="pond_waterHardness"
+                        class="block text-gray-700 text-sm font-bold mb-2  ">ความกระด้างของน้ำ (mg/L)</label>
+                    <input type="number" step="0.01" id="pond_waterHardness" name="pond_waterHardness"
+                        value="{{ detail.pond_waterHardness }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="pond_pH" class="block text-gray-700 text-sm font-bold mb-2  ">ค่า pH ของน้ำ</label>
+                    <input type="number" step="0.01" id="pond_pH" name="pond_pH" value="{{ detail.pond_pH }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="pond_temperature" class="block text-gray-700 text-sm font-bold mb-2  ">อุณหภูมิของน้ำ
+                        (°C)</label>
+                    <input type="number" step="0.01" id="pond_temperature" name="pond_temperature"
+                        value="{{ detail.pond_temperature }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="food_quantity" class="block text-gray-700 text-sm font-bold mb-2  ">ปริมาณอาหาร
+                        (กรัม)</label>
+                    <input type="number" step="0.01" id="food_quantity" name="food_quantity"
+                        value="{{ detail.food_quantity }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="total_date"
+                        class="block text-gray-700 text-sm font-bold mb-2  ">วันที่บันทึกข้อมูล</label>
+                    <input type="number" id="total_date" name="total_date" value="{{ detail.total_date }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="TAN" class="block text-gray-700 text-sm font-bold mb-2  ">TAN (mg/L)</label>
+                    <input type="number" step="0.01" id="TAN" name="TAN" value="{{ detail.TAN }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="alkalinity" class="block text-gray-700 text-sm font-bold mb-2  ">อัลคาลินิตี้
+                        (mg/L)</label>
+                    <input type="number" step="0.01" id="alkalinity" name="alkalinity" value="{{ detail.alkalinity }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="nitrite" class="block text-gray-700 text-sm font-bold mb-2  ">ไนไตรต์ (mg/L)</label>
+                    <input type="number" step="0.01" id="nitrite" name="nitrite" value="{{ detail.nitrite }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="salinity" class="block text-gray-700 text-sm font-bold mb-2  ">ความเค็ม (ppt)</label>
+                    <input type="number" step="0.01" id="salinity" name="salinity" value="{{ detail.salinity }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="transparency" class="block text-gray-700 text-sm font-bold mb-2  ">ความโปร่งใส
+                        (cm)</label>
+                    <input type="number" step="0.01" id="transparency" name="transparency"
+                        value="{{ detail.transparency }}"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                </div>
+
+            </div>
+            <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">บันทึก</button>
+        </form>
+    </div>
+
+
+<script>
+        function showEditShrimpForm(pondId, pondName) {
+            document.getElementById('pond_id').value = pondId;
+            document.getElementById('modal_title').textContent = 'รายละเอียดบ่อกุ้ง: ' + pondName;
+            document.getElementById('edit_shrimp_pool').classList.remove('hidden');
+        }
+
+        function hideeditShrimpForm() {
+            document.getElementById("edit_shrimp_pool").classList.add("hidden");
+        }
+
+        document.getElementById("dropdownRadioButton").addEventListener("click", function () {
+            const dropdown = document.getElementById("dropdownRadio");
+            dropdown.classList.toggle("hidden"); 
+        });
+        window.onload = function () {
+            document.querySelector('[data-column="quality"]').style.display = "table-cell";
+            document.querySelectorAll('[data-column="date"], [data-column="weight"]').forEach((th) => {
+                th.style.display = "none"; 
+            });
+        };
+        document.querySelectorAll('input[name="filter-radio"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+            const selectedValue = this.id;
+
+            document.querySelectorAll('[data-column="date"], [data-column="weight"], [data-column="quality"]').forEach((element) => {
+                element.style.display = "none";
+            });
+
+            if (selectedValue === "filter-radio-example-1") {
+                document.querySelectorAll('[data-column="quality"]').forEach((element) => {
+                    element.style.display = "table-cell";
+                });
+            } else if (selectedValue === "filter-radio-example-2") {
+                document.querySelectorAll('[data-column="date"]').forEach((element) => {
+                    element.style.display = "table-cell";
+                });
+            } else if (selectedValue === "filter-radio-example-3") {
+                document.querySelectorAll('[data-column="weight"]').forEach((element) => {
+                    element.style.display = "table-cell";
+                });
+            }
+        });
+    });
+
+    const pondDetails = [
+            {% for detail in pond_details %}
+                {
+                    date: "{{ detail.total_date}}",
+                    growthRate: {{ detail.growth_rate|floatformat:2 }},
+                    predictedGrowthRate: {{ detail.predicted_growth_rate|floatformat:2 }},
+                    shrimpWeight: {{ detail.shrimp_weight|default:0 }},
+                    predictedGrowthRate_date_base: {{ detail.predicted_growth_rate_date_base|floatformat:2 }},
+                    predictedGrowthRate_weight_base: {{ detail.predicted_growth_rate_weight_base|floatformat:2 }},
+                },
+            {% endfor %}
+        ];
+
+        pondDetails.sort((a, b) => parseFloat(a.date) - parseFloat(b.date));
+
+        const labels = pondDetails.map(item => item.date);
+        const growthRates = pondDetails.map(item => item.growthRate);
+        const predictedGrowthRates = pondDetails.map(item => item.predictedGrowthRate);
+        // predictedGrowthRates[0] = 0.00;
+
+        const predictedGrowthRate_date_bases= pondDetails.map(item => item.predictedGrowthRate_date_base);
+        const predictedGrowthRate_weight_base= pondDetails.map(item => item.predictedGrowthRate_weight_base);
+        //const shrimpWeights = pondDetails.map(item => item.shrimpWeight);
+
+        const ctx = document.getElementById('pondChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'อัตราการเติบโต (ADG)',
+                        data: growthRates,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 1,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'พยากรณ์อัตราการเติบโตจากคุณภาพน้ำ (ADG)',
+                        data: predictedGrowthRates,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 1,
+                        tension: 0.3,
+                        // hidden: false
+                    },
+                    {
+                        label: 'พยากรณ์อัตราการเติบโตจากวันที่เลี้ยง (ADG)',
+                        data: predictedGrowthRate_date_bases,
+                        borderColor: 'rgba(128, 0, 128, 1)',
+                        backgroundColor: 'rgba(128, 0, 128, 0.2)',
+                        borderWidth: 1,
+                        tension: 0.3,
+                        // hidden: true
+                    },
+                    {
+                        label: 'พยากรณ์อัตราการเติบโตจากน้ำหนักเฉลี่ย (ADG)',
+                        data: predictedGrowthRate_weight_base,
+                        borderColor: 'rgba(255, 165, 0, 1)',
+                        backgroundColor: 'rgba(255, 165, 0, 0.2)',
+                        borderWidth: 1,
+                        tension: 0.3,
+                        // hidden: true
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Values'
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+</script>
+    {% endblock %}

@@ -1,26 +1,151 @@
-<header class="bg-blue-500 p-4 rounded-b-xl">
+<header class="bg-gradient-to-r from-indigo-700 to-blue-500 p-4 " >
     <div class="flex justify-center">
         <div class="flex items-center space-x-4">
-            <a href="{% url 'home' %}" class="text-white font-bold">Shrimp48</a>
             <a href="{% url 'home' %}" class="text-white mx-2">หน้าแรก</a>
-            <a href="" class="text-white mx-2">พันธ์กุ้ง</a>
-            <a href="" class="text-white mx-2">โรคกุ้ง</a>
-            <a href="" class="text-white mx-2">อาหารกุ้ง</a>
-            <a href="{% url 'howtouse' %}" class="text-white mx-2">วิธีการใช้งาน</a>
+            <a href="{% url 'shrimp_species' %}" class="text-white mx-2">พันธ์ุกุ้ง</a>
+            <a href="{% url 'shrimp_diseases' %}" class="text-white mx-2">โรคกุ้ง</a>
+            <a href="{% url 'shrimp_food' %}" class="text-white mx-2">อาหารกุ้ง</a>
+            <!-- <a href="{% url 'howtouse' %}" class="text-white mx-2">วิธีการใช้งาน</a>
             <a href="" class="text-white mx-2">บริการของเรา</a>
-            <a href="" class="text-white mx-2">คำถามที่พบบ่อย</a>
+            <a href="" class="text-white mx-2">คำถามที่พบบ่อย</a> -->
+        </div>
+        <div id="loginForm"
+            class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 hidden">
+            <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
+                <div class="absolute top-0 right-0 mt-4 mr-4 z-10">
+                    <button onclick="hideLoginForm()" class="focus:outline-none">
+                        <img src="media\extra\x_icon.png" alt="Reject" class="w-6 h-6">
+                    </button>
+                </div>
+                <h2 class="text-3xl font-bold mb-6 text-center">เข้าสู่ระบบ</h2>
+                <form method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <input id="username"
+                            class="block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                            type="text" name="username" placeholder="ชื่อผู้ใช้งาน" required autofocus />
+                    </div>
+                    <div class="mb-4">
+                        <input id="password"
+                            class="block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                            type="password" name="password" placeholder="รหัสผ่าน" required
+                            autocomplete="current-password" />
+                    </div>
+                    <div class="flex items-center mb-6">
+                        <input id="remember_me" type="checkbox" name="remember"
+                            class="h-4 w-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300" />
+                        <label for="remember_me" class="ml-2 text-sm text-gray-600">จดจำรหัสผ่าน</label>
+                        <a href="{% url 'password_reset' %}"
+                            class="ml-auto text-sm text-blue-600 hover:text-blue-800">ลืมรหัสผ่านหรือไม่?</a>
+                    </div>
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">เข้าสู่ระบบ</button>
+                    <div class="text-center mt-4">
+                        <p class="text-sm text-gray-600">ยังไม่มีบัญชีใช่ไหม? <a href="#" onclick="showRegisterForm()" 
+                            class="text-blue-600 hover:text-blue-800">สมัครสมาชิก</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="registerForm" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 hidden">
+            <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
+                <div class="absolute top-0 right-0 mt-4 mr-4 z-10">
+                    <button onclick="hideRegisterForm()" class="focus:outline-none">
+                        <img src="media\extra\x_icon.png" alt="Reject" class="w-6 h-6">
+                    </button>
+                </div>
+                <h3 class="text-2xl font-semibold mb-4 text-center">สมัครสมาชิก</h3>
+                <form action="{% url 'register' %}" method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="flex flex-col">
+                        <input id="username" name="username" type="text" placeholder="ชื่อผู้ใช้งาน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                        <p class="text-red-500 text-sm mt-1">{{ form.username.errors }}</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <input id="email" name="email" type="email" placeholder="อีเมล" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                        <p class="text-red-500 text-sm mt-1">{{ form.email.errors }}</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <input id="password1" name="password1" type="password" placeholder="รหัสผ่าน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                        <p class="text-red-500 text-sm mt-1">{{ form.password1.errors }}</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <input id="password2" name="password2" type="password" placeholder="ยืนยันรหัสผ่าน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                        <p class="text-red-500 text-sm mt-1">{{ form.password2.errors }}</p>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200">สมัครสมาชิก</button>
+                    <div class="text-center mt-4">
+                        <p class="text-sm text-gray-600">มีบัญชีอยู่แล้วใช่ไหม? <a href="#" onclick="showLoginForm()" 
+                            class="text-blue-600 hover:text-blue-800">เข้าสู่ระบบ</a></p>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="flex items-center">
             {% if user.is_authenticated %}
-                <button class="bg-white py-2 px-4 border rounded-full ml-4" >{{user.username}}</button>
-                <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border rounded-full">
-                    <a href="{% url 'logout' %}" class="">ออกจากระบบ</a>
-                </button>
+            <div class="relative inline-block text-left ml-4">
+                <div>
+                    <button type="button" class="bg-white py-2 px-4 border rounded-2xl" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                        {{ user.username }}
+                    </button>
+                </div>
+            
+                <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" id="dropdown-menu">
+                    <div class="py-1" role="none">
+                        <a href="{% url 'userprofile' user.id %}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">โปรไฟล์ผู้ใช้</a>
+                        <a href="{% url 'logout' %}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">ออกจากระบบ</a>
+                    </div>
+                </div>
+            </div>     
+
             {% else %}
-                <a href="{% url 'login' %}" class="text-white hover:text-black ml-4">เข้าสู่ระบบ</a>
-                <a href="{% url 'register' %}" class="text-white hover:text-black ml-4">สมัครสมาชิก</a>
+            <a href="#" onclick="showLoginForm()" class="text-white hover:text-black ml-4">เข้าสู่ระบบ</a>
+            <!-- <a href="#" onclick="showRegisterForm()" class="text-white hover:text-black ml-4">สมัครสมาชิก</a>             -->
             {% endif %}
         </div>
     </div>
+    <script>
+        function showLoginForm() {
+            var loginForm = document.getElementById("loginForm");
+            var registerForm = document.getElementById("registerForm");
+            loginForm.classList.remove("hidden");
+            registerForm.classList.add("hidden");
+            window.location.href = "#";
+        }
     
+        function hideLoginForm() {
+            var loginForm = document.getElementById("loginForm");
+            loginForm.classList.add("hidden");
+        }
+    
+        function showRegisterForm() {
+            var registerForm = document.getElementById("registerForm");
+            var loginForm = document.getElementById("loginForm");
+            registerForm.classList.remove("hidden");
+            loginForm.classList.add("hidden");
+            window.location.href = "#";
+        }
+    
+        function hideRegisterForm() {
+            var registerForm = document.getElementById("registerForm");
+            registerForm.classList.add("hidden");
+        }
+    
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const menuButton = document.getElementById('menu-button');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+    
+            menuButton.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent the click event from propagating
+                dropdownMenu.classList.toggle('hidden');
+            });
+    
+            // Close the dropdown if clicked outside
+            window.addEventListener('click', (e) => {
+                if (!menuButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </header>

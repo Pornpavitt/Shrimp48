@@ -1,36 +1,37 @@
 {% extends 'app_general/components/base.html' %}
 
 {% block title %}
-    สมัครสมาชิค
+สมัครสมาชิค
 {% endblock %}
 
 {% block content %}
-<div class='max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6'>
-    <h3 class="text-2xl font-semibold mb-4">สมัครสมาชิค</h3>
-    <form action="{% url 'register' %}" method="post" class="space-y-4">
-        {% csrf_token %}
-        <div class="flex flex-col">
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {{ form.username.errors }}
-        </div>
-        <div class="flex flex-col">
-            {{ form.email.label_tag }}
-            {{ form.email }}
-            {{ form.email.errors }}
-        </div>
-        <div class="flex flex-col">
-            {{ form.password1.label_tag }}
-            {{ form.password1 }}
-            {{ form.password1.errors }}
-        </div>
-        <div class="flex flex-col">
-            {{ form.password2.label_tag }}
-            {{ form.password2 }}
-            {{ form.password2.errors }}
-        </div>
-        
-        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">สมัครสมาชิค</button>
-    </form>
+
+
+<!-- <img src="/media/extra/register.jpg" alt="" class=""> -->
+<div class="bg-scroll h-screen flex items-center justify-center" style="background-image: url('/media/extra/MAX_5921ps1-scaled.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center center;">
+    <div class="max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6 border-blue-500 border-2">
+        <h3 class="text-2xl font-semibold mb-4 text-center">สมัครสมาชิก</h3>
+        <form action="{% url 'register' %}" method="post" class="space-y-4">
+            {% csrf_token %}
+            <div class="flex flex-col">
+                <input id="username" name="username" type="text" placeholder="ชื่อผู้ใช้งาน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                <p class="text-red-500 text-sm mt-1">{{ form.username.errors }}</p>
+            </div>
+            <div class="flex flex-col">
+                <input id="email" name="email" type="email" placeholder="อีเมล" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                <p class="text-red-500 text-sm mt-1">{{ form.email.errors }}</p>
+            </div>
+            <div class="flex flex-col">
+                <input id="password1" name="password1" type="password" placeholder="รหัสผ่าน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                <p class="text-red-500 text-sm mt-1">{{ form.password1.errors }}</p>
+            </div>
+            <div class="flex flex-col">
+                <input id="password2" name="password2" type="password" placeholder="ยืนยันรหัสผ่าน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                <p class="text-red-500 text-sm mt-1">{{ form.password2.errors }}</p>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200">สมัครสมาชิก</button>
+        </form>
+    </div>
 </div>
+
 {% endblock %}

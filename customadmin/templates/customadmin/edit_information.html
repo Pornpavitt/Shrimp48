@@ -1,0 +1,50 @@
+{% extends 'customadmin/components/site_header.html' %}
+
+{% block title %} Edit Foods {% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 class="text-3xl font-bold mb-6 text-blue-500">แก้ไขประกาศหน้าเว็ปไซต์</h1>
+        <nav>
+            <ol class="flex text-right gap-2">
+                <li>
+                    <a href="{% url 'dashboard' %}" class="font-medium">หน้าหลัก /</a>
+                </li>
+                <li>
+                    <a href="{% url 'information' %}" class="font-medium">ประกาศจากหน้าเว็ปไซต์ /</a>
+                </li>
+                <li>
+                    <a href="{% url 'edit_information' information.id %}" class="font-medium text-blue-500">แก้ไขประกาศหน้าเว็ปไซต์</a>
+                </li>
+            </ol>
+        </nav>
+    </div>
+<div class="mb-4">
+    <h1 class="mb-4"></h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="userid" value="{{ request.user.id }}">
+        <div class="mb-4">
+            <label for="information_name" class="block mb-2">หัวข้อการประกาศ:</label>
+            <input type="text" id="information_name" name="information_name" value="{{ information.information_name }}" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full px-4 py-2">
+        </div>
+        <div class="mb-6">
+            <label class="block text-gray-700">รายละเอียด:</label>
+            <textarea name="information_description" id="" cols="30" rows="6" required
+                class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">{{ information.information_description }}</textarea>
+        </div>
+        <div class="mb-4">
+            {% if foods.food_image %}
+                <img src="{{ information.information_image.url }}" alt="Food Image" style="max-width: 300px; max-height: 300px;" class="mb-2">
+            {% else %}
+                <p>No image available</p>
+            {% endif %}
+            <label for="information" class="block mb-2">รูปภาพการประกาศ:</label>
+            <input type="file" id="information_image" name="information_image" class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full px-4 py-2">
+        </div>
+        <input type="checkbox" name="allow_show" class="" value="1"> แสดงหน้าเว็ปไซต์ด้วยหรือไม่?<br>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3">บันทึกและแก้ไข</button>
+    </form>
+</div>
+{% endblock %}

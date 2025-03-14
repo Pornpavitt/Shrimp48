@@ -1,0 +1,31 @@
+{% extends 'customadmin/components/site_header.html' %}
+
+{% block title %} Add Users {% endblock %}
+
+{% block content %}
+<div class="mb-4 w-full">
+    <div class="flex justify-between items-center mb-4">
+        <div>
+            <input type="text" id="searchInput" placeholder="Search..." class="px-4 py-2 border rounded-md">
+        </div> 
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ชื่อบ่อกุ้ง</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ชื่อเจ้าของบ่อกุ้ง</th>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+                {% for ponds in pond %}
+                <tr>
+                    <td class="px-6 py-4">{{ ponds.pond_name }}</td>
+                    <td class="px-6 py-4">{{ ponds.user.username }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

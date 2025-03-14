@@ -1,49 +1,110 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body>
     <header class="bg-gray-200 p-4">
-        <a href="{% url 'dashboard' %}" class="text-lg font-semibold">Shrimp48</a>
-        <a href="{% url 'dashboard' %}" class="ml-4">หน้าแรก</a>
-        <a href="{% url 'logout' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md" >Logout</a>
+        <a href="{% url 'dashboard' %}" class="text-lg font-semibold">การวิเคราะห์ปัจจัยการเลี้ยงกุ้งให้เติบโตและระบบติดตามการเจริญเติบโตของกุ้ง</a>
+        <a href="{% url 'home' %}" class="ml-4">หน้าแรก</a>
+        <a href="{% url 'logout' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md">ออกจากระบบ</a>
     </header>
-    <div class="flex h-screen bg-gray-100">
-        <!-- Sidebar -->
-        <div class="w-64 bg-white border-r border-gray-200">
-            <div class="p-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold">Admin Dashboard</h2>
+    <div class="flex bg-white-900">
+        <div class="flex bg-gray-800 ">
+            <div class="p-4 text-white h-screen">
+                <h2 class="text-xl font-bold mb-4">หน้าต่างผู้จัดการ</h2>
+                <nav class="">
+                    <h3 class="mb-5 ml-4 mt-10 text-sm font-medium text-bodydark2">Menu</h3>
+                    <ul class="mb-6 flex flex-col gap-1.5">
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'dashboard' %}" class="block text-white">หน้าหลัก</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'user' %}" class="block text-white">ผู้ใช้</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimpSpecies' %}" class="block text-white">พันธ์ุกุ้ง</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimpFoods' %}" class="block text-white">อาหารกุ้ง</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimpDiseases' %}" class="block text-white">โรคกุ้ง</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimpprice.ad' %}" class="block text-white">ราคากุ้ง</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'shrimppond' %}" class="block text-white">บ่อกุ้ง</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'information' %}" class="block text-white">ประกาศ</a>
+                        </li>
+                    </ul>
+                </nav>
+
             </div>
-            <nav class="mt-4">
-                <ul>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="#" class="block text-gray-800">Dashboard</a>
-                    </li>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="{% url 'user' %}" class="block text-gray-800">Users</a>
-                    </li>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="{% url 'shrimpSpecies' %}" class="block text-gray-800">Shrimp Species</a>
-                    </li>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="{% url 'shrimpFoods' %}" class="block text-gray-800">Shrimp Foods</a>
-                    </li>
-                    <li class="px-4 py-2 hover:bg-gray-200">
-                        <a href="{% url 'shrimpDiseases' %}" class="block text-gray-800">Shrimp Diseases</a>
-                    </li>
-                    <!-- Add more sidebar items as needed -->
-                </ul>
-            </nav>
         </div>
-        <!-- Content area -->
-        {% block content%} {% endblock %}
+        <div class="flex-1 p-10">
+            
+            {% block content %} {% endblock %}
         </div>
     </div>
-    
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/a7046885ac.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: "คุณแน่ใจใช้ไหมที่จะลบ",
+                        // text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "ลบ",
+                        cancelButtonText:"ยกเลิก"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: "Delete Successfully",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            setTimeout(() => {
+                                
+                                window.location.href = button.querySelector('a').href;
+                            }, 1000);
+                        }
+                    });
+                });
+            });
+        });
+        function showLoginForm() {
+            var loginForm = document.getElementById("loginForm");
+            loginForm.classList.remove("hidden");
+            hideRegisterForm(); // ซ่อนแบบฟอร์มการลงทะเบียน
+            window.location.href = "#"; // หน้าล็อกอินที่คุณต้องการให้ไปยัง URL ของหน้าเข้าสู่ระบบ
+        }
+
+        function hideLoginForm() {
+            var loginForm = document.getElementById("loginForm");
+            loginForm.classList.add("hidden");
+        }
+    </script>
+
 </body>
+
 </html>

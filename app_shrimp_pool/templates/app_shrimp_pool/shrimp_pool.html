@@ -3,25 +3,166 @@
 {%block title%} บ่อกุ้ง {%endblock%}
 {% block content %}
 
+<div class="max-w-4xl mx-auto p-6">
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">บ่อกุ้งของคุณ</h2>
+            <button onclick="showAddShrimpForm()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                เพิ่มบ่อกุ้ง
+            </button>
+        </div>
+        <p class="text-lg text-gray-600 mb-6">ผู้ใช้: {{ user.username }}</p>
 
-<div class="max-w-md mx-auto bg-white shadow-md rounded p-6">
-    <a href="{% url 'add_shrimp_pool' user.id %}"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">เพิ่มบ่อกุ้ง</a>
-</div>
-
-<div class="max-w-md mx-auto">
-    <div class="bg-white shadow-md rounded p-4 mb-4">
-        <p class="font-semibold mb-2">User: {{ user.username }}</p>
-        <ul class="ml-6">
-            {% for pools in pool %}
-                {% if pools.user_id == user.id %}
-                    <li>บ่อกุ้งชื่อ : {{ pools.pond_name }}</li>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for pond in ponds %}
+            {% if pond.user_id == user.id %}
+            <div class="bg-gray-50 rounded-lg shadow-md transition duration-300 ease-in-out hover:shadow-lg overflow-hidden">
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">{{ pond.pond_name }}</h3>
+                        {% if pond.pond_number is None%}
+                            <h3 class="text-xl font-semibold text-gray-800"></h3>
+                        {% else %}
+                            <h3 class="text-xl font-semibold text-gray-800 mr-36">บ่อที่: {{ pond.pond_number }}</h3>
+                        {% endif %}
+                        <button onclick="toggleDetails('pond-{{ pond.id }}')" class="text-blue-500 hover:text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </div>
+                    {% if pond.pond_address is None%}
+                        <p class="text-gray-600">ไม่มีข้อมูลที่อยู่บ่อกุ้ง</p>
+                    {% else %}
+                        <p class="text-gray-600">{{ pond.pond_address }}</p>
+                    {% endif %}
+                </div>
+                
+                {% if pond.pond_image %}
+                    <img src="{{ pond.pond_image.url }}" alt="Shrimp Pond Image" class="w-full h-48 object-cover">
+                {% else %}
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                        <p class="text-gray-500 italic">ไม่มีรูปภาพบ่อกุ้ง</p>
+                    </div>
                 {% endif %}
+                
+                <div id="pond-{{ pond.id }}" class="hidden p-4 bg-white border-t border-gray-200">
+                    <h4 class="font-semibold mb-2">รายละเอียดเพิ่มเติม</h4>
+                    <p class="text-gray-600 mb-2">วันที่สร้าง: {{ pond.created_at|date:"d M Y" }}</p>
+                    <a href="{% url 'pond_detail' pond.id %}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out inline-block">
+                        ตรวจสอบ
+                    </a>
+                        <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out inline-block delete-btn"><a
+                                href="{% url 'delete_pool' pond.id user.id %}">ลบบ่อกุ้ง </a></button>
+                    </td>
+                </div>
+            </div>
+            {% endif %}
             {% endfor %}
-        </ul>
+        </div>
     </div>
 </div>
 
+<div id="addShrimpForm" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 hidden">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
+        <div class="absolute top-0 right-0 mt-4 mr-4 z-10">
+            <button onclick="hideAddShrimpForm()" class="focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6 w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <h2 class="text-3xl font-bold mb-6 text-center">เพิ่มบ่อกุ้ง</h2>
+        <form method="post" action="{% url 'add_shrimp_pool' user.id %}" class="space-y-4" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <input type="hidden" name="create_shrimp_pond">
+            <div>
+                <label for="pond_name" class="block text-gray-700 font-bold mb-2">ตั้งชื่อบ่อกุ้ง ที่จะเพิ่ม</label>
+                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
+                " id="pond_name" name="pond_name" required>
+            </div>
+            <div>
+                <label for="pond_address" class="block text-gray-700 font-bold mb-2">ที่อยู่บ่อกุ้ง</label>
+                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                    id="pond_address" name="pond_address" required>
+            </div>
+            <div>
+                <label for="pond_address" class="block text-gray-700 font-bold mb-2">หมายเลขบ่อกุ้ง</label>
+                <input type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                    id="pond_number" name="pond_number" required>
+            </div>
+            <div>
+                <label for="pond_image" class="block text-gray-700 font-bold mb-2">เพิ่มรูปภาพบ่อกุ้ง</label>
+                <input type="file" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" 
+                    id="pond_image" name="pond_image" >
+            </div>
+            <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create</button>
+        </form>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); 
 
+            Swal.fire({
+                title: "คุณแน่ใจหรือไม่?",
+                text: "คุณกำลังลบบ่อกุ้ง!",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: "ยกเลิก", 
+                confirmButtonText: "ลบบ่อกุ้ง", 
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "ลบเสร็จสิ้น",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    setTimeout(() => {
+                        const deleteUrl = button.querySelector('a')?.href;
+                        if (deleteUrl) {
+                            window.location.href = deleteUrl;
+                        } else {
+                            console.error("Delete URL not found!");
+                        }
+                    }, 1000); 
+                }
+            });
+        });
+    });
+});
+    function toggleDetails(id) {
+    var detailsElement = document.getElementById(id);
+    if (detailsElement.classList.contains('hidden')) {
+        detailsElement.classList.remove('hidden');
+    } else {
+        detailsElement.classList.add('hidden');
+    }
+}
+
+    function showAddShrimpForm() {
+        var addShrimpForm = document.getElementById("addShrimpForm");
+        addShrimpForm.classList.remove("hidden");
+        hideLoginForm(); 
+
+    }
+
+    function hideAddShrimpForm() {
+        var addShrimpForm = document.getElementById("addShrimpForm");
+        addShrimpForm.classList.add("hidden");
+    }
+    </script>
+</script>
 
 {% endblock %}

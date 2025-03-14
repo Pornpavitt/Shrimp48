@@ -1,10 +1,18 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.contrib.auth import authenticate, login
 from django.contrib.admin.views.decorators import staff_member_required
-from app_model.models import ShrimpSpecies, ShrimpFoods, ShrimpDiseases, ShrimpPrices, ShrimpPonds, ShrimpPondsDetail
-import datetime
+from app_model.models import ShrimpSpecies, ShrimpFoods, ShrimpDiseases, ShrimpPrices, ShrimpPonds, ShrimpPondsDetail, Information
+from datetime import datetime, timedelta
+from django import forms
+from django.views.decorators.csrf import csrf_exempt
+import requests
+from django.http import JsonResponse
+from django.db.models import Max
+from pytz import timezone
+from django.utils.timezone import make_aware
+
 # Create your views here.
 
 def admin(request):
@@ -13,31 +21,61 @@ def admin(request):
     else:
         return  HttpResponse("You are not authorized to access this page.")
 
-@staff_member_required
-def admin_login(request,):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password )
-        if user is not None:
-            login(request, user)
-            return redirect("dashboard/")  # Corrected the redirect URL
-        else:
-            return render(request, 'customadmin/login.html', {'error_message': 'Invalid login'})
+def update_price(request):
+    if request.method == 'POST' and request.POST.get('submit'):
+        api_url = "https://dataapi.moc.go.th/gis-product-prices?product_id=P12004&from_date=2020-01-01&to_date=2025-12-31"
+
+        try:
+            response = requests.get(api_url, verify=False)  
+            response.raise_for_status()  
+            try:
+                data = response.json()  
+            except ValueError as e:
+                return JsonResponse({'error': 'Invalid JSON format in API response', 'details': str(e)}, status=500)
+
+            if 'price_list' in data:
+                for price_entry in data['price_list']:
+                    date_str = price_entry.get('date')
+                    if date_str:
+                        date = make_aware(datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S'), timezone('Asia/Bangkok'))
+                        price_min = price_entry.get('price_min')
+                        price_max = price_entry.get('price_max')
+
+                        ShrimpPrices.objects.get_or_create(
+                            date=date,
+                            defaults={
+                                'price_specie': data.get('product_name'),
+                                'price_min': price_min,
+                                'price_max': price_max
+                            }
+                        )
+
+        except requests.exceptions.RequestException as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
     else:
-        return render(request, 'customadmin/login.html')
+        return JsonResponse({'error': 'No date selected'}, status=400)
+    
+    return redirect('dashboard')
+
+
 
 @staff_member_required
 def dashboard(request):
     if request.user.is_superuser:
         users = User.objects.all()
-        shrimp_species = ShrimpSpecies.objects.all()
-        shrimp_species = ShrimpSpecies.objects.all()
-        shrimp_foods = ShrimpFoods.objects.all()
-        shrimp_diseases = ShrimpDiseases.objects.all()
-        shrimp_prices = ShrimpPrices.objects.all()
-        shrimp_ponds = ShrimpPonds.objects.all()
-        shrimp_ponds_detail = ShrimpPondsDetail.objects.all()
+        shrimp_species = ShrimpSpecies.objects.filter(deleted_at = None)
+        shrimp_species = ShrimpSpecies.objects.filter(deleted_at = None)
+        shrimp_foods = ShrimpFoods.objects.filter(deleted_at = None)
+        shrimp_diseases = ShrimpDiseases.objects.filter(deleted_at = None)
+        shrimp_ponds = ShrimpPonds.objects.filter(deleted_at = None)
+        shrimp_ponds_detail = ShrimpPondsDetail.objects.filter(deleted_at = None)
+        information = Information.objects.filter(deleted_at = None)
+        latest_date = ShrimpPrices.objects.filter(deleted_at=None).aggregate(latest_date=Max('date'))['latest_date']
+        print(f"Selected date from request: {latest_date}")
+        # Filter the shrimp prices by the latest date
+        shrimp_prices = ShrimpPrices.objects.filter(deleted_at=None, date=latest_date)
+
 
         return render(request, 'customadmin/dashboard.html', {
             'users' : users,
@@ -47,8 +85,9 @@ def dashboard(request):
             'shrimp_prices': shrimp_prices,
             'shrimp_ponds': shrimp_ponds,
             'shrimp_ponds_detail': shrimp_ponds_detail,
+            'information': information
     })
-
+    
     else:
         return  render(request,"customadmin/login.html")
     
@@ -93,6 +132,8 @@ def edit_user(request, user_id):
         users = User.objects.get(id=user_id)
         users.first_name = request.POST['first_name']
         users.last_name = request.POST['last_name']
+        if 'image' in request.FILES:
+            users.image = request.FILES['image']
         users.save()
         return redirect('user')
     else:
@@ -123,14 +164,16 @@ def add_shrimpSpecies(request):
         description = request.POST.get('description')
         specie_food = request.POST.get('specie_food')
         image = request.FILES.get('image')
+        allow_show = request.POST.get('allow_show')
         user_id = request.POST.get('userid')
-        print(request.FILES)
+        # print(request.FILES)
         # Create a new user object
         new_species = ShrimpSpecies.objects.create(
             name=name,
             description=description,
             specie_food=specie_food,
             image=image,
+            allow_show = allow_show,
             user_id=user_id
         )
         return redirect('shrimpSpecies')
@@ -144,7 +187,9 @@ def edit_species(request, specie_id):
         species.name = request.POST['name']
         species.description = request.POST['description']
         species.specie_food = request.POST['specie_food']
-        species.image = request.FILES['image']
+        if 'image' in request.FILES:
+            species.image = request.FILES['image']
+        species.allow_show = request.POST.get('allow_show')
         user_id = request.POST.get('userid')
         species.save()
         return redirect('shrimpSpecies')
@@ -173,6 +218,7 @@ def add_shrimpFoods(request):
         food_name = request.POST.get('food_name')
         food_description = request.POST.get('food_description')
         food_image = request.FILES.get('food_image')
+        allow_show = request.POST.get('allow_show')
         user_id = request.POST.get('userid')
 
         # Create a new user object
@@ -180,6 +226,7 @@ def add_shrimpFoods(request):
             food_name=food_name,
             food_description=food_description,
             food_image=food_image,
+            allow_show=allow_show,
             user_id=user_id
         )
         return redirect('shrimpFoods')
@@ -192,7 +239,9 @@ def edit_shrimpFoods(request, food_id):
         foods = ShrimpFoods.objects.get(id=food_id)
         foods.food_name = request.POST['food_name']
         foods.food_description = request.POST['food_description']
-        foods.food_image = request.FILES['food_image']
+        if 'food_image' in request.FILES:
+            foods.food_image = request.FILES['food_image']
+        foods.allow_show = request.POST.get('allow_show')
         user_id = request.POST.get('userid')
         foods.save()
         return redirect('shrimpFoods')
@@ -203,12 +252,12 @@ def edit_shrimpFoods(request, food_id):
 @staff_member_required
 def delete_shrimpFoods(request, food_id):
     species = ShrimpFoods.objects.get(id=food_id)
-    species.deleted_at = datetime.datetime.now()
+    species.deleted_at = datetime.now()
     species.save()
     return redirect('shrimpFoods')   
 
 ###################
-####shrimpDiseases#####
+##shrimpDiseases###
 ###################
 @staff_member_required
 def shrimpDiseases(request):
@@ -224,6 +273,7 @@ def add_shrimpDiseases(request):
         disease_prevent = request.POST.get('disease_prevent')
         disease_treat = request.POST.get('disease_treat')
         disease_cause =  request.POST.get('disease_cause')
+        allow_show = request.POST.get('allow_show')
         user_id = request.POST.get('userid')
 
         # Create a new user object
@@ -234,6 +284,7 @@ def add_shrimpDiseases(request):
             disease_prevent=disease_prevent,
             disease_treat=disease_treat,
             disease_cause=disease_cause,
+            allow_show=allow_show,
             user_id=user_id
         )
         return redirect('shrimpDiseases')
@@ -247,10 +298,12 @@ def edit_shrimp_diseases(request, disease_id):
         disease = ShrimpDiseases.objects.get(id=disease_id)
         disease.disease_name = request.POST.get('disease_name')
         disease.disease_symptom = request.POST.get('disease_symptom')
-        disease.disease_image = request.FILES.get('disease_image')
+        if 'disease_image' in request.FILES:
+            disease.disease_image = request.FILES['disease_image']
         disease.disease_prevent = request.POST.get('disease_prevent')
         disease.disease_treat = request.POST.get('disease_treat')
         disease.disease_cause = request.POST.get('disease_cause')
+        disease.allow_show = request.POST.get('allow_show')
         user_id = request.POST.get('userid')
         disease.user_id = user_id
         disease.save()
@@ -266,3 +319,84 @@ def delete_shrimp_diseases(request, disease_id):
     disease.deleted_at = datetime.datetime.now()
     disease.save()
     return redirect('shrimpDiseases')
+
+###################
+####shrimpPrice####
+###################
+
+@staff_member_required
+def shrimpprice(request):
+    price = ShrimpPrices.objects.filter(deleted_at=None)
+    return render(request, 'customadmin/shrimpprice.html', {'price' : price})
+
+@staff_member_required
+def delete_shrimp_price(request, id):
+    price = ShrimpPrices.objects.get(id=id)
+    price.deleted_at = datetime.datetime.now()
+    price.save()
+    return redirect('shrimpprice.ad')
+
+###################
+####shrimpPond#####
+###################
+
+@staff_member_required
+def shrimppond(request):
+    pond = ShrimpPonds.objects.filter(deleted_at=None)
+    return render(request, 'customadmin/shrimppond.html', {'pond' : pond})
+
+###################
+####Information####
+###################
+@staff_member_required
+def information(request):
+    information = Information.objects.filter(deleted_at=None)
+    return render(request, 'customadmin/information.html', {'information' : information})
+
+@staff_member_required
+def add_information(request):
+    if request.method == 'POST':
+        information_name = request.POST.get('information_name')
+        information_description = request.POST.get('information_description')
+        allow_show = request.POST.get('allow_show')
+        information_image = request.FILES.get('information_image')
+        user_id = request.POST.get('userid')
+
+        # Create a new user object
+        new_diseases = Information.objects.create(
+            information_name=information_name,
+            information_description=information_description,
+            allow_show=allow_show,
+            information_image=information_image,
+            user_id=user_id
+        )
+        return redirect('information')
+    
+    elif request.method == 'GET':
+        return render(request, 'customadmin/add_information.html') 
+
+@staff_member_required
+def edit_information(request, information_id):
+    if request.method == 'POST':
+        information = Information.objects.get(id=information_id)
+        information.information_name = request.POST.get('information_name')
+        information.information_description = request.POST.get('information_description')
+        if 'information_image' in request.FILES:
+            information.information_image = request.FILES.get('information_image')
+        information.allow_show = request.POST.get('allow_show')
+        user_id = request.POST.get('userid')
+        information.user_id = user_id
+        information.save()
+        return redirect('information')
+    else:
+        information = Information.objects.get(id=information_id)
+        return render(request, 'customadmin/edit_information.html', {"information": information})
+
+
+@staff_member_required
+def delete_information(request, information_id):
+    information = Information.objects.get(id=information_id)
+    information.deleted_at = datetime.datetime.now()
+    information.save()
+    return redirect('information')
+
