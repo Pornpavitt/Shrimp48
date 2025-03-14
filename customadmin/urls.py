@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     # path('', views.admin_login , name='login'),
     path('dashboard/', views.dashboard , name='dashboard'),
+    path('update-price/', views.update_price, name='update_price'),
 
     #User
     path('user/', views.user, name='user'),
@@ -32,11 +33,19 @@ urlpatterns = [
     path('edit_shrimpDisease/<disease_id>', views.edit_shrimp_diseases, name='edit_shrimpDisease'),
     path('delete_shrimpDisease/<disease_id>', views.delete_shrimp_diseases, name="delete_shrimpDisease"),
 
+    #Information
+    path('information/', views.information, name="information"),
+    path('add_information/', views.add_information, name="add_information"),
+    path('edit_information/<information_id>', views.edit_information, name='edit_information'),
+    path('delete_information/<information_id>', views.delete_information, name="delete_information"),
+    # path('update_allow_show/<int:info_id>/', views.update_allow_show, name='update_allow_show'),
+
     #Price
     path('shrimpprice/', views.shrimpprice, name="shrimpprice.ad"),
     path('delete_shrimp_price/<id>', views.delete_shrimp_price, name="delete_shrimp_price"),
 
     #Price
     path('shrimppond/', views.shrimppond, name="shrimppond"),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

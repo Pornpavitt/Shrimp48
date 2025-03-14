@@ -5,14 +5,17 @@
 {% block content %}
 <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 class="text-3xl font-bold mb-6 text-blue-500">Add New Diseases</h1>
+        <h1 class="text-3xl font-bold mb-6 text-blue-500">เพิ่มโรคกุ้ง</h1>
         <nav>
             <ol class="flex text-right gap-2">
                 <li>
-                    <a href="{% url 'dashboard' %}" class="font-medium">Dashboard /</a>
+                    <a href="{% url 'dashboard' %}" class="font-medium">หน้าหลัก /</a>
                 </li>
                 <li>
-                    <a href="{% url 'add_shrimpdisease' %}" class="font-medium text-blue-500">Add Diseases</a>
+                    <a href="{% url 'shrimpDiseases' %}" class="font-medium ">โรคกุ้ง /</a>
+                </li>
+                <li>
+                    <a href="{% url 'add_shrimpdisease' %}" class="font-medium text-blue-500">เพิ่มโรคกุ้ง</a>
                 </li>
             </ol>
         </nav>
@@ -23,17 +26,17 @@
             <div class="flex flex-col gap-9">
                 <input type="hidden" name="userid" value="{{ request.user.id }}">
                 <div class="mb-6">
-                    <label class="block text-gray-700">Disease Name</label>
+                    <label class="block text-gray-700">ชื่อโรคกุ้ง</label>
                     <input type="text" name="disease_name" required
                         class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
                 </div>
                 <div class="mb-6">
-                    <label class="block text-gray-700">Disease Symptom</label>
+                    <label class="block text-gray-700">อาการ</label>
                     <textarea name="disease_symptom" id="" cols="30" rows="6" required
                         class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3"></textarea>
                 </div>
                 <div class="mb-6">
-                    <label class="block text-gray-700">Disease Cause</label>
+                    <label class="block text-gray-700">สาเหตุ</label>
                     <textarea name="disease_cause" id="" cols="30" rows="6" required
                         class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3"></textarea>
 
@@ -41,24 +44,25 @@
             </div>
             <div class="flex flex-col gap-9 ">
                 <div class="mb-6">
-                    <label class="block text-gray-700">Disease Prevention</label>
+                    <label class="block text-gray-700">การป้องกัน</label>
                     <textarea name="disease_prevent" id="" cols="30" rows="6" required
                         class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3"></textarea>
                 </div>
                 <div class="mb-6">
-                    <label class="block text-gray-700">Disease Treatment</label>
+                    <label class="block text-gray-700">การรักษา</label>
                     <textarea name="disease_treat" id="" cols="30" rows="6" required
                     class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3"></textarea>  
                 </div>
                 <div class="mb-6">
-                    <label class="block text-gray-700">Disease Image</label>
+                    <label class="block text-gray-700">รูปโรคกุ้ง</label>
                     <input type="file" name="disease_image" required
-                        class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
+                    class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
                 </div>
             </div>
         </div>
+        <input type="checkbox" name="allow_show" class="" value="1"> แสดงหน้าเว็ปไซต์ด้วยหรือไม่?<br>
         <button type="submit"
-            class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Create</button>
+            class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">เพิ่มข้อมูล</button>
     </form>
 </div>
 

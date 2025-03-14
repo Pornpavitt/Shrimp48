@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'IT48.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'django_shrimp48',
+        'NAME' : 'bit07_shrimp',
         'HOST' : 'localhost',
         'USER' : 'root',
         'PASSWORD' : '',

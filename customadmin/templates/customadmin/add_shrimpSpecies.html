@@ -5,17 +5,17 @@
 {% block content %}
 <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 class="text-3xl font-bold mb-6 text-blue-500">Add New Species</h1>
+        <h1 class="text-3xl font-bold mb-6 text-blue-500">เพิ่มพันธุ์กุ้ง</h1>
         <nav>
             <ol class="flex text-right gap-2">
                 <li>
-                    <a href="{% url 'dashboard' %}" class="font-medium">Dashboard /</a>
+                    <a href="{% url 'dashboard' %}" class="font-medium">หน้าหลัก /</a>
                 </li>
                 <li>
-                    <a href="{% url 'shrimpSpecies' %}" class="font-medium">Shrimp Species /</a>
+                    <a href="{% url 'shrimpSpecies' %}" class="font-medium">พันธ์ุกุ้ง /</a>
                 </li>
                 <li>
-                    <a href="{% url 'add_shrimpSpecies' %}" class="font-medium text-blue-500">Add Species</a>
+                    <a href="{% url 'add_shrimpSpecies' %}" class="font-medium text-blue-500">เพิ่มพันธุ์กุ้ง</a>
                 </li>
             </ol>
         </nav>
@@ -25,26 +25,27 @@
     {% csrf_token %}
     <input type="hidden" name="userid" value="{{ request.user.id }}">
     <div class="mb-6">
-        <label class="block text-gray-700">Name</label>
+        <label class="block text-gray-700">ชื่อพันธุ์กุ้ง</label>
         <input type="text" name="name" 
             class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
     </div>
     <div class="mb-6">
-        <label class="block text-gray-700">Description</label>
+        <label class="block text-gray-700">รายละเอียด</label>
         <textarea name="description" id="" cols="30" rows="6" required
             class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3"></textarea>
     </div>
     <div class="mb-6">
-        <label class="block text-gray-700">Specie Food</label>
+        <label class="block text-gray-700">อาหารกุ้ง</label>
         <input type="text" name="specie_food"
             class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
     </div>
     <div class="mb-6">
-        <label class="block text-gray-700">image</label>
+        <label class="block text-gray-700">รูปพันธ์ุกุ้ง</label>
         <input type="file" name="image" 
             class="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 rounded-md w-full py-2 px-3">
     </div>
-    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Create</button>
+    <input type="checkbox" name="allow_show" class="" value="1"> แสดงหน้าเว็ปไซต์ด้วยหรือไม่?<br>
+    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">เพิ่มข้อมูล</button>
 </form>
 
 {% endblock %}

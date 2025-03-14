@@ -3,8 +3,9 @@ from django.shortcuts import render
 from app_model.models import ShrimpPrices
 from django.http import JsonResponse
 from datetime import datetime, timedelta
-from pytz import timezone
+from django.db.models import Max
 # ML import zone
+import json
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,18 +13,17 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-thai_months = [
-    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-    "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
-]
 
 def predict(yearY,monthY):
-    df = pd.read_csv("media/extra/data_2.csv", encoding='tis-620')
+    shrimpprice = ShrimpPrices.objects.values('date','price_min','price_max')
+    df = pd.DataFrame(shrimpprice)
+    df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
+    df['price_min'] = df['price_min'].astype(float)
+    df['price_max'] = df['price_max'].astype(float)
+    print(df.head())  
+    print(df.dtypes)  
 
-    df[["date","XOX"]] = df.date.str.split("T", expand=True)
-    df=df.drop(columns=[ 'XOX'], axis=1)
     df[["year","month","day"]] = df.date.str.split("-", expand=True)
-
     df['average'] = df['price_min']+df['price_max']
     df['average'] = df['average']/2
     df_dropped = df.drop(columns=['price_min', 'price_max'], axis=1)
@@ -58,43 +58,27 @@ def predict(yearY,monthY):
     print('Predict',y_predict_Future)
     return score,MSE,MAE,y_predict_Future
 
+
 def shrimpprice(request):
-    selected_date = request.GET.get('calendar')
     yearX = request.GET.get('yearX')
     monthX = request.GET.get('monthX')
+    start_date = request.GET.get('start_date', '')
+    end_date = request.GET.get('end_date', '')
+    latest_date = ShrimpPrices.objects.filter(deleted_at=None).aggregate(latest_date=Max('date'))['latest_date']
+    shrimpprice_view = ShrimpPrices.objects.filter(deleted_at=None, date=latest_date)
+    error_message = None
 
-    if selected_date:
-        api_url = f"https://dataapi.moc.go.th/gis-product-prices?product_id=P12004&from_date={selected_date}&to_date={selected_date}"
-        
-        try:
-            response = requests.get(api_url)
-            data = response.json()
-            if 'price_list' in data:
-                for price_entry in data['price_list']:
-                    date_str = price_entry['date']
-                    date = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone('Asia/Bangkok'))
-                    date += timedelta(days=1)
-                    formatted_date_str = date.strftime('%Y-%m-%d %H:%M:%S')
-                    price_min = price_entry['price_min']
-                    price_max = price_entry['price_max']
-                    entry = ShrimpPrices.objects.filter(date=date).first()
-                    if not entry:
-                        shrimp_price = ShrimpPrices.objects.create(
-                            price_specie=data.get('product_name'), 
-                            price_min=price_min,
-                            price_max=price_max,
-                            date=date,  
-                        )
-                        shrimp_price.save()
-        except requests.exceptions.RequestException as e:
-            return JsonResponse({'error': str(e)}, status=500)
-        except ValueError as e:
-            return JsonResponse({'error': 'Invalid JSON format in API response'}, status=500)
-    else:
-        data = None
+    # Initialize prediction variables
+    score = None
+    MSE = None
+    MAE = None
+    Predictt = None
+    prediction_dates = []
+    prediction_values = []
+    y_predict_Future = []
     
     if yearX and monthX:
-        yearX= int(yearX)
+        yearX = int(yearX)
         monthX = int(monthX)
         score,MSE,MAE,Predictt = predict(yearX,monthX)
     else:
@@ -103,30 +87,57 @@ def shrimpprice(request):
         MAE = None
         Predictt = None
 
-    return render(request, 'app_shrimp_price/shrimp_price.html',{'data': data,"score":score,"MSE":MSE,"MAE":MAE,"pre":Predictt,"M":monthX})
+
+    shrimp_prices = []
+    shrimp_dates = []
+    shrimp_prices_min = []
+    shrimp_prices_max = []
+
+    if start_date and end_date:
+        try:
+            start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
+            end_datetime = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)  # End of the end date
+            if start_datetime > end_datetime:
+                error_message = "วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด"
+            else:
+                shrimp_prices = ShrimpPrices.objects.filter(date__range=[start_datetime, end_datetime])
+            for price in shrimp_prices:
+                shrimp_dates.append(price.date.strftime('%Y-%m-%d'))
+                shrimp_prices_min.append(float(price.price_min))
+                shrimp_prices_max.append(float(price.price_max))
+        except ValueError:
+            error_message = "รูปแบบวันที่ไม่ถูกต้อง"
+            shrimp_prices = ShrimpPrices.objects.none()
+
+    return render(request, 'app_shrimp_price/shrimp_price.html', {
+        "shrimpprice_view":shrimpprice_view,
+        "shrimp_prices": shrimp_prices,
+        "shrimp_dates": shrimp_dates,
+        "shrimp_prices_min": shrimp_prices_min,
+        "shrimp_prices_max": shrimp_prices_max,
+        "score": score,
+        "MSE": MSE,
+        "MAE": MAE,
+        "pre": Predictt,
+        "prediction_dates": prediction_dates,
+        "prediction_values": prediction_values,
+        "M": monthX,
+        "Y": yearX,
+        "error_message": error_message,
+        'start_date': start_date,
+        'end_date': end_date,
+        "y_predict" : y_predict_Future
+    })
 
 
 
 
+def shrimpprice_view(request):
+    selected_date = request.GET.get('calendar') 
+    
+    if selected_date:
+        shrimp_prices = ShrimpPrices.objects.filter(date=selected_date)
+    else:
+        shrimp_prices = ShrimpPrices.objects.none()  
+    return render(request, 'app_shrimp_price/shrimp_price.html', {'shrimp_prices': shrimp_prices})
 
-
-
-
-
-
-
-
-# def predictprice(request):
-#     yearX = request.GET.get('yearX')
-#     monthX = request.GET.get('monthX')
-#     if yearX and monthX:
-#         yearX= int(yearX)
-#         monthX = int(monthX)
-#         score,MSE,MAE,Predictt = predict(yearX,monthX)
-#     else:
-#         score = None
-#         MSE = None
-#         MAE = None
-#         Predictt = None
-
-#     return render(request, 'app_shrimp_price/shrimp_price.html', {"score":score,"MSE":MSE,"MAE":MAE,"pre":Predictt,"M":monthX})

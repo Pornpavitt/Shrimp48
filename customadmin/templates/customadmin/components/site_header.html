@@ -10,48 +10,48 @@
 
 <body>
     <header class="bg-gray-200 p-4">
-        <a href="{% url 'dashboard' %}" class="text-lg font-semibold">Shrimp48</a>
-        <a href="{% url 'dashboard' %}" class="ml-4">หน้าแรก</a>
-        <a href="{% url 'logout' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md">Logout</a>
+        <a href="{% url 'dashboard' %}" class="text-lg font-semibold">การวิเคราะห์ปัจจัยการเลี้ยงกุ้งให้เติบโตและระบบติดตามการเจริญเติบโตของกุ้ง</a>
+        <a href="{% url 'home' %}" class="ml-4">หน้าแรก</a>
+        <a href="{% url 'logout' %}" class="mx-2 bg-blue-500 text-white px-4 py-2 rounded shadow-md">ออกจากระบบ</a>
     </header>
     <div class="flex bg-white-900">
-        <!-- Sidebar -->
         <div class="flex bg-gray-800 ">
-            <!-- Sidebar content -->
             <div class="p-4 text-white h-screen">
-                <h2 class="text-xl font-bold mb-4">Admin Dashboard</h2>
+                <h2 class="text-xl font-bold mb-4">หน้าต่างผู้จัดการ</h2>
                 <nav class="">
                     <h3 class="mb-5 ml-4 mt-10 text-sm font-medium text-bodydark2">Menu</h3>
                     <ul class="mb-6 flex flex-col gap-1.5">
                         <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
-                            <a href="{% url 'dashboard' %}" class="block text-white">Dashboard</a>
+                            <a href="{% url 'dashboard' %}" class="block text-white">หน้าหลัก</a>
                         </li>
                         <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
-                            <a href="{% url 'user' %}" class="block text-white">Users</a>
+                            <a href="{% url 'user' %}" class="block text-white">ผู้ใช้</a>
                         </li>
                         <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
-                            <a href="{% url 'shrimpSpecies' %}" class="block text-white">Shrimp Species</a>
+                            <a href="{% url 'shrimpSpecies' %}" class="block text-white">พันธ์ุกุ้ง</a>
                         </li>
                         <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
-                            <a href="{% url 'shrimpFoods' %}" class="block text-white">Shrimp Foods</a>
+                            <a href="{% url 'shrimpFoods' %}" class="block text-white">อาหารกุ้ง</a>
                         </li>
                         <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
-                            <a href="{% url 'shrimpDiseases' %}" class="block text-white">Shrimp Diseases</a>
+                            <a href="{% url 'shrimpDiseases' %}" class="block text-white">โรคกุ้ง</a>
                         </li>
                         <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
-                            <a href="{% url 'shrimpprice.ad' %}" class="block text-white">Shrimp Price</a>
+                            <a href="{% url 'shrimpprice.ad' %}" class="block text-white">ราคากุ้ง</a>
                         </li>
                         <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
-                            <a href="{% url 'shrimppond' %}" class="block text-white">Shrimp Ponds</a>
+                            <a href="{% url 'shrimppond' %}" class="block text-white">บ่อกุ้ง</a>
+                        </li>
+                        <li class="px-4 py-2 ml-10 hover:bg-gray-700 sidebar-link">
+                            <a href="{% url 'information' %}" class="block text-white">ประกาศ</a>
                         </li>
                     </ul>
                 </nav>
 
             </div>
         </div>
-        <!-- Main content -->
         <div class="flex-1 p-10">
-            <!-- Your main content here -->
+            
             {% block content %} {% endblock %}
         </div>
     </div>
@@ -64,15 +64,16 @@
             const deleteButtons = document.querySelectorAll('.delete-btn');
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function (event) {
-                    event.preventDefault(); // Prevent the default link behavior
+                    event.preventDefault();
                     Swal.fire({
-                        title: "Are you sure?",
-                        text: "You won't be able to revert this!",
+                        title: "คุณแน่ใจใช้ไหมที่จะลบ",
+                        // text: "You won't be able to revert this!",
                         icon: "warning",
                         showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, delete it!"
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "ลบ",
+                        cancelButtonText:"ยกเลิก"
                     }).then((result) => {
                         if (result.isConfirmed) {
                             Swal.fire({
@@ -83,7 +84,7 @@
                                 timer: 1500
                             });
                             setTimeout(() => {
-                                // Redirect to the delete URL when confirmed
+                                
                                 window.location.href = button.querySelector('a').href;
                             }, 1000);
                         }
@@ -91,6 +92,17 @@
                 });
             });
         });
+        function showLoginForm() {
+            var loginForm = document.getElementById("loginForm");
+            loginForm.classList.remove("hidden");
+            hideRegisterForm(); // ซ่อนแบบฟอร์มการลงทะเบียน
+            window.location.href = "#"; // หน้าล็อกอินที่คุณต้องการให้ไปยัง URL ของหน้าเข้าสู่ระบบ
+        }
+
+        function hideLoginForm() {
+            var loginForm = document.getElementById("loginForm");
+            loginForm.classList.add("hidden");
+        }
     </script>
 
 </body>

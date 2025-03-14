@@ -4,14 +4,16 @@
 <header class="h-96 flex content-center justify-center bg-imgae "
     style="background-image: url(media/shrimp_diseases_images/20190107shrinp.jpg); height: 500px; background-size: cover; background-repeat: no-repeat; background-position: center center; ">
     <div class="w-100  text-white content-center text-center">
-        <h1 class="text-5xl">การวิเคราะห์ปัจจัยการเลี้ยงกุ้งให้เติบโตและระบบติดตามการเจริญเติบโตของกุ้ง</h1>
-        <!-- <p class="">afsdlkfgjaeprofgj;'dfjgg;oisthjgol;bindsfl;ignhso;itdnbo;rsitnbo;adiengoaifsng;lainj'</p> -->
+        <h1 class="text-4xl mt-5">การวิเคราะห์ปัจจัยการเลี้ยงกุ้งให้เติบโตและระบบติดตามการเจริญเติบโตของกุ้ง</h1>
+        <p class="mt-5">ยินดีต้อนรับสู่แหล่งข้อมูลครบวงจรสำหรับการเลี้ยงกุ้ง! <br>
+            หน้าเว็บนี้รวบรวมข้อมูลและเทคโนโลยีที่จำเป็นในการวิเคราะห์ปัจจัยต่าง ๆ <br>ที่ส่งผลต่อการเติบโตของกุ้ง
+            รวมถึงการจัดการระบบติดตามการเจริญเติบโตของกุ้งเพื่อเพิ่มประสิทธิภาพการผลิต</p>
         <div class="mt-6"></div>
         {% if user.is_authenticated %}
         <a href="{% url 'shrimpool_dashbord' user.id %}"
             class="w-20 content-center bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">เริ่มต้นใช้งาน</a>
         {% else %}
-        <a href="{% url 'register' %}"
+        <a href="#" onclick="showRegisterForm()"
             class=" content-center bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">สมัครสมาชิก</a>
         {% endif %}
     </div>
@@ -20,11 +22,12 @@
     <section class="service_section layout_padding b p-4 mx-auto max-w-screen-xl ">
     </section>
 </div>
+
 <div class="shrimppice h-80 flex content-center justify-center bg-gray-200 ">
     <div class=" mt-10 mr-96 mb-10 ">
         {% for price in shrimpprice %}
-        <h2 class="mt-3">ราคากุ้งวันนี้ : วันที่ {{ price.date|date:"j N Y " }}<span id="datenow"></span></h2>
-        <h3 class="mt-3 ml-3">กุ้งขาว (70 ตัว/กก.) :</h3>
+        <h2 class="mt-3">ราคากุ้งวันนี้ : วันที่ {{ price.date|date:"j N Y "}}<span id="datenow"></span></h2>
+        <h3 class="mt-3 ml-3">{{price.price_specie}} :</h3>
         <p class="mt-3 ml-3">ราคาต่ำสุด / กก. : {{price.price_min}} <span id="price_min"></span> บาท</p>
         <p class="mt-3 ml-3">ราคาสูงสุด / กก. : {{ price.price_max }} <span id="price_max"></span>บาท</p>
         {% endfor %}
@@ -39,91 +42,98 @@
     <section class="service_section layout_padding b p-4 mx-auto max-w-screen-xl ">
     </section>
 </div>
-<div class="max-w-2xl mx-auto my-10">
-    <p class="text-3xl">ตัวอย่างโรคกุ้ง</p>
-    <div class="grid grid-cols-4 my-5">
-        {% for diseases in disease %}
-        {% if diseases.disease_image == "shrimp_diseases_images/โรคดวงขาว.jpg" %}
-        <div class="col-span-2 justify-center">
-            {% if diseases.disease_image %}
-            <img src="{{ diseases.disease_image.url }}" alt="" class="w-52 h-52 rounded border border-black">
+
+
+<div class="container mx-auto my-10">
+    {% if species %}
+    <div class="mb-4">
+        <h3 class="text-3xl font-bold text-gray-800 dark:text-white ml-10">พันธ์กุ้ง</h3>
+    </div>
+    <div class="w-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for specie in species %}
+        <div
+            class="col-span-1 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-auto my-10">
+            {% if specie.image %}
+            <img class="rounded-t-lg object-contain h-48 w-full" src="{{ specie.image.url }}"
+                alt="{{ specie.name }} Image">
             {% else %}
-            <span>Not Showing</span>
+            <div class="h-48 w-full bg-gray-200 rounded-t-lg flex items-center justify-center">
+                <p class="text-gray-500">No image available</p>
+            </div>
             {% endif %}
+            <div class="p-5">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ specie.name }}</h5>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ specie.description }}</p>
+                
+            </div>
         </div>
-        <div class="grid-rows-3 col-span-2">
-            <p class="text-3xl">{{ diseases.disease_name }}</p>
-            <p>อาการ : {{ diseases.disease_symptom }}</p>
-        </div>
-        {% else %}
-        {% endif %}
         {% endfor %}
     </div>
+    {% endif %}
 </div>
-<div class="max-w-2xl mx-auto my-10">
-    <p class="text-3xl">ตัวอย่างอาหารกุ้ง</p>
-    <div class="grid grid-cols-2 my-5">
-        <div>
-            {% for foods in food %}
-            {% if foods.food_image %}
-            <p class="text-xl ml-5">{{ foods.food_name }}</p>
-            {% else %}
-            {% endif %}
-            {% endfor %}
-        </div>
-        <div>
-            {% for foods in food %}
-            {% if foods.food_image == "shrimp_foods_images/navy.jpg" %}
-            <img src="{{ foods.food_image.url }}" alt="" class="w-52  rounded ">
-            {% else %}
-            {% endif %}
-            {% endfor %}
-        </div>
+
+
+
+<div class="container mx-auto my-10">
+    {% if food %}
+    <div class="mb-4">
+        <h3 class="text-3xl font-bold text-gray-800 dark:text-white ml-10">อาหารกุ้ง</h3>
     </div>
-    <script>
-        function formatDate(date) {
-            let d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
+    <div class="w-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for foods in food %}
+        <div class="col-span-1 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-auto my-10">
+            {% if foods.food_image %}
+            <img class="rounded-t-lg object-contain h-48 w-full" src="{{ foods.food_image.url }}" alt="Foods Image">
+            {% else %}
+            <div class="h-48 w-full bg-gray-200 rounded-t-lg flex items-center justify-center">
+                <p class="text-gray-500">No food image available</p>
+            </div>
+            {% endif %}
+            <div class="p-5">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ foods.food_name }}</h5>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ foods.food_description }}</p>
+            
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
 
-            if (month.length < 2) month = '0' + month;
-            if (day.length < 2) day = '0' + day;
+<div class="container mx-auto my-10 ">
+    {% if disease %}
+        <div class="mb-4">
+            <h3 class="text-3xl font-bold text-gray-800 dark:text-white ml-10">โรคกุ้ง</h3>
+        </div>
+        <div class="flex flex-wrap justify-start gap-4  ">
+            {% for diseases in disease %}
+                <div class="flex flex-col md:flex-row bg-white border border-gray-200 mx-auto  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-full md:w-auto my-10">
+                    {% if diseases.disease_image %}
+                        <div class="flex content-center shadow-2xl  ">
+                            <img src="{{ diseases.disease_image.url }}" alt="" srcset="">
+                        </div>
+                        <!-- <img class="rounded-t-lg object-contain h-48 w-full md:w-48 md:h-auto" src="{{ diseases.disease_image.url }}" alt="Foods Image"> -->
+                    {% else %}
+                        <div class="h-48 w-full md:w-48 md:h-auto bg-gray-200 rounded-t-lg flex items-center justify-center">
+                            <p class="text-gray-500">No food image available</p>
+                        </div>
+                    {% endif %}
+                    <div class="p-5 flex-1">
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ diseases.disease_name }}</h5>
+                        <h3 class="mb-2  ml-7 text-xl font-bold tracking-tight text-gray-900 dark:text-white">อาการของกุ้ง</h3>
+                        <p class="mb-3 ml-10 font-normal text-gray-700 dark:text-gray-400">{{ diseases.disease_symptom }}</p>
+                        <h3 class="mb-2 ml-7 text-xl font-bold tracking-tight text-gray-900 dark:text-white">สาเหตุ:</h3>
+                        <p class="mb-3 ml-10 font-normal text-gray-700 dark:text-gray-400">{{ diseases.disease_cause }}</p>
+                        <h3 class="mb-2  ml-7 text-xl font-bold tracking-tight text-gray-900 dark:text-white">การป้องกัน</h3>
+                        <p class="mb-3 ml-10 font-normal text-gray-700 dark:text-gray-400">{{ diseases.disease_prevent }}</p>
+                        <h3 class="mb-2 ml-7 text-xl font-bold tracking-tight text-gray-900 dark:text-white">การรักษา</h3>
+                        <p class="mb-3 ml-10 font-normal text-gray-700 dark:text-gray-400">{{ diseases.disease_treat }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 
-            return [year, month, day].join('-');
-        }
 
-        async function fetchShrimpPrices() {
-            const today = new Date();
-            const formattedDate = formatDate(today);
-            const url = `https://dataapi.moc.go.th/gis-product-prices?product_id=P12004&from_date=${formattedDate}&to_date=${formattedDate}`;
-
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-
-                document.getElementById('price_min').innerText = data.price_min + ' บาท';
-                document.getElementById('price_max').innerText = data.price_max + ' บาท';
-                document.getElementById('datenow').innerText = formattedDate;
-            } catch (error) {
-                console.error('Failed to fetch data:', error);
-            }
-        }
-
-        function scheduleFetch() {
-            const now = new Date();
-            const millisTill7AM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 0, 0, 0) - now;
-            if (millisTill7AM < 0) {
-                millisTill7AM += 86400000; // 24 hours in milliseconds
-            }
-            setTimeout(() => {
-                fetchShrimpPrices();
-                setInterval(fetchShrimpPrices, 86400000); // 24 hours in milliseconds
-            }, millisTill7AM);
-        }
-
-        document.addEventListener('DOMContentLoaded', (event) => {
-            scheduleFetch();
-        });
-    </script>
-    {% endblock %}
+{% endblock %}
