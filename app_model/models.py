@@ -85,3 +85,8 @@ class Information(BaseModel):
     information_description = models.TextField(max_length=255)
     allow_show = models.BooleanField(null=True)
     information_image = models.ImageField(upload_to='shrimp_species_images', blank=True, null=True)
+    
+class water_quality(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quality_name = models.TextField(max_length=255)
+    quality_description = models.TextField(max_length=255)

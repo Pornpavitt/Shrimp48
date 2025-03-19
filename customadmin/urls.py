@@ -42,10 +42,17 @@ urlpatterns = [
 
     #Price
     path('shrimpprice/', views.shrimpprice, name="shrimpprice.ad"),
+    path('predict_price/',views.predict_price, name='predict_price'),
     path('delete_shrimp_price/<id>', views.delete_shrimp_price, name="delete_shrimp_price"),
 
-    #Price
+    #Pond
     path('shrimppond/', views.shrimppond, name="shrimppond"),
+
+    #Information
+    path('water_quality/', views.Water_quality, name="water_quality"),
+    path('add_water_quality/', views.add_water_quality, name="add_water_quality"),
+    path('edit_water_quality/<water_id>', views.edit_water_quality, name='edit_water_quality'),
+    path('delete_water_quality/<water_id>', views.delete_water_quality, name="delete_water_quality"),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

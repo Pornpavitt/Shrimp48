@@ -64,7 +64,10 @@ def shrimpprice(request):
     monthX = request.GET.get('monthX')
     start_date = request.GET.get('start_date', '')
     end_date = request.GET.get('end_date', '')
-    latest_date = ShrimpPrices.objects.filter(deleted_at=None).aggregate(latest_date=Max('date'))['latest_date']
+    latest_date = ShrimpPrices.objects.filter(
+        deleted_at=None, 
+        price_specie="กุ้งขาว (70 ตัว/กก.)" 
+    ).aggregate(latest_date=Max('date'))['latest_date']
     shrimpprice_view = ShrimpPrices.objects.filter(deleted_at=None, date=latest_date)
     error_message = None
 
@@ -92,19 +95,22 @@ def shrimpprice(request):
     shrimp_dates = []
     shrimp_prices_min = []
     shrimp_prices_max = []
+    shrimp_prices_predict = []
+
 
     if start_date and end_date:
         try:
             start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
-            end_datetime = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)  # End of the end date
+            end_datetime = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)  
             if start_datetime > end_datetime:
                 error_message = "วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด"
             else:
                 shrimp_prices = ShrimpPrices.objects.filter(date__range=[start_datetime, end_datetime])
             for price in shrimp_prices:
                 shrimp_dates.append(price.date.strftime('%Y-%m-%d'))
-                shrimp_prices_min.append(float(price.price_min))
-                shrimp_prices_max.append(float(price.price_max))
+                shrimp_prices_min.append(float(price.price_min) if price.price_min else 0)
+                shrimp_prices_max.append(float(price.price_max) if price.price_max else 0)
+                shrimp_prices_predict.append(float(price.predict) if price.predict else 0)
         except ValueError:
             error_message = "รูปแบบวันที่ไม่ถูกต้อง"
             shrimp_prices = ShrimpPrices.objects.none()
@@ -115,6 +121,7 @@ def shrimpprice(request):
         "shrimp_dates": shrimp_dates,
         "shrimp_prices_min": shrimp_prices_min,
         "shrimp_prices_max": shrimp_prices_max,
+        "shrimp_prices_predict":shrimp_prices_predict,
         "score": score,
         "MSE": MSE,
         "MAE": MAE,
