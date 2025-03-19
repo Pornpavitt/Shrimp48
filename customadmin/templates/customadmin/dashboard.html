@@ -3,177 +3,322 @@
 {% block title %} Add Users {% endblock %}
 
 {% block content %}
-<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 class="text-3xl font-bold mb-6 text-blue-500">ยินดีต้อนรับ,{{ user.username | upper }} สู่หน้าต่างผู้จัดการ</h1>
-    </div>
-    <div>
-        {% for price in shrimp_prices %}
-        <h2 class="mt-3">ราคากุ้งอัพเดตล่าสุด วันที่ {{ price.date|date:"j N Y "}}<span id="datenow"></span></h2>
-        {% endfor %}
-        <form action="{% url 'update_price' %}" method="post">
-            {% csrf_token %}
-            
-            <button type="submit" name="submit" value="1" 
-            class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow mt-5">อัพเดตราคากุ้ง</button>
-        </form>
-    </div>
-</div>
 
-<div>
-    <h3 class="text-3xl font-bold mb-6 text-blue-500">ประกาศจากหน้าเว็ปไซต์</h3>
-    <div>
-        <h1 class="ml-4">ข้อมูลที่แสดงอยู่ที่หน้าเว็ปไซต์</h1>
-        <!-- #Information# -->
-        <div class="container mx-auto p-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {% for informations in information %}
-                <div class="bg-white border rounded-lg p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center">
-                            {% if informations.allow_show is not None and delete_at is None %}
-                            <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">กำลังแสดงอยู่ในหน้าเว็ปไซต์</span>
-                            {% else %}
-                            <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">ไม่ได้แสดงหน้าเว็ปไซต์</span>
-                            {% endif %}
-                        </div>
-                        <!-- <div>
-                            <input type="checkbox" name="allow_show" {% if informations.allow_show %} checked {% endif %} value="1">
-                        </div> -->
+<body class="bg-gray-50 min-h-screen">
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Header -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h1
+                            class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                            ยินดีต้อนรับ, {{ user.username | upper }} สู่หน้าต่างผู้จัดการ
+                        </h1>
+                        <p class="mt-2 text-gray-600">จัดการและติดตามราคากุ้งได้ที่นี่</p>
                     </div>
-                    <h2 class="text-lg font-bold flex">{{ informations.information_name }}</h2>
-                    <p class="text-gray-600 flex">{{ informations.information_description }}</p>
-                    {% if informations.information_image %}
-                    <div class="mt-2">
-                        <img src="{{ informations.information_image.url }}" alt="Information" class="w-full h-32 object-cover rounded-md">
-                    </div>
-                    {% else %}
-                    <p class="text-gray-500 mt-2">No Information available</p>
-                    {% endif %}
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="{% url 'edit_information' informations.id %}" class="text-blue-500 hover:text-blue-700">แก้ไข</a>
-                        <a href="{% url 'delete_information' informations.id %}" class="text-red-500 hover:text-red-700 delete-btn">ลบข้อมูล</a>
+                    <div class="mt-4 md:mt-0">
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span id="current-date">วันที่ปัจจุบัน</span>
+                        </span>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-        </div>
-        <h3 class="text-3xl font-bold mb-6 text-blue-500">พันธ์ุกุ้ง</h3>
-    <div>
-        <h1 class="ml-4">ข้อมูลที่แสดงอยู่ที่หน้าเว็ปไซต์</h1>
-        <!-- #พันธ์ุกุ้ง# -->
-        <div class="container mx-auto p-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-                {% for shrimp_speciess in shrimp_species %}
-                <div class="bg-white border rounded-lg p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center">
-                            {% if shrimp_speciess.allow_show is not None and delete_at is None %}
-                            <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">กำลังแสดงอยู่ในหน้าเว็ปไซต์</span>
-                            {% else %}
-                            <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">ไม่ได้แสดงหน้าเว็ปไซต์</span>
-                            {% endif %}
-                        </div>
-                        <!-- <div>
-                            <input type="checkbox" name="allow_show" {% if informations.allow_show %} checked {% endif %} value="1">
-                        </div> -->
-                    </div>
-                    <h2 class="text-lg font-bold flex">{{ shrimp_speciess.name }}</h2>
-                    <p class="text-gray-600 flex">{{ shrimp_speciess.description }}</p>
-                    {% if shrimp_speciess.image %}
-                    <div class="mt-2">
-                        <img src="{{ shrimp_speciess.image.url }}" alt="Shrimp Species" class="w-full h-32 object-cover rounded-md">
-                    </div>
-                    {% else %}
-                    <p class="text-gray-500 mt-2">No Shrimp Species available</p>
-                    {% endif %}
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="{% url 'edit_shrimpSpecies' shrimp_speciess.id %}" class="text-blue-500 hover:text-blue-700">แก้ไข</a>
-                        <a href="{% url 'delete_species' shrimp_speciess.id %}" class="text-red-500 hover:text-red-700 delete-btn">ลบข้อมูล</a>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        <!-- #อาหารกุ้ง# -->
-        <h3 class="text-3xl font-bold mb-6 text-blue-500">อาหารกุ้ง</h3>
-    <div>
-        <h1 class="ml-4">ข้อมูลที่แสดงอยู่ที่หน้าเว็ปไซต์</h1>
-        <div class="container mx-auto p-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {% for food in shrimp_foods %}
-                <div class="bg-white border rounded-lg p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center">
-                            {% if food.allow_show is not None and delete_at is None %}
-                            <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">กำลังแสดงอยู่ในหน้าเว็ปไซต์</span>
-                            {% else %}
-                            <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">ไม่ได้แสดงหน้าเว็ปไซต์</span>
-                            {% endif %}
-                        </div>
-                        <!-- <div>
-                            <input type="checkbox" name="allow_show" {% if informations.allow_show %} checked {% endif %} value="1">
-                        </div> -->
-                    </div>
-                    <h2 class="text-lg font-bold flex">{{ food.food_name }}</h2>
-                    <p class="text-gray-600 flex">{{ food.food_description }}</p>
-                    {% if food.food_image %}
-                    <div class="mt-2">
-                        <img src="{{ food.food_image.url }}" alt="Food Image" class="w-full h-32 object-cover rounded-md">
-                    </div>
-                    {% else %}
-                    <p class="text-gray-500 mt-2">No food image available</p>
-                    {% endif %}
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="{% url 'edit_shrimpFood' food.id %}" class="text-blue-500 hover:text-blue-700">แก้ไข</a>
-                        <a href="{% url 'delete_shrimpFoods' food.id %}" class="text-red-500 hover:text-red-700 delete-btn">ลบข้อมูล</a>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        <!-- #โรคกุ้ง# -->
-        <h3 class="text-3xl font-bold mb-6 text-blue-500">โรคกุ้ง</h3>
-    <div>
-        <h1 class="ml-4">ข้อมูลที่แสดงอยู่ที่หน้าเว็ปไซต์</h1>
-        <div class="container mx-auto p-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {% for diseases in shrimp_diseases %}
-                <div class="bg-white border rounded-lg p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center">
-                            {% if diseases.allow_show is not None and delete_at is None %}
-                            <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">กำลังแสดงอยู่ในหน้าเว็ปไซต์</span>
-                            {% else %}
-                            <span class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">ไม่ได้แสดงหน้าเว็ปไซต์</span>
-                            {% endif %}
-                        </div>
-                        <!-- <div>
-                            <input type="checkbox" name="allow_show" {% if informations.allow_show %} checked {% endif %} value="1">
-                        </div> -->
-                    </div>
-                    <h2 class="text-lg font-bold flex">{{ diseases.disease_name }}</h2>
-                    <p class="text-gray-600 flex">{{ diseases.disease_symptom }}</p>
-                    <p class="text-gray-600 flex">{{ diseases.disease_cause }}</p>
-                    <p class="text-gray-600 flex">{{ diseases.disease_prevent }}</p>
-                    <p class="text-gray-600 flex">{{ diseases.disease_treat }}</p>
-                    {% if diseases.disease_image %}
-                    <div class="mt-2">
-                        <img src="{{ diseases.disease_image.url }}" alt="disease image" class="w-full h-32 object-cover rounded-md">
-                    </div>
-                    {% else %}
-                    <p class="text-gray-500 mt-2">No disease image available</p>
-                    {% endif %}
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="{% url 'edit_shrimpDisease' diseases.id %}" class="text-blue-500 hover:text-blue-700">แก้ไข</a>
-                        <a href="{% url 'delete_shrimpDisease' diseases.id %}" class="text-red-500 hover:text-red-700 delete-btn">ลบข้อมูล</a>
-                    </div>
 
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Current Price Section -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-4">
+                        <h2 class="text-xl font-bold text-white flex items-center">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            ราคากุ้งปัจจุบัน
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        {% for price in shrimp_prices %}
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">วันที่อัพเดตล่าสุด:</span>
+                                <span class="font-semibold">{{ price.date|date:"j N Y" }}</span>
+                            </div>
+                            <div class="bg-gray-100 rounded-lg p-4">
+                                <!-- Here you can add price details if your model has those fields -->
+                                <p class="text-center text-gray-700">ราคากุ้งได้รับการอัพเดตแล้ว</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <form action="{% url 'update_price' %}" method="post" class="mt-4">
+                            {% csrf_token %}
+                            <button type="submit" name="submit" value="1"
+                                class="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                    </path>
+                                </svg>
+                                อัพเดตราคากุ้ง
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                {% endfor %}
+
+                <!-- Price Prediction Section -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-500 to-indigo-700 px-6 py-4">
+                        <h2 class="text-xl font-bold text-white flex items-center">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                </path>
+                            </svg>
+                            พยากรณ์ราคากุ้ง
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        {% for preice in pre_price %}
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">วันที่พยากรณ์ล่าสุด:</span>
+                                <span class="font-semibold">{{ preice.date|date:"j N Y" }}</span>
+                            </div>
+                            <div class="bg-gray-100 rounded-lg p-4">
+                                <!-- Here you can add prediction details if your model has those fields -->
+                                <p class="text-center text-gray-700">ผลการพยากรณ์ล่าสุด</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <form method="POST" action="{% url 'predict_price' %}" class="mt-4 space-y-4">
+                            {% csrf_token %}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="year"
+                                        class="block text-sm font-medium text-gray-700 mb-1">ปีที่จะพยากรณ์:</label>
+                                    <select name="yearY" id="yearY"
+                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition">
+                                        <option value="2025">2025</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="monthY"
+                                        class="block text-sm font-medium text-gray-700 mb-1">เดือนที่จะพยากรณ์:</label>
+                                    <input type="number" name="monthY" id="monthY" min="1" max="12"
+                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition"
+                                        placeholder="1-12">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <button type="submit" name="months_ahead" value="1"
+                                    class="bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 flex items-center justify-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                    ทำนายล่วงหน้าเดือนที่ 1
+                                </button>
+                                <button type="submit" name="months_ahead" value="2"
+                                    class="bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 flex items-center justify-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                    </svg>
+                                    ทำนายล่วงหน้าเดือนที่ 2
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- <div id="loginForm" class="">
+    </div>
+
+    <div>
+        <h3 class="text-3xl font-bold mb-6 text-blue-500">ประกาศจากหน้าเว็ปไซต์</h3>
+        <div>
+            <h1 class="ml-4">ข้อมูลที่แสดงอยู่ที่หน้าเว็ปไซต์</h1>
+            <!-- #Information# -->
+            <div class="container mx-auto p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for informations in information %}
+                    <div class="bg-white border rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center">
+                                {% if informations.allow_show is not None and delete_at is None %}
+                                <span
+                                    class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">กำลังแสดงอยู่ในหน้าเว็ปไซต์</span>
+                                {% else %}
+                                <span
+                                    class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">ไม่ได้แสดงหน้าเว็ปไซต์</span>
+                                {% endif %}
+                            </div>
+                            <!-- <div>
+                            <input type="checkbox" name="allow_show" {% if informations.allow_show %} checked {% endif %} value="1">
+                        </div> -->
+                        </div>
+                        <h2 class="text-lg font-bold flex">{{ informations.information_name }}</h2>
+                        <p class="text-gray-600 flex">{{ informations.information_description }}</p>
+                        {% if informations.information_image %}
+                        <div class="mt-2">
+                            <img src="{{ informations.information_image.url }}" alt="Information"
+                                class="w-full h-32 object-cover rounded-md">
+                        </div>
+                        {% else %}
+                        <p class="text-gray-500 mt-2">No Information available</p>
+                        {% endif %}
+                        <div class="mt-4 flex justify-between items-center">
+                            <a href="{% url 'edit_information' informations.id %}"
+                                class="text-blue-500 hover:text-blue-700">แก้ไข</a>
+                            <a href="{% url 'delete_information' informations.id %}"
+                                class="text-red-500 hover:text-red-700 delete-btn">ลบข้อมูล</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <h3 class="text-3xl font-bold mb-6 text-blue-500">พันธ์ุกุ้ง</h3>
+            <div>
+                <h1 class="ml-4">ข้อมูลที่แสดงอยู่ที่หน้าเว็ปไซต์</h1>
+                <!-- #พันธ์ุกุ้ง# -->
+                <div class="container mx-auto p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+                        {% for shrimp_speciess in shrimp_species %}
+                        <div class="bg-white border rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    {% if shrimp_speciess.allow_show is not None and delete_at is None %}
+                                    <span
+                                        class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">กำลังแสดงอยู่ในหน้าเว็ปไซต์</span>
+                                    {% else %}
+                                    <span
+                                        class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">ไม่ได้แสดงหน้าเว็ปไซต์</span>
+                                    {% endif %}
+                                </div>
+                                <!-- <div>
+                            <input type="checkbox" name="allow_show" {% if informations.allow_show %} checked {% endif %} value="1">
+                        </div> -->
+                            </div>
+                            <h2 class="text-lg font-bold flex">{{ shrimp_speciess.name }}</h2>
+                            <p class="text-gray-600 flex">{{ shrimp_speciess.description }}</p>
+                            {% if shrimp_speciess.image %}
+                            <div class="mt-2">
+                                <img src="{{ shrimp_speciess.image.url }}" alt="Shrimp Species"
+                                    class="w-full h-32 object-cover rounded-md">
+                            </div>
+                            {% else %}
+                            <p class="text-gray-500 mt-2">No Shrimp Species available</p>
+                            {% endif %}
+                            <div class="mt-4 flex justify-between items-center">
+                                <a href="{% url 'edit_shrimpSpecies' shrimp_speciess.id %}"
+                                    class="text-blue-500 hover:text-blue-700">แก้ไข</a>
+                                <a href="{% url 'delete_species' shrimp_speciess.id %}"
+                                    class="text-red-500 hover:text-red-700 delete-btn">ลบข้อมูล</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- #อาหารกุ้ง# -->
+                <h3 class="text-3xl font-bold mb-6 text-blue-500">อาหารกุ้ง</h3>
+                <div>
+                    <h1 class="ml-4">ข้อมูลที่แสดงอยู่ที่หน้าเว็ปไซต์</h1>
+                    <div class="container mx-auto p-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {% for food in shrimp_foods %}
+                            <div class="bg-white border rounded-lg p-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <div class="flex items-center">
+                                        {% if food.allow_show is not None and delete_at is None %}
+                                        <span
+                                            class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">กำลังแสดงอยู่ในหน้าเว็ปไซต์</span>
+                                        {% else %}
+                                        <span
+                                            class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">ไม่ได้แสดงหน้าเว็ปไซต์</span>
+                                        {% endif %}
+                                    </div>
+                                    <!-- <div>
+                            <input type="checkbox" name="allow_show" {% if informations.allow_show %} checked {% endif %} value="1">
+                        </div> -->
+                                </div>
+                                <h2 class="text-lg font-bold flex">{{ food.food_name }}</h2>
+                                <p class="text-gray-600 flex">{{ food.food_description }}</p>
+                                {% if food.food_image %}
+                                <div class="mt-2">
+                                    <img src="{{ food.food_image.url }}" alt="Food Image"
+                                        class="w-full h-32 object-cover rounded-md">
+                                </div>
+                                {% else %}
+                                <p class="text-gray-500 mt-2">No food image available</p>
+                                {% endif %}
+                                <div class="mt-4 flex justify-between items-center">
+                                    <a href="{% url 'edit_shrimpFood' food.id %}"
+                                        class="text-blue-500 hover:text-blue-700">แก้ไข</a>
+                                    <a href="{% url 'delete_shrimpFoods' food.id %}"
+                                        class="text-red-500 hover:text-red-700 delete-btn">ลบข้อมูล</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- #โรคกุ้ง# -->
+                    <h3 class="text-3xl font-bold mb-6 text-blue-500">โรคกุ้ง</h3>
+                    <div>
+                        <h1 class="ml-4">ข้อมูลที่แสดงอยู่ที่หน้าเว็ปไซต์</h1>
+                        <div class="container mx-auto p-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {% for diseases in shrimp_diseases %}
+                                <div class="bg-white border rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div class="flex items-center">
+                                            {% if diseases.allow_show is not None and delete_at is None %}
+                                            <span
+                                                class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">กำลังแสดงอยู่ในหน้าเว็ปไซต์</span>
+                                            {% else %}
+                                            <span
+                                                class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">ไม่ได้แสดงหน้าเว็ปไซต์</span>
+                                            {% endif %}
+                                        </div>
+                                        <!-- <div>
+                            <input type="checkbox" name="allow_show" {% if informations.allow_show %} checked {% endif %} value="1">
+                        </div> -->
+                                    </div>
+                                    <h2 class="text-lg font-bold flex">{{ diseases.disease_name }}</h2>
+                                    <p class="text-gray-600 flex">{{ diseases.disease_symptom }}</p>
+                                    <p class="text-gray-600 flex">{{ diseases.disease_cause }}</p>
+                                    <p class="text-gray-600 flex">{{ diseases.disease_prevent }}</p>
+                                    <p class="text-gray-600 flex">{{ diseases.disease_treat }}</p>
+                                    {% if diseases.disease_image %}
+                                    <div class="mt-2">
+                                        <img src="{{ diseases.disease_image.url }}" alt="disease image"
+                                            class="w-full h-32 object-cover rounded-md">
+                                    </div>
+                                    {% else %}
+                                    <p class="text-gray-500 mt-2">No disease image available</p>
+                                    {% endif %}
+                                    <div class="mt-4 flex justify-between items-center">
+                                        <a href="{% url 'edit_shrimpDisease' diseases.id %}"
+                                            class="text-blue-500 hover:text-blue-700">แก้ไข</a>
+                                        <a href="{% url 'delete_shrimpDisease' diseases.id %}"
+                                            class="text-red-500 hover:text-red-700 delete-btn">ลบข้อมูล</a>
+                                    </div>
+
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- <div id="loginForm" class="">
             <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
                 <div class="absolute top-0 right-0 mt-4 mr-4 z-10">
                     <button onclick="hideLoginForm()" class="focus:outline-none">
@@ -210,6 +355,6 @@
                 </form>
             </div>
         </div> -->
-    </div>
-</div>
-{% endblock %}
+                    </div>
+                </div>
+                {% endblock %}

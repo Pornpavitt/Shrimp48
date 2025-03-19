@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, AbstractUser
 from django.contrib.auth import authenticate, login
 from django.contrib.admin.views.decorators import staff_member_required
-from app_model.models import ShrimpSpecies, ShrimpFoods, ShrimpDiseases, ShrimpPrices, ShrimpPonds, ShrimpPondsDetail, Information
+from app_model.models import ShrimpSpecies, ShrimpFoods, ShrimpDiseases, ShrimpPrices, ShrimpPonds, ShrimpPondsDetail, Information,water_quality
 from datetime import datetime, timedelta
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
@@ -14,12 +14,73 @@ from pytz import timezone
 from django.utils.timezone import make_aware
 
 # Create your views here.
+import json
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 def admin(request):
     if request.User.is_superuser:
         return render(request, 'customadmin/dashboard.html')
     else:
         return  HttpResponse("You are not authorized to access this page.")
+
+def predict_price(request):
+    if request.method == 'POST':
+        months_ahead = int(request.POST.get('months_ahead', 1))  
+        yearY = int(request.POST.get('yearY')) 
+        monthY = int(request.POST.get('monthY'))
+
+        predicted_price = predict(yearY, monthY, months_ahead)
+        
+
+    return redirect('dashboard')
+
+def predict(yearY,monthY, months_ahead=1):
+    shrimpprice = ShrimpPrices.objects.values('date','price_min','price_max')
+    df = pd.DataFrame(shrimpprice)
+    df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
+    df['price_min'] = df['price_min'].astype(float)
+    df['price_max'] = df['price_max'].astype(float)
+    print(df.head())  
+    print(df.dtypes)  
+
+    df[["year","month","day"]] = df.date.str.split("-", expand=True)
+    df['average'] = df['price_min']+df['price_max']
+    df['average'] = df['average']/2
+    df_dropped = df.drop(columns=['price_min', 'price_max'], axis=1)
+
+    df_select = df_dropped
+    df_select['date'] = pd.to_datetime(df_select['date'])
+
+    df_select=df_select[(df_select['date'].dt.year==yearY)]
+
+    dp = pd.pivot_table(df_select, index=["month"],values=["average"],aggfunc=np.average)
+
+    x = dp.index.values.reshape(-1,1)
+    dfpoly = PolynomialFeatures(degree=2)
+    x_poly = dfpoly.fit_transform(x)
+    y = dp.average
+    model = LinearRegression()
+    model.fit(x_poly,y)
+
+    future_month = monthY + months_ahead
+    y_predict_Future = model.predict(dfpoly.fit_transform([[future_month]]))
+    
+    
+    future_date = datetime(yearY, future_month, 28) 
+
+    ShrimpPrices.objects.create(
+        date=future_date,
+        price_specie="Predicted",  
+        price_min=None,  
+        price_max=None,  
+        predict=y_predict_Future[0]
+    )
+    return y_predict_Future[0]
 
 def update_price(request):
     if request.method == 'POST' and request.POST.get('submit'):
@@ -71,10 +132,17 @@ def dashboard(request):
         shrimp_ponds = ShrimpPonds.objects.filter(deleted_at = None)
         shrimp_ponds_detail = ShrimpPondsDetail.objects.filter(deleted_at = None)
         information = Information.objects.filter(deleted_at = None)
-        latest_date = ShrimpPrices.objects.filter(deleted_at=None).aggregate(latest_date=Max('date'))['latest_date']
-        print(f"Selected date from request: {latest_date}")
-        # Filter the shrimp prices by the latest date
+        latest_date = ShrimpPrices.objects.filter(
+            deleted_at=None, 
+            price_specie="กุ้งขาว (70 ตัว/กก.)" 
+        ).aggregate(latest_date=Max('date'))['latest_date']
         shrimp_prices = ShrimpPrices.objects.filter(deleted_at=None, date=latest_date)
+        latest_date_predict = ShrimpPrices.objects.filter(
+            deleted_at=None, 
+            price_specie="Predicted" 
+        ).aggregate(latest_date=Max('date'))['latest_date']
+        pre_price = ShrimpPrices.objects.filter(deleted_at=None, date=latest_date_predict)
+        print('f',pre_price)
 
 
         return render(request, 'customadmin/dashboard.html', {
@@ -85,7 +153,8 @@ def dashboard(request):
             'shrimp_prices': shrimp_prices,
             'shrimp_ponds': shrimp_ponds,
             'shrimp_ponds_detail': shrimp_ponds_detail,
-            'information': information
+            'information': information,
+            'pre_price':pre_price
     })
     
     else:
@@ -200,7 +269,7 @@ def edit_species(request, specie_id):
 @staff_member_required
 def delete_species(request, specie_id):
     species = ShrimpSpecies.objects.get(id=specie_id)
-    species.deleted_at = datetime.datetime.now()
+    species.deleted_at = datetime.now()
     species.save()
     return redirect('shrimpSpecies')   
 
@@ -316,7 +385,7 @@ def edit_shrimp_diseases(request, disease_id):
 @staff_member_required
 def delete_shrimp_diseases(request, disease_id):
     disease = ShrimpDiseases.objects.get(id=disease_id)
-    disease.deleted_at = datetime.datetime.now()
+    disease.deleted_at = datetime.now()
     disease.save()
     return redirect('shrimpDiseases')
 
@@ -332,7 +401,7 @@ def shrimpprice(request):
 @staff_member_required
 def delete_shrimp_price(request, id):
     price = ShrimpPrices.objects.get(id=id)
-    price.deleted_at = datetime.datetime.now()
+    price.deleted_at = datetime.now()
     price.save()
     return redirect('shrimpprice.ad')
 
@@ -396,7 +465,54 @@ def edit_information(request, information_id):
 @staff_member_required
 def delete_information(request, information_id):
     information = Information.objects.get(id=information_id)
-    information.deleted_at = datetime.datetime.now()
+    information.deleted_at = datetime.now()
     information.save()
     return redirect('information')
 
+###################
+## Water_quality ##
+###################
+@staff_member_required
+def Water_quality(request):
+    Water_quality = water_quality.objects.filter(deleted_at=None)
+    return render(request, 'customadmin/water_quality.html', {'Water_quality' : Water_quality})
+
+@staff_member_required
+def add_water_quality(request):
+    if request.method == 'POST':
+        quality_name = request.POST.get('quality_name')
+        quality_description = request.POST.get('quality_description')
+        user_id = request.POST.get('userid')
+
+        # Create a new user object
+        new_quality = water_quality.objects.create(
+            quality_name=quality_name,
+            quality_description=quality_description,
+            user_id=user_id
+        )
+        return redirect('water_quality')
+    
+    elif request.method == 'GET':
+        return render(request, 'customadmin/add_water_quality.html') 
+
+@staff_member_required
+def edit_water_quality(request, water_id):
+    if request.method == 'POST':
+        Water_quality = water_quality.objects.get(id=water_id)
+        Water_quality.quality_name = request.POST.get('quality_name')
+        Water_quality.quality_description = request.POST.get('quality_description')
+        user_id = request.POST.get('userid')
+        Water_quality.user_id = user_id
+        Water_quality.save()
+        return redirect('water_quality')
+    else:
+        Water_quality = water_quality.objects.get(id=water_id)
+        return render(request, 'customadmin/edit_water_quality.html', {"Water_quality": Water_quality})
+
+
+@staff_member_required
+def delete_water_quality(request, water_id):
+    Water_quality = water_quality.objects.get(id=water_id)
+    Water_quality.deleted_at = datetime.now()
+    Water_quality.save()
+    return redirect('water_quality')

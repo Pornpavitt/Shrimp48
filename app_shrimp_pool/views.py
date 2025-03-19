@@ -1,7 +1,7 @@
 from django.shortcuts import render ,redirect, get_object_or_404
 from django.http import HttpResponse,HttpResponseNotAllowed
 from django.contrib.auth.models import User
-from app_model.models import ShrimpPonds, ShrimpPondsDetail, ShrimpPrices
+from app_model.models import ShrimpPonds, ShrimpPondsDetail, ShrimpPrices, water_quality
 from datetime import datetime, timedelta
 # Create your views here.
 
@@ -9,11 +9,12 @@ def shrimppool(request, user_id):
     user = User.objects.filter(id=user_id).first()
     ponds = ShrimpPonds.objects.filter(user_id=user_id,deleted_at = None)
     pool_details = ShrimpPondsDetail.objects.filter(pond_id__in=ponds.values_list('id')).order_by('-created_at') 
-    
+    water = water_quality.objects.filter(deleted_at=None)
     context = {
         'ponds': ponds,
         'user': user,
         'pool_details': pool_details,
+        'water':water
     }
     return render(request, 'app_shrimp_pool/shrimp_pool.html', context)
 
@@ -108,6 +109,50 @@ def load_survival():
 
 survival_rate_model = load_survival()
 
+def cal_food (w,q):
+    if w >= 0 and w < 0.5  :
+        FW = 2*(q/100000)*1000
+        return FW
+    elif w >= 0.5 and w < 3 :
+        FW = w*4*(q/100000)*1000
+        return FW
+    elif w >= 3 and w < 4 :
+        FW = w*4.4*(q/100000)*1000
+        return FW
+    elif w >= 4 and w < 5 :
+        FW = w*3.7*(q/100000)*1000
+        return FW
+    elif w >= 5 and w < 7 :
+        FW = w*3.5*(q/100000)*1000
+        return FW
+    elif w >= 7 and w < 8 :
+        FW = w*3.3*(q/100000)*1000
+        return FW
+    elif w >= 8 and w < 9 :
+        FW = w*3*(q/100000)*1000
+        return FW
+    elif w >= 9 and w < 11 :
+        FW = w*2.8*(q/100000)*1000
+        return FW
+    elif w >= 11 and w < 12 :
+        FW = w*2.7*(q/100000)*1000
+        return FW
+    elif w >= 12 and w < 14 :
+        FW = w*2.5*(q/100000)*1000
+        return FW
+    elif w >= 14 and w < 16 :
+        FW = w*2.3*(q/100000)*1000
+        return FW
+    elif w >= 16 and w < 18 :
+        FW = w*2.2*(q/100000)*1000
+        return FW
+    elif w >= 18 and w < 22 :
+        FW = w*2.1*(q/100000)*1000
+        return FW
+    elif w >= 22 :
+        FW = w*2*(q/100000)*1000
+        return FW
+
 
 def pool_detail(request, pond_id):
     pond = get_object_or_404(ShrimpPonds, id=pond_id)
@@ -120,7 +165,8 @@ def pool_detail(request, pond_id):
     
     details = ShrimpPondsDetail.objects.filter(pond_id=pond_id).order_by('-created_at')[:2]
     if len(details) > 0:
-        first_detail = details[0]  
+        first_detail = details[0]
+        foodqura = cal_food(first_detail.shrimp_weight,first_detail.shrimp_quantity)
     if len(details) > 1:
         second_detail = details[1] 
         
@@ -192,10 +238,12 @@ def pool_detail(request, pond_id):
 
                 
                 shrimp_weight = float(request.POST.get('shrimp_weight'))  
+                shrimp_quantity = request.POST.get('shrimp_quantity')
                 total_date = int(request.POST.get('total_date'))
                 delta_weight = shrimp_weight - shrimp_weight_previous
                 delta_days = total_date - date_previous
-
+                
+                
                 if delta_days > 0:
                     growth_rate = delta_weight / delta_days
 
@@ -215,6 +263,7 @@ def pool_detail(request, pond_id):
             growth_dateG_model, dfpoly = load_dateG()
             growth_weightG_model, dfpoly = load_weightG()
             try:
+                
                 x_polyD = dfpoly.transform([[total_date]])
                 predicted_growth_rate_dateG = growth_dateG_model.predict(x_polyD)[0]
                 
@@ -266,6 +315,8 @@ def pool_detail(request, pond_id):
         'data_alkalinity': data_alkalinity,
         'data_nitrite': data_nitrite,
         'data_TAN': data_TAN,
+        'foodqura':foodqura
+        
 
     }
 

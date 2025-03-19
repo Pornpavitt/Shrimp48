@@ -3,16 +3,54 @@
 {% block title %} รายละเอียดบ่อกุ้ง {% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">รายละเอียดบ่อกุ้ง: {{ pond.pond_name }}</h1>
+<div class="container mx-auto px-4 py-8 bg-gray-50">
+    <h1 class="text-4xl font-bold mb-8 text-gray-800 border-b pb-4">รายละเอียดบ่อกุ้ง: {{ pond.pond_name }}</h1>
 
-    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-        <div class="p-6 space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
+    <div class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
+        <div class="p-6 space-y-8">
+            
+            <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl shadow-inner border border-blue-200">
+                <h2 class="text-xl font-semibold text-blue-800 mb-4">คุณภาพน้ำล่าสุด</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                        <h5 class="text-gray-500 text-sm font-medium mb-1">ออกซิเจนที่ละลายในน้ำ</h5>
+                        <p class="text-2xl font-bold text-blue-600">{{ data_dissolvedOxygen.value|floatformat:2 }}</p>
+                        <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                        <h5 class="text-gray-500 text-sm font-medium mb-1">ค่า pH</h5>
+                        <p class="text-2xl font-bold text-blue-600">{{ data_pH.value|floatformat:2 }}</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                        <h5 class="text-gray-500 text-sm font-medium mb-1">ความเค็มของน้ำ</h5>
+                        <p class="text-2xl font-bold text-blue-600">{{ data_salinity.value|floatformat:2 }}</p>
+                        <p class="text-xs text-gray-500 mt-1">1/1000</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                        <h5 class="text-gray-500 text-sm font-medium mb-1">อัลคาลินิตี้</h5>
+                        <p class="text-2xl font-bold text-blue-600">{{ data_alkalinity.value|floatformat:2 }}</p>
+                        <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                        <h5 class="text-gray-500 text-sm font-medium mb-1">ไนไตรต์</h5>
+                        <p class="text-2xl font-bold text-blue-600">{{ data_nitrite.value|floatformat:2 }}</p>
+                        <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                        <h5 class="text-gray-500 text-sm font-medium mb-1">แอมโมเนียรวม</h5>
+                        <p class="text-2xl font-bold text-blue-600">{{ data_TAN.value|floatformat:2 }}</p>
+                        <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-md border border-gray-200">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
+                    
+                    <div class="relative w-full sm:w-auto">
                         <button id="dropdownRadioButton"
-                            class="inline-flex items-center text-gray-700 bg-gray-100 border border-gray-300 focus:outline-none hover:bg-gray-200 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 transition-colors duration-200">
+                            class="w-full sm:w-auto inline-flex items-center justify-between text-gray-700 bg-blue-50 border border-blue-200 focus:outline-none hover:bg-blue-100 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-3 transition-colors duration-200">
                             <span class="mr-2">พยากรณ์อัตราการเติบโต</span>
                             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -21,10 +59,10 @@
                             </svg>
                         </button>
                         <div id="dropdownRadio"
-                            class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-48 mt-2">
+                            class="absolute z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-64 mt-2 border border-gray-200">
                             <ul class="p-3 space-y-1 text-sm text-gray-700" aria-labelledby="dropdownRadioButton">
                                 <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
+                                    <div class="flex items-center p-2 rounded hover:bg-blue-50 cursor-pointer">
                                         <input id="filter-radio-example-1" type="radio" value="" name="filter-radio"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
                                         <label for="filter-radio-example-1"
@@ -32,7 +70,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
+                                    <div class="flex items-center p-2 rounded hover:bg-blue-50 cursor-pointer">
                                         <input id="filter-radio-example-2" type="radio" value="" name="filter-radio"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
                                         <label for="filter-radio-example-2"
@@ -40,7 +78,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
+                                    <div class="flex items-center p-2 rounded hover:bg-blue-50 cursor-pointer">
                                         <input checked id="filter-radio-example-3" type="radio" value=""
                                             name="filter-radio"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
@@ -51,9 +89,11 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="relative">
+                    
+                    
+                    <div class="relative w-full sm:w-auto">
                         <input type="text" id="table-search"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-3"
                             placeholder="ค้นหา">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor"
@@ -65,169 +105,168 @@
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-2">
-                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าออกซิเจนที่ละลายในน้ำ</h5>
-                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_dissolvedOxygen.value|floatformat:2 }}</p>
-                    </a>
-                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่า pH</h5>
-                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_pH.value |floatformat:2}}</p>
-                    </a>
-                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าความเค็มของน้ำ</h5>
-                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_salinity.value|floatformat:2 }}</p>
-                    </a>
-                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าอัลคาลินิตี้</h5>
-                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_alkalinity.value|floatformat:2 }}</p>
-                    </a>
-                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าไนไตรต์</h5>
-                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_nitrite.value|floatformat:2 }}</p>
-                    </a>
-                    <a href="#" class="block p-4 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h5 class="mb-1 text-lg font-bold text-gray-900 dark:text-white text-center">ค่าแอมโมเนียรวม</h5>
-                        <p class="text-md font-semibold text-gray-700 dark:text-gray-400 text-center">{{ data_TAN.value|floatformat:2 }}</p>
-                    </a>
-                </div>
+
+                
                 {% if pond.user_id == user.id %}
                 <button onclick="showEditShrimpForm('{{ pond.id }}', '{{ pond.pond_name }}')"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    class="w-full md:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-md flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
                     บันทึกข้อมูล
                 </button>
                 {% endif %}
             </div>
 
-            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">สร้างเมื่อ</th>
-                            <th scope="col" class="px-6 py-3">วันที่บันทึกข้อมูล</th>
-                            <th scope="col" class="px-6 py-3">จำนวนกุ้ง</th>
-                            <th scope="col" class="px-6 py-3">ออกซิเจนที่ละลายในน้ำ (มก./ลิตร)</th>
-                            <th scope="col" class="px-6 py-3">ความกระด้างของน้ำ (มก./ลิตร)</th>
-                            <th scope="col" class="px-6 py-3">ค่าพีเอชของน้ำ</th>
-                            <th scope="col" class="px-6 py-3">อุณหภูมิของน้ำ (°C)</th>
-                            <th scope="col" class="px-6 py-3">TAN (มก./ลิตร)</th>
-                            <th scope="col" class="px-6 py-3">อัลคาลินิตี้ (มก./ลิตร)</th>
-                            <th scope="col" class="px-6 py-3">ไนไตรต์ (มก./ลิตร)</th>
-                            <th scope="col" class="px-6 py-3">ความเค็มของน้ำ (1/1000)</th>
-                            <th scope="col" class="px-6 py-3">ความใสของน้ำ (ซม.)</th>
-                            <th scope="col" class="px-6 py-3">น้ำหนักกุ้ง (กรัม)</th>
-                            <th scope="col" class="px-6 py-3">อัตราการเติบโต (ADG)</th>
-                            <th scope="col" class="px-6 py-3" data-column="quality">คาดการณ์อัตราการเติบโต (ADG)</th>
-                            <th scope="col" class="px-6 py-3" data-column="date">คาดการณ์อัตราการเติบโต (ADG)</th>
-                            <th scope="col" class="px-6 py-3" data-column="weight">คาดการณ์อัตราการเติบโต (ADG)</th>                            
-                            <th scope="col" class="px-6 py-3">คาดการณ์อัตราการรอด (%)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for detail in pond_details %}
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="px-6 py-4">{{ detail.created_at | date:"j N Y "}}</td>
-                            <td class="px-6 py-4">{{ detail.total_date }}</td>
-                            <td class="px-6 py-4">{{ detail.shrimp_quantity }}</td>
-                            <td class="px-6 py-4"
-                                {% if detail.id == latest_detail_id %}
-                                    style ="color: {{ data_dissolvedOxygen.color }};"
-                                {% endif %}>
-                                {{ detail.pond_dissolvedOxygen }}
-                                {% if detail.id == latest_detail_id %}
-                                    {% if data_dissolvedOxygen.color == 'green' %}
-                                        <span style="color: green;">⬆</span>
-                                    {% elif data_dissolvedOxygen.color == 'red' %}
-                                        <span style="color: red;">⬇</span>
-                                    {% endif %}
-                                {% endif %}</td>
-                            <td class="px-6 py-4">{{ detail.pond_waterHardness }}</td>
-                            <td class="px-6 py-4"
-                                {% if detail.id == latest_detail_id %}
-                                    style ="color: {{ data_pH.color }};"
-                                {% endif %}>
-                                {{ detail.pond_pH }}
-                                {% if detail.id == latest_detail_id %}
-                                    {% if data_pH.color == 'green' %}
-                                        <span style="color: green;">⬆</span>
-                                    {% elif data_pH.color == 'red' %}
-                                        <span style="color: red;">⬇</span>
-                                    {% endif %}
-                                {% endif %}</td>
-                            <td class="px-6 py-4">{{ detail.pond_temperature }}</td>
-                            <td class="px-6 py-4"
-                                {% if detail.id == latest_detail_id %}
-                                    style ="color: {{ data_TAN.color }};"
-                                {% endif %}>
-                                {{ detail.TAN }}
-                                    {% if detail.id == latest_detail_id %}
-                                        {% if data_TAN.color == 'green' %}
-                                            <span style="color: green;">⬆</span>
-                                        {% elif data_TAN.color == 'red' %}
-                                            <span style="color: red;">⬇</span>
-                                        {% endif %}
-                                {% endif %}
-                            </td>
-                            <td class="px-6 py-4"
-                                {% if detail.id == latest_detail_id %}
-                                    style ="color: {{ data_alkalinity.color }};"
-                                {% endif %}>
-                                {{ detail.alkalinity }}
-                                    {% if detail.id == latest_detail_id %}
-                                        {% if data_alkalinity.color == 'green' %}
-                                            <span style="color: green;">⬆</span>
-                                        {% elif data_alkalinity.color == 'red' %}
-                                            <span style="color: red;">⬇</span>
-                                        {% endif %}
-                                {% endif %}
-                            </td>
+            
+            <div class="bg-white p-4 rounded-xl shadow-md mb-6 border border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">แนวโน้มการเติบโต</h2>
+                <div class="bg-white rounded-lg overflow-hidden">
+                    <canvas id="pondChart" width="550" height="250" class="p-2"></canvas>
+                </div>
+            </div>
 
-                            <td class="px-6 py-4"
-                                {% if detail.id == latest_detail_id %}
-                                    style ="color: {{ data_nitrite.color }};"
-                                {% endif %}>
-                                {{ detail.nitrite }}
-                                {% if detail.id == latest_detail_id %}
-                                    {% if data_nitrite.color == 'green' %}
-                                        <span style="color: green;">⬆</span>
-                                    {% elif data_nitrite.color == 'red' %}
-                                        <span style="color: red;">⬇</span>
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-
-                            <td class="px-6 py-4"
-                                {% if detail.id == latest_detail_id %}
-                                    style ="color: {{ data_salinity.color }};"
-                                {% endif %}>
-                                {{ detail.salinity }}
+            
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg bg-white border border-gray-200">
+                <div class="sticky top-0 bg-white p-4 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800">ประวัติข้อมูลบ่อกุ้ง</h2>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 font-medium">สร้างเมื่อ</th>
+                                <th scope="col" class="px-6 py-4 font-medium">วันที่บันทึกข้อมูล</th>
+                                <th scope="col" class="px-6 py-4 font-medium">จำนวนกุ้ง</th>
+                                <th scope="col" class="px-6 py-4 font-medium">ออกซิเจนที่ละลายในน้ำ (มก./ลิตร)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">ความกระด้างของน้ำ (มก./ลิตร)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">ค่าพีเอชของน้ำ</th>
+                                <th scope="col" class="px-6 py-4 font-medium">อุณหภูมิของน้ำ (°C)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">TAN (มก./ลิตร)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">อัลคาลินิตี้ (มก./ลิตร)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">ไนไตรต์ (มก./ลิตร)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">ความเค็มของน้ำ (1/1000)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">ความใสของน้ำ (ซม.)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">น้ำหนักกุ้ง (กรัม)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">อัตราการเติบโต (ADG)</th>
+                                <th scope="col" class="px-6 py-4 font-medium" data-column="quality">คาดการณ์อัตราการเติบโต (ADG)</th>
+                                <th scope="col" class="px-6 py-4 font-medium" data-column="date">คาดการณ์อัตราการเติบโต (ADG)</th>
+                                <th scope="col" class="px-6 py-4 font-medium" data-column="weight">คาดการณ์อัตราการเติบโต (ADG)</th>                            
+                                <th scope="col" class="px-6 py-4 font-medium">คาดการณ์อัตราการรอด (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detail in pond_details %}
+                            <tr class="bg-white border-b hover:bg-blue-50 transition-colors duration-200">
+                                <td class="px-6 py-4">{{ detail.created_at | date:"j N Y "}}</td>
+                                <td class="px-6 py-4">{{ detail.total_date }}</td>
+                                <td class="px-6 py-4">{{ detail.shrimp_quantity }}</td>
+                                <td class="px-6 py-4 font-medium"
                                     {% if detail.id == latest_detail_id %}
-                                        {% if data_salinity.color == 'green' %}
-                                            <span style="color: green;">⬆</span>
-                                        {% elif data_salinity.color == 'red' %}
-                                            <span style="color: red;">⬇</span>
+                                        style ="color: {{ data_dissolvedOxygen.color }};"
+                                    {% endif %}>
+                                    {{ detail.pond_dissolvedOxygen }}
+                                    {% if detail.id == latest_detail_id %}
+                                        {% if data_dissolvedOxygen.color == 'green' %}
+                                            <span class="inline-block ml-1" style="color: green;">⬆</span>
+                                        {% elif data_dissolvedOxygen.color == 'red' %}
+                                            <span class="inline-block ml-1" style="color: red;">⬇</span>
                                         {% endif %}
-                                {% endif %}
-                            </td>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4">{{ detail.pond_waterHardness }}</td>
+                                <td class="px-6 py-4 font-medium"
+                                    {% if detail.id == latest_detail_id %}
+                                        style ="color: {{ data_pH.color }};"
+                                    {% endif %}>
+                                    {{ detail.pond_pH }}
+                                    {% if detail.id == latest_detail_id %}
+                                        {% if data_pH.color == 'green' %}
+                                            <span class="inline-block ml-1" style="color: green;">⬆</span>
+                                        {% elif data_pH.color == 'red' %}
+                                            <span class="inline-block ml-1" style="color: red;">⬇</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4">{{ detail.pond_temperature }}</td>
+                                <td class="px-6 py-4 font-medium"
+                                    {% if detail.id == latest_detail_id %}
+                                        style ="color: {{ data_TAN.color }};"
+                                    {% endif %}>
+                                    {{ detail.TAN }}
+                                        {% if detail.id == latest_detail_id %}
+                                            {% if data_TAN.color == 'green' %}
+                                                <span class="inline-block ml-1" style="color: green;">⬆</span>
+                                            {% elif data_TAN.color == 'red' %}
+                                                <span class="inline-block ml-1" style="color: red;">⬇</span>
+                                            {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 font-medium"
+                                    {% if detail.id == latest_detail_id %}
+                                        style ="color: {{ data_alkalinity.color }};"
+                                    {% endif %}>
+                                    {{ detail.alkalinity }}
+                                        {% if detail.id == latest_detail_id %}
+                                            {% if data_alkalinity.color == 'green' %}
+                                                <span class="inline-block ml-1" style="color: green;">⬆</span>
+                                            {% elif data_alkalinity.color == 'red' %}
+                                                <span class="inline-block ml-1" style="color: red;">⬇</span>
+                                            {% endif %}
+                                    {% endif %}
+                                </td>
 
-                            <td class="px-6 py-4">{{ detail.transparency }}</td>
-                            <td class="px-6 py-4">{{ detail.shrimp_weight }}</td>
-                            <td class="px-6 py-4">{{ detail.growth_rate|floatformat:2 }}</td>
-                            <td class="px-6 py-4" data-column="quality" >{{ detail.predicted_growth_rate|floatformat:2 }}{{MAE.MAE}}</td>
-                            <td class="px-6 py-4" data-column="date">{{ detail.predicted_growth_rate_date_base|floatformat:2 }}</td>
-                            <td class="px-6 py-4" data-column="weight">{{ detail.predicted_growth_rate_weight_base|floatformat:2 }}</td>
-                            <td class="px-6 py-4">{{ detail.survival_rate|floatformat:2 }}</td>
-                        </tr>
-                        
-                        {% empty %}
-                        <tr>
-                            <td colspan="14" class="px-6 py-4 text-center text-gray-500">ไม่มีข้อมูลบ่อกุ้งในขณะนี้</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <div>
-                    <canvas id="pondChart" width="550" height="150"></canvas>
+                                <td class="px-6 py-4 font-medium"
+                                    {% if detail.id == latest_detail_id %}
+                                        style ="color: {{ data_nitrite.color }};"
+                                    {% endif %}>
+                                    {{ detail.nitrite }}
+                                    {% if detail.id == latest_detail_id %}
+                                        {% if data_nitrite.color == 'green' %}
+                                            <span class="inline-block ml-1" style="color: green;">⬆</span>
+                                        {% elif data_nitrite.color == 'red' %}
+                                            <span class="inline-block ml-1" style="color: red;">⬇</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+
+                                <td class="px-6 py-4 font-medium"
+                                    {% if detail.id == latest_detail_id %}
+                                        style ="color: {{ data_salinity.color }};"
+                                    {% endif %}>
+                                    {{ detail.salinity }}
+                                        {% if detail.id == latest_detail_id %}
+                                            {% if data_salinity.color == 'green' %}
+                                                <span class="inline-block ml-1" style="color: green;">⬆</span>
+                                            {% elif data_salinity.color == 'red' %}
+                                                <span class="inline-block ml-1" style="color: red;">⬇</span>
+                                            {% endif %}
+                                    {% endif %}
+                                </td>
+
+                                <td class="px-6 py-4">{{ detail.transparency }}</td>
+                                <td class="px-6 py-4 font-medium">{{ detail.shrimp_weight }}</td>
+                                <td class="px-6 py-4 font-medium text-blue-600">{{ detail.growth_rate|floatformat:2 }}</td>
+                                <td class="px-6 py-4 font-medium text-green-600" data-column="quality">{{ detail.predicted_growth_rate|floatformat:2 }}{{MAE.MAE}}</td>
+                                <td class="px-6 py-4 font-medium text-green-600" data-column="date">{{ detail.predicted_growth_rate_date_base|floatformat:2 }}</td>
+                                <td class="px-6 py-4 font-medium text-green-600" data-column="weight">{{ detail.predicted_growth_rate_weight_base|floatformat:2 }}</td>
+                                <td class="px-6 py-4 font-medium text-purple-600">{{ detail.survival_rate|floatformat:2 }}</td>
+                            </tr>
+                            
+                            {% empty %}
+                            <tr>
+                                <td colspan="18" class="px-6 py-8 text-center text-gray-500 bg-gray-50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p class="text-lg font-medium">ไม่มีข้อมูลบ่อกุ้งในขณะนี้</p>
+                                    <p class="text-sm text-gray-500 mt-1">กรุณาเพิ่มข้อมูลโดยกดปุ่มบันทึกข้อมูล</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>                
             </div>
         </div>
@@ -303,9 +342,9 @@
                     <label for="food_quantity" class="block text-gray-700 text-sm font-bold mb-2  ">ปริมาณอาหาร
                         (กรัม)</label>
                     <input type="number" step="0.01" id="food_quantity" name="food_quantity"
-                        value="{{ detail.food_quantity }}"
+                        value="{{foodqura}}" 
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>
+                        required disabled>
                 </div>
                 <div class="mb-4">
                     <label for="total_date"
@@ -404,9 +443,9 @@
             {% for detail in pond_details %}
                 {
                     date: "{{ detail.total_date}}",
+                    predictedGrowthRateDate: {{ detail.total_date }} + 5,
                     growthRate: {{ detail.growth_rate|floatformat:2 }},
                     predictedGrowthRate: {{ detail.predicted_growth_rate|floatformat:2 }},
-                    shrimpWeight: {{ detail.shrimp_weight|default:0 }},
                     predictedGrowthRate_date_base: {{ detail.predicted_growth_rate_date_base|floatformat:2 }},
                     predictedGrowthRate_weight_base: {{ detail.predicted_growth_rate_weight_base|floatformat:2 }},
                 },
@@ -414,15 +453,20 @@
         ];
 
         pondDetails.sort((a, b) => parseFloat(a.date) - parseFloat(b.date));
+        
+        const allDates = [...new Set(
+            pondDetails.flatMap(item => [Number(item.date), Number(item.predictedGrowthRateDate)])
+        )].sort((a, b) => a - b);
+
+        console.log("All Dates:", allDates); 
 
         const labels = pondDetails.map(item => item.date);
         const growthRates = pondDetails.map(item => item.growthRate);
+        const predicted_date = pondDetails.map(item=>item.predicted_date);
         const predictedGrowthRates = pondDetails.map(item => item.predictedGrowthRate);
-        // predictedGrowthRates[0] = 0.00;
-
         const predictedGrowthRate_date_bases= pondDetails.map(item => item.predictedGrowthRate_date_base);
         const predictedGrowthRate_weight_base= pondDetails.map(item => item.predictedGrowthRate_weight_base);
-        //const shrimpWeights = pondDetails.map(item => item.shrimpWeight);
+        
 
         const ctx = document.getElementById('pondChart').getContext('2d');
         new Chart(ctx, {

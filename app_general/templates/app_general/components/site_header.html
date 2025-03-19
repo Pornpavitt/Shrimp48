@@ -1,151 +1,201 @@
-<header class="bg-gradient-to-r from-indigo-700 to-blue-500 p-4 " >
-    <div class="flex justify-center">
-        <div class="flex items-center space-x-4">
-            <a href="{% url 'home' %}" class="text-white mx-2">หน้าแรก</a>
-            <a href="{% url 'shrimp_species' %}" class="text-white mx-2">พันธ์ุกุ้ง</a>
-            <a href="{% url 'shrimp_diseases' %}" class="text-white mx-2">โรคกุ้ง</a>
-            <a href="{% url 'shrimp_food' %}" class="text-white mx-2">อาหารกุ้ง</a>
-            <!-- <a href="{% url 'howtouse' %}" class="text-white mx-2">วิธีการใช้งาน</a>
-            <a href="" class="text-white mx-2">บริการของเรา</a>
-            <a href="" class="text-white mx-2">คำถามที่พบบ่อย</a> -->
-        </div>
-        <div id="loginForm"
-            class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 hidden">
-            <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-                <div class="absolute top-0 right-0 mt-4 mr-4 z-10">
-                    <button onclick="hideLoginForm()" class="focus:outline-none">
-                        <img src="media\extra\x_icon.png" alt="Reject" class="w-6 h-6">
-                    </button>
-                </div>
-                <h2 class="text-3xl font-bold mb-6 text-center">เข้าสู่ระบบ</h2>
-                <form method="POST" action="{% url 'login' %}">
-                    {% csrf_token %}
-                    <div class="mb-4">
-                        <input id="username"
-                            class="block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                            type="text" name="username" placeholder="ชื่อผู้ใช้งาน" required autofocus />
-                    </div>
-                    <div class="mb-4">
-                        <input id="password"
-                            class="block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                            type="password" name="password" placeholder="รหัสผ่าน" required
-                            autocomplete="current-password" />
-                    </div>
-                    <div class="flex items-center mb-6">
-                        <input id="remember_me" type="checkbox" name="remember"
-                            class="h-4 w-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300" />
-                        <label for="remember_me" class="ml-2 text-sm text-gray-600">จดจำรหัสผ่าน</label>
-                        <a href="{% url 'password_reset' %}"
-                            class="ml-auto text-sm text-blue-600 hover:text-blue-800">ลืมรหัสผ่านหรือไม่?</a>
-                    </div>
-                    <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">เข้าสู่ระบบ</button>
-                    <div class="text-center mt-4">
-                        <p class="text-sm text-gray-600">ยังไม่มีบัญชีใช่ไหม? <a href="#" onclick="showRegisterForm()" 
-                            class="text-blue-600 hover:text-blue-800">สมัครสมาชิก</a></p>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div id="registerForm" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 hidden">
-            <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-                <div class="absolute top-0 right-0 mt-4 mr-4 z-10">
-                    <button onclick="hideRegisterForm()" class="focus:outline-none">
-                        <img src="media\extra\x_icon.png" alt="Reject" class="w-6 h-6">
-                    </button>
-                </div>
-                <h3 class="text-2xl font-semibold mb-4 text-center">สมัครสมาชิก</h3>
-                <form action="{% url 'register' %}" method="post" class="space-y-4">
-                    {% csrf_token %}
-                    <div class="flex flex-col">
-                        <input id="username" name="username" type="text" placeholder="ชื่อผู้ใช้งาน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
-                        <p class="text-red-500 text-sm mt-1">{{ form.username.errors }}</p>
-                    </div>
-                    <div class="flex flex-col">
-                        <input id="email" name="email" type="email" placeholder="อีเมล" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
-                        <p class="text-red-500 text-sm mt-1">{{ form.email.errors }}</p>
-                    </div>
-                    <div class="flex flex-col">
-                        <input id="password1" name="password1" type="password" placeholder="รหัสผ่าน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
-                        <p class="text-red-500 text-sm mt-1">{{ form.password1.errors }}</p>
-                    </div>
-                    <div class="flex flex-col">
-                        <input id="password2" name="password2" type="password" placeholder="ยืนยันรหัสผ่าน" required class="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
-                        <p class="text-red-500 text-sm mt-1">{{ form.password2.errors }}</p>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200">สมัครสมาชิก</button>
-                    <div class="text-center mt-4">
-                        <p class="text-sm text-gray-600">มีบัญชีอยู่แล้วใช่ไหม? <a href="#" onclick="showLoginForm()" 
-                            class="text-blue-600 hover:text-blue-800">เข้าสู่ระบบ</a></p>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="flex items-center">
-            {% if user.is_authenticated %}
-            <div class="relative inline-block text-left ml-4">
-                <div>
-                    <button type="button" class="bg-white py-2 px-4 border rounded-2xl" id="menu-button" aria-expanded="true" aria-haspopup="true">
-                        {{ user.username }}
-                    </button>
-                </div>
+<header class="bg-gradient-to-r from-indigo-600 to-blue-500 shadow-lg">
+    <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
             
-                <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" id="dropdown-menu">
-                    <div class="py-1" role="none">
-                        <a href="{% url 'userprofile' user.id %}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">โปรไฟล์ผู้ใช้</a>
-                        <a href="{% url 'logout' %}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">ออกจากระบบ</a>
+            <nav class="flex items-center space-x-1 md:space-x-6">
+                <a href="{% url 'home' %}" class="text-white font-medium hover:text-blue-100 transition duration-300 px-3 py-2 rounded-lg hover:bg-blue-700/30">หน้าแรก</a>
+                <a href="{% url 'shrimp_species' %}" class="text-white font-medium hover:text-blue-100 transition duration-300 px-3 py-2 rounded-lg hover:bg-blue-700/30">พันธ์ุกุ้ง</a>
+                <a href="{% url 'shrimp_diseases' %}" class="text-white font-medium hover:text-blue-100 transition duration-300 px-3 py-2 rounded-lg hover:bg-blue-700/30">โรคกุ้ง</a>
+                <a href="{% url 'shrimp_food' %}" class="text-white font-medium hover:text-blue-100 transition duration-300 px-3 py-2 rounded-lg hover:bg-blue-700/30">อาหารกุ้ง</a>
+                {%if user.is_superuser %}
+                    <a href="{% url 'dashboard' %}" class="text-white font-medium hover:text-blue-100 transition duration-300 px-3 py-2 rounded-lg hover:bg-blue-700/30">หน้าต่างผู้จัดการ</a>
+                {%else%}
+                    <a href=""></a>
+                {%endif%}
+            </nav>
+            
+            
+            <div class="flex items-center">
+                {% if user.is_authenticated %}
+                <div class="relative inline-block text-left">
+                    <button type="button" id="menu-button" class="flex items-center bg-white text-indigo-700 py-2 px-4 rounded-full shadow hover:shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50">
+                        <span class="mr-1">{{ user.username }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                
+                    <div id="dropdown-menu" class="origin-top-right absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                        <div class="py-1" role="none">
+                            <a href="{% url 'userprofile' user.id %}" class="text-gray-700 hover:bg-gray-100 flex items-center px-4 py-3 text-sm transition duration-300" role="menuitem" tabindex="-1" id="menu-item-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                โปรไฟล์ผู้ใช้
+                            </a>
+                            <a href="{% url 'logout' %}" class="text-gray-700 hover:bg-gray-100 flex items-center px-4 py-3 text-sm transition duration-300" role="menuitem" tabindex="-1" id="menu-item-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                ออกจากระบบ
+                            </a>
+                        </div>
                     </div>
-                </div>
-            </div>     
-
-            {% else %}
-            <a href="#" onclick="showLoginForm()" class="text-white hover:text-black ml-4">เข้าสู่ระบบ</a>
-            <!-- <a href="#" onclick="showRegisterForm()" class="text-white hover:text-black ml-4">สมัครสมาชิก</a>             -->
-            {% endif %}
+                </div>     
+                {% else %}
+                <button onclick="showLoginForm()" class="bg-white text-indigo-700 hover:bg-blue-50 font-medium px-4 py-2 rounded-full shadow hover:shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50">
+                    เข้าสู่ระบบ
+                </button>
+                {% endif %}
+            </div>
         </div>
     </div>
-    <script>
-        function showLoginForm() {
-            var loginForm = document.getElementById("loginForm");
-            var registerForm = document.getElementById("registerForm");
-            loginForm.classList.remove("hidden");
-            registerForm.classList.add("hidden");
-            window.location.href = "#";
-        }
-    
-        function hideLoginForm() {
-            var loginForm = document.getElementById("loginForm");
-            loginForm.classList.add("hidden");
-        }
-    
-        function showRegisterForm() {
-            var registerForm = document.getElementById("registerForm");
-            var loginForm = document.getElementById("loginForm");
-            registerForm.classList.remove("hidden");
-            loginForm.classList.add("hidden");
-            window.location.href = "#";
-        }
-    
-        function hideRegisterForm() {
-            var registerForm = document.getElementById("registerForm");
-            registerForm.classList.add("hidden");
-        }
-    
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const menuButton = document.getElementById('menu-button');
-            const dropdownMenu = document.getElementById('dropdown-menu');
-    
-            menuButton.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent the click event from propagating
-                dropdownMenu.classList.toggle('hidden');
-            });
-    
-            // Close the dropdown if clicked outside
-            window.addEventListener('click', (e) => {
-                if (!menuButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                    dropdownMenu.classList.add('hidden');
-                }
-            });
-        });
-    </script>
 </header>
+
+<div id="loginForm" class="fixed inset-0 bg-gray-900 bg-opacity-60 flex justify-center items-center z-50 hidden backdrop-blur-sm">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md relative animate-fadeIn">
+        <div class="absolute top-0 right-0 mt-4 mr-4 z-10">
+            <button onclick="hideLoginForm()" class="text-gray-500 hover:text-gray-700 focus:outline-none transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <h2 class="text-3xl font-bold mb-6 text-center text-indigo-700">เข้าสู่ระบบ</h2>
+        <form method="POST" action="{% url 'login' %}" class="space-y-4">
+            {% csrf_token %}
+            <div class="mb-4">
+                <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <input id="username" class="w-full focus:outline-none bg-transparent" type="text" name="username" placeholder="ชื่อผู้ใช้งาน" required autofocus />
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <input id="password" class="w-full focus:outline-none bg-transparent" type="password" name="password" placeholder="รหัสผ่าน" required autocomplete="current-password" />
+                </div>
+            </div>
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <input id="remember_me" type="checkbox" name="remember" class="h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300" />
+                    <label for="remember_me" class="ml-2 text-sm text-gray-600">จดจำรหัสผ่าน</label>
+                </div>
+                <a href="{% url 'password_reset' %}" class="text-sm text-indigo-600 hover:text-indigo-800 transition duration-300">ลืมรหัสผ่าน?</a>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-blue-600 transition duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+                เข้าสู่ระบบ
+            </button>
+            <div class="text-center mt-6">
+                <p class="text-sm text-gray-600">ยังไม่มีบัญชีใช่ไหม? <a href="#" onclick="showRegisterForm()" class="text-indigo-600 hover:text-indigo-800 font-medium transition duration-300">สมัครสมาชิก</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="registerForm" class="fixed inset-0 bg-gray-900 bg-opacity-60 flex justify-center items-center z-50 hidden backdrop-blur-sm">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md relative animate-fadeIn">
+        <div class="absolute top-0 right-0 mt-4 mr-4 z-10">
+            <button onclick="hideRegisterForm()" class="text-gray-500 hover:text-gray-700 focus:outline-none transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <h3 class="text-3xl font-bold mb-6 text-center text-indigo-700">สมัครสมาชิก</h3>
+        <form action="{% url 'register' %}" method="post" class="space-y-4">
+            {% csrf_token %}
+            <div class="flex flex-col space-y-1">
+                <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <input id="username" name="username" type="text" placeholder="ชื่อผู้ใช้งาน" required class="w-full focus:outline-none bg-transparent">
+                </div>
+                <p class="text-red-500 text-sm ml-1">{{ form.username.errors }}</p>
+            </div>
+            <div class="flex flex-col space-y-1">
+                <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <input id="email" name="email" type="email" placeholder="อีเมล" required class="w-full focus:outline-none bg-transparent">
+                </div>
+                <p class="text-red-500 text-sm ml-1">{{ form.email.errors }}</p>
+            </div>
+            <div class="flex flex-col space-y-1">
+                <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <input id="password1" name="password1" type="password" placeholder="รหัสผ่าน" required class="w-full focus:outline-none bg-transparent">
+                </div>
+                <p class="text-red-500 text-sm ml-1">{{ form.password1.errors }}</p>
+            </div>
+            <div class="flex flex-col space-y-1">
+                <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <input id="password2" name="password2" type="password" placeholder="ยืนยันรหัสผ่าน" required class="w-full focus:outline-none bg-transparent">
+                </div>
+                <p class="text-red-500 text-sm ml-1">{{ form.password2.errors }}</p>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-blue-600 transition duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 mt-6">
+                สมัครสมาชิก
+            </button>
+            <div class="text-center mt-6">
+                <p class="text-sm text-gray-600">มีบัญชีอยู่แล้วใช่ไหม? <a href="#" onclick="showLoginForm()" class="text-indigo-600 hover:text-indigo-800 font-medium transition duration-300">เข้าสู่ระบบ</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showLoginForm() {
+        var loginForm = document.getElementById("loginForm");
+        var registerForm = document.getElementById("registerForm");
+        loginForm.classList.remove("hidden");
+        registerForm.classList.add("hidden");
+        window.location.href = "#";
+    }
+
+    function hideLoginForm() {
+        var loginForm = document.getElementById("loginForm");
+        loginForm.classList.add("hidden");
+    }
+
+    function showRegisterForm() {
+        var registerForm = document.getElementById("registerForm");
+        var loginForm = document.getElementById("loginForm");
+        registerForm.classList.remove("hidden");
+        loginForm.classList.add("hidden");
+        window.location.href = "#";
+    }
+
+    function hideRegisterForm() {
+        var registerForm = document.getElementById("registerForm");
+        registerForm.classList.add("hidden");
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const menuButton = document.getElementById('menu-button');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        menuButton.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+
+        window.addEventListener('click', (e) => {
+            if (!menuButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+    });
+</script>

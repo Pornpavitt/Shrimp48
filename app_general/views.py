@@ -10,7 +10,10 @@ def home(request):
     species = ShrimpSpecies.objects.filter(allow_show = 1,deleted_at = None)
     food = ShrimpFoods.objects.filter(allow_show = 1,deleted_at = None)
     disease = ShrimpDiseases.objects.filter(allow_show = 1,deleted_at = None)
-    latest_date = ShrimpPrices.objects.filter(deleted_at=None).aggregate(latest_date=Max('date'))['latest_date']
+    latest_date = ShrimpPrices.objects.filter(
+        deleted_at=None, 
+        price_specie="กุ้งขาว (70 ตัว/กก.)" 
+    ).aggregate(latest_date=Max('date'))['latest_date']
     shrimpprice = ShrimpPrices.objects.filter(deleted_at=None, date=latest_date)
 
     user = request.user if request.user.is_authenticated else None
