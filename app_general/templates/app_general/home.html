@@ -45,6 +45,34 @@
 
 
 <div class="container mx-auto my-10">
+    {% if infor %}
+    <div class="mb-4">
+        <h3 class="text-3xl font-bold text-gray-800 dark:text-white ml-10">ประชาสัมพันธ์</h3>
+    </div>
+    <div class="w-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for information in infor %}
+        <div
+            class="col-span-1 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-auto my-10">
+            {% if information.information_image %}
+            <img class="rounded-t-lg object-contain h-48 w-full" src="{{ information.information_image.url }}"
+                alt="{{ information.information_name }} Image">
+            {% else %}
+            <div class="h-48 w-full bg-gray-200 rounded-t-lg flex items-center justify-center">
+                <p class="text-gray-500">No image available</p>
+            </div>
+            {% endif %}
+            <div class="p-5">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ information.information_name }}</h5>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ information.information_description }}</p>
+                
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<div class="container mx-auto my-10">
     {% if species %}
     <div class="mb-4">
         <h3 class="text-3xl font-bold text-gray-800 dark:text-white ml-10">พันธ์กุ้ง</h3>

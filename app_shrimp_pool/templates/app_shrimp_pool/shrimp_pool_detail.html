@@ -8,41 +8,205 @@
 
     <div class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
         <div class="p-6 space-y-8">
-            
-            <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl shadow-inner border border-blue-200">
-                <h2 class="text-xl font-semibold text-blue-800 mb-4">คุณภาพน้ำล่าสุด</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
-                        <h5 class="text-gray-500 text-sm font-medium mb-1">ออกซิเจนที่ละลายในน้ำ</h5>
-                        <p class="text-2xl font-bold text-blue-600">{{ data_dissolvedOxygen.value|floatformat:2 }}</p>
-                        <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
-                    </div>
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
-                        <h5 class="text-gray-500 text-sm font-medium mb-1">ค่า pH</h5>
-                        <p class="text-2xl font-bold text-blue-600">{{ data_pH.value|floatformat:2 }}</p>
-                    </div>
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
-                        <h5 class="text-gray-500 text-sm font-medium mb-1">ความเค็มของน้ำ</h5>
-                        <p class="text-2xl font-bold text-blue-600">{{ data_salinity.value|floatformat:2 }}</p>
-                        <p class="text-xs text-gray-500 mt-1">1/1000</p>
-                    </div>
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
-                        <h5 class="text-gray-500 text-sm font-medium mb-1">อัลคาลินิตี้</h5>
-                        <p class="text-2xl font-bold text-blue-600">{{ data_alkalinity.value|floatformat:2 }}</p>
-                        <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
-                    </div>
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
-                        <h5 class="text-gray-500 text-sm font-medium mb-1">ไนไตรต์</h5>
-                        <p class="text-2xl font-bold text-blue-600">{{ data_nitrite.value|floatformat:2 }}</p>
-                        <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
-                    </div>
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
-                        <h5 class="text-gray-500 text-sm font-medium mb-1">แอมโมเนียรวม</h5>
-                        <p class="text-2xl font-bold text-blue-600">{{ data_TAN.value|floatformat:2 }}</p>
-                        <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
-                    </div>
+        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-xl shadow-inner border border-blue-200">
+        <h2 class="text-xl font-semibold text-blue-800 mb-4">คุณภาพน้ำล่าสุด</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                <div class="flex justify-between items-center mb-1">
+                    <h5 class="text-gray-500 text-sm font-medium">ออกซิเจนที่ละลายในน้ำ</h5>
+                    <button onclick="doinfo()" id="do-info-button" class="text-gray-400 hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </button>
                 </div>
+                
+                <div class="flex items-center">
+                    <p class="text-2xl font-bold text-blue-600">{{ data_dissolvedOxygen.value|floatformat:2 }}</p>
+                    <span class="ml-2">
+                    {% if data_dissolvedOxygen.color == 'green' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    {% elif data_dissolvedOxygen.color == 'red' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                        <polyline points="6 12 18 12"></polyline>
+                        </svg>
+                    {% endif %}
+                    </span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
             </div>
+
+            
+            <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                <div class="flex justify-between items-center mb-1">
+                    <h5 class="text-gray-500 text-sm font-medium">ค่า pH</h5>
+                    <button onclick="pHinfo()" id="ph-info-button" class="text-gray-400 hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </button>
+                </div>
+            <!-- <h5 class="text-gray-500 text-sm font-medium mb-1">ค่า pH</h5> -->
+            <div class="flex items-center">
+                <p class="text-2xl font-bold text-blue-600">{{ data_pH.value|floatformat:2 }}</p>
+                <span class="ml-2">
+                {% if data_pH.color == 'green' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                {% elif data_pH.color == 'red' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                    <polyline points="6 12 18 12"></polyline>
+                    </svg>
+                {% endif %}
+                </span>
+            </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                <div class="flex justify-between items-center mb-1">
+                    <h5 class="text-gray-500 text-sm font-medium">ความเค็มของน้ำ</h5>
+                    <button onclick="saltinfo()" id="salt-info-button" class="text-gray-400 hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </button>
+                </div>
+            <!-- <h5 class="text-gray-500 text-sm font-medium mb-1">ความเค็มของน้ำ</h5> -->
+            <div class="flex items-center">
+                <p class="text-2xl font-bold text-blue-600">{{ data_salinity.value|floatformat:2 }}</p>
+                <span class="ml-2">
+                {% if data_salinity.color == 'green' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                {% elif data_salinity.color == 'red' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                    <polyline points="6 12 18 12"></polyline>
+                    </svg>
+                {% endif %}
+                </span>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">1/1000</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                <div class="flex justify-between items-center mb-1">
+                    <h5 class="text-gray-500 text-sm font-medium">อัลคาลินิตี้</h5>
+                    <button onclick="alkainfo()" id="alka-info-button" class="text-gray-400 hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </button>
+                </div>
+            <!-- <h5 class="text-gray-500 text-sm font-medium mb-1">อัลคาลินิตี้</h5> -->
+            <div class="flex items-center">
+                <p class="text-2xl font-bold text-blue-600">{{ data_alkalinity.value|floatformat:2 }}</p>
+                <span class="ml-2">
+                {% if data_alkalinity.color == 'green' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                {% elif data_alkalinity.color == 'red' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                    <polyline points="6 12 18 12"></polyline>
+                    </svg>
+                {% endif %}
+                </span>
+            </div>
+            
+            <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                <div class="flex justify-between items-center mb-1">
+                    <h5 class="text-gray-500 text-sm font-medium">ไนไตรท์</h5>
+                    <button onclick="nitinfo()" id="nit-info-button" class="text-gray-400 hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </button>
+                </div>
+            <!-- <h5 class="text-gray-500 text-sm font-medium mb-1">ไนไตรท์</h5> -->
+            <div class="flex items-center">
+                <p class="text-2xl font-bold text-blue-600">{{ data_nitrite.value|floatformat:2 }}</p>
+                <span class="ml-2">
+                {% if data_nitrite.color == 'green' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                {% elif data_nitrite.color == 'red' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                    <polyline points="6 12 18 12"></polyline>
+                    </svg>
+                {% endif %}
+                </span>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200 transform hover:-translate-y-1">
+                <div class="flex justify-between items-center mb-1">
+                    <h5 class="text-gray-500 text-sm font-medium">แอมโมเนียรวม</h5>
+                    <button onclick="amminfo()" id="amm-info-button" class="text-gray-400 hover:text-blue-500 transition-colors duration-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </button>
+                </div>
+            <!-- <h5 class="text-gray-500 text-sm font-medium mb-1">แอมโมเนียรวม</h5> -->
+            <div class="flex items-center">
+                <p class="text-2xl font-bold text-blue-600">{{ data_TAN.value|floatformat:2 }}</p>
+                <span class="ml-2">
+                {% if data_TAN.color == 'green' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                {% elif data_TAN.color == 'red' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                    <polyline points="6 12 18 12"></polyline>
+                    </svg>
+                {% endif %}
+                </span>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">มก./ลิตร</p>
+            </div>
+        </div>
+    </div>
 
             
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-md border border-gray-200">
@@ -104,6 +268,52 @@
                             </svg>
                         </div>
                     </div>
+                    <div class="flex items-center gap-4 p-3 rounded-lg bg-gray-50 border border-gray-100 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-xs text-gray-500 font-medium">การเติบโตล่าสุด</span>
+                            <div class="flex items-baseline">
+                                <span class="text-xl font-bold text-gray-800">{{last_growth.value|floatformat:2}}</span>
+                                <span class="ml-1 text-sm text-gray-600">ADG</span>
+                            </div>
+                        </div>
+                        
+                        <div class="h-8 w-px bg-gray-200 mx-1"></div>
+                        
+                        <div class="flex flex-col">
+                            <span class="text-xs text-gray-500 font-medium">การเติบโตปัจจุบัน</span>
+                            <div class="flex items-baseline">
+                                <span class="text-xl font-bold 
+                                    {% if data_growth.value > 0 %}text-emerald-600{% elif data_growth.value < 0 %}text-red-600{% else %}text-gray-800{% endif %}">
+                                    {{data_growth.value|floatformat:2}}
+                                </span>
+                                <span class="ml-1 text-sm text-gray-600">ADG</span>
+                            </div>
+                        </div>
+                        {% if data_growth.color == 'green' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        {% elif data_growth.color == 'red' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                            <polyline points="6 12 18 12"></polyline>
+                            </svg>
+                        {% endif %}
+                        
+                    </div>
+                    <div>
+                        {%if data_growth.color == 'red' %}
+                            <button onclick="showGrowthrates()"
+                            class="w-full md:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white
+                            font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2
+                            focus:ring-blue-500 focus:ring-opacity-50 shadow-md flex items-center justify-center">
+                            ปัจจัยที่ส่งผลต่อการเพิ่มอัตราการเจริญเติบโต
+                            </button>
+                        {%endif%}
+                    </div>
                 </div>
 
                 
@@ -145,9 +355,10 @@
                                 <th scope="col" class="px-6 py-4 font-medium">อุณหภูมิของน้ำ (°C)</th>
                                 <th scope="col" class="px-6 py-4 font-medium">TAN (มก./ลิตร)</th>
                                 <th scope="col" class="px-6 py-4 font-medium">อัลคาลินิตี้ (มก./ลิตร)</th>
-                                <th scope="col" class="px-6 py-4 font-medium">ไนไตรต์ (มก./ลิตร)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">ไนไตรท์ (มก./ลิตร)</th>
                                 <th scope="col" class="px-6 py-4 font-medium">ความเค็มของน้ำ (1/1000)</th>
                                 <th scope="col" class="px-6 py-4 font-medium">ความใสของน้ำ (ซม.)</th>
+                                <th scope="col" class="px-6 py-4 font-medium">ปริมาณอาหาร(กรัม)</th>
                                 <th scope="col" class="px-6 py-4 font-medium">น้ำหนักกุ้ง (กรัม)</th>
                                 <th scope="col" class="px-6 py-4 font-medium">อัตราการเติบโต (ADG)</th>
                                 <th scope="col" class="px-6 py-4 font-medium" data-column="quality">คาดการณ์อัตราการเติบโต (ADG)</th>
@@ -246,6 +457,7 @@
                                 </td>
 
                                 <td class="px-6 py-4">{{ detail.transparency }}</td>
+                                <td class="px-6 py-4 font-medium">{{ detail.food_quantity }}</td>
                                 <td class="px-6 py-4 font-medium">{{ detail.shrimp_weight }}</td>
                                 <td class="px-6 py-4 font-medium text-blue-600">{{ detail.growth_rate|floatformat:2 }}</td>
                                 <td class="px-6 py-4 font-medium text-green-600" data-column="quality">{{ detail.predicted_growth_rate|floatformat:2 }}{{MAE.MAE}}</td>
@@ -344,7 +556,7 @@
                     <input type="number" step="0.01" id="food_quantity" name="food_quantity"
                         value="{{foodqura}}" 
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required disabled>
+                        required >
                 </div>
                 <div class="mb-4">
                     <label for="total_date"
@@ -367,7 +579,7 @@
                         required>
                 </div>
                 <div class="mb-4">
-                    <label for="nitrite" class="block text-gray-700 text-sm font-bold mb-2  ">ไนไตรต์ (mg/L)</label>
+                    <label for="nitrite" class="block text-gray-700 text-sm font-bold mb-2  ">ไนไตรท์ (mg/L)</label>
                     <input type="number" step="0.01" id="nitrite" name="nitrite" value="{{ detail.nitrite }}"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required>
@@ -392,9 +604,286 @@
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">บันทึก</button>
         </form>
     </div>
+</div>
 
+<div id="showGrowthrates" class="fixed inset-0 bg-gray-900 bg-opacity-50 overflow-y-auto h-full w-full hidden transition-opacity duration-300 ease-in-out z-50">
+    <div class="relative top-20 mx-auto p-0 border-0 w-11/12 md:w-3/4 lg:w-2/3 shadow-2xl rounded-xl bg-white dark:bg-gray-800 transition-all duration-300 transform">
+        <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 id="modal_title" class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                ปัจจัยที่ส่งผลต่อการเพิ่มอัตราการเจริญเติบโต 3 ลำดับแรก
+            </h3>
+            <button onclick="hideGrowthrates()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-1">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div class="p-6 space-y-6 text-gray-700 dark:text-gray-300">
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold rounded-full w-8 h-8 flex items-center justify-center">1</div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">ออกซิเจนที่ละลายในน้ำ</h4>
+                    <p>เนื่องจากกุ้งต้องการออกซิเจนให้เหมาะสมในการเจริญเติบโต หากค่าออกซิเจนที่ละลายในน้ำต่ำควรทำการตีน้ำหรือใส่ออกซิเจนผง ในการเพิ่มค่าออกซิเจนที่ละลายในน้ำ</p>
+                </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 font-bold rounded-full w-8 h-8 flex items-center justify-center">2</div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">ค่า pH</h4>
+                    <p>เนื่องจากหากค่า pH มีค่าสูงหรือต่ำเกินไปจะส่งผลต่อพฤติกรรมของกุ้งทำให้กินอาหารได้น้อยลงหรือไม่กินเลย ทำให้อัตราการเจริญเติบโตลดลง หากค่า pH ต่ำเกินไปควรเติมปูนขาวเพื่อเพิ่มค่า pH หากค่า pH สูงเกินควรเติมจุลินทรีย์เพื่อลดค่า pH หลังจากค่า pH ลดลงแล้วให้ปรับสีน้ำต่อไปตามลำดับ</p>
+                </div>
+            </div>
+            
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 font-bold rounded-full w-8 h-8 flex items-center justify-center">3</div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">ความเค็มของน้ำ</h4>
+                    <p>เนื่องจากความเค็มของน้ำที่เปลี่ยนแปลงไปนั้นส่งผลต่อความเข้มข้นของแร่ธาตุในน้ำและการสูญเสียพลังงานที่ได้รับจากอาหารของกุ้ง หากค่าความเค็มสูงเกินจะส่งผลให้กุ้งต้องใช้พลังงานจากอาหารมากขึ้นในการปรับตัวให้เข้ากับสภาพความเค็ม ทำให้เหลือพลังงานที่จะนำไปใช้ในกิจกรรมการเจริญเติบโตลดลง หากค่าความเค็มต่ำเกินก็จะส่งผลให้กุ้งต้องใช้พลังงานจากอาหารมากขึ้นในการปรับตัวเช่นกัน และจะให้ความเข้มข้นของแร่ธาตุไม่เพียงพอส่งผลให้กุ้งขาดแร่ธาตุ หากค่าความเค็มสูงสามารถเติมน้ำจืดเพื่อลดค่าความเค็ม หากความเค็มต่ำสามารถเติมน้ำเค็มเพื่อเพิ่มค่าความเค็ม</p>
+                </div>
+            </div>
+        </div>
 
+        <div class="flex justify-end items-center p-6 border-t border-gray-200 dark:border-gray-700">
+            <button onclick="hideGrowthrates()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                ปิด
+            </button>
+        </div>
+    </div>      
+</div>
+
+<div id="showdoinfo" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden transition-all duration-300 ease-in-out z-50">
+    <div class="relative top-20 mx-auto p-0 w-11/12 md:w-3/4 lg:w-2/3 shadow-2xl rounded-2xl bg-white dark:bg-gray-800 transition-all duration-300 transform">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ออกซิเจนที่ละลายในน้ำ
+            </h3>
+            <button onclick="hidedoinfo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-1">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="p-6 max-h-[60vh] overflow-y-auto">
+            {% for wa in water %}
+                {% if wa.quality_name == "DO" %}
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-base">{{ wa.quality_description }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <button onclick="hidedoinfo()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                ปิด
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="showpHinfo" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden transition-all duration-300 ease-in-out z-50">
+    <div class="relative top-20 mx-auto p-0 w-11/12 md:w-3/4 lg:w-2/3 shadow-2xl rounded-2xl bg-white dark:bg-gray-800 transition-all duration-300 transform">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ค่า pH
+            </h3>
+            <button onclick="hidepHinfo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 rounded-full p-1">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="p-6 max-h-[60vh] overflow-y-auto">
+            {% for wa in water %}
+                {% if wa.quality_name == "pH" %}
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-base">{{ wa.quality_description }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <button onclick="hidepHinfo()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                ปิด
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="showsaltinfo" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden transition-all duration-300 ease-in-out z-50">
+    <div class="relative top-20 mx-auto p-0 w-11/12 md:w-3/4 lg:w-2/3 shadow-2xl rounded-2xl bg-white dark:bg-gray-800 transition-all duration-300 transform">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ความเค็มของน้ำ
+            </h3>
+            <button onclick="hidesaltinfo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-full p-1">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="p-6 max-h-[60vh] overflow-y-auto">
+            {% for wa in water %}
+                {% if wa.quality_name == "Salinity" %}
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-base">{{ wa.quality_description }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <button onclick="hidesaltinfo()" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">
+                ปิด
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="showalkainfo" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden transition-all duration-300 ease-in-out z-50">
+    <div class="relative top-20 mx-auto p-0 w-11/12 md:w-3/4 lg:w-2/3 shadow-2xl rounded-2xl bg-white dark:bg-gray-800 transition-all duration-300 transform">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                อัลคาลินิตี้
+            </h3>
+            <button onclick="hidealkainfo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-full p-1">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="p-6 max-h-[60vh] overflow-y-auto">
+            {% for wa in water %}
+                {% if wa.quality_name == "Alkalinity" %}
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-base">{{ wa.quality_description }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <button onclick="hidealkainfo()" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                ปิด
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="shownitinfo" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden transition-all duration-300 ease-in-out z-50">
+    <div class="relative top-20 mx-auto p-0 w-11/12 md:w-3/4 lg:w-2/3 shadow-2xl rounded-2xl bg-white dark:bg-gray-800 transition-all duration-300 transform">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ไนไตรท์
+            </h3>
+            <button onclick="hidenitinfo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full p-1">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="p-6 max-h-[60vh] overflow-y-auto">
+            {% for wa in water %}
+                {% if wa.quality_name == "Nitrite" %}
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-base">{{ wa.quality_description }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <button onclick="hidenitinfo()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                ปิด
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="showamminfo" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden transition-all duration-300 ease-in-out z-50">
+    <div class="relative top-20 mx-auto p-0 w-11/12 md:w-3/4 lg:w-2/3 shadow-2xl rounded-2xl bg-white dark:bg-gray-800 transition-all duration-300 transform">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ค่าแอมโมเนียรวม
+            </h3>
+            <button onclick="hideamminfo()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 rounded-full p-1">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="p-6 max-h-[60vh] overflow-y-auto">
+            {% for wa in water %}
+                {% if wa.quality_name == "ค่าแอมโมเนียรวม" %}
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-base">{{ wa.quality_description }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <button onclick="hideamminfo()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                ปิด
+            </button>
+        </div>
+    </div>
+</div>
 <script>
+        function amminfo() {
+            document.getElementById('showamminfo').classList.remove('hidden');
+        }
+
+        function hideamminfo() {
+            document.getElementById('showamminfo').classList.add('hidden');
+        }
+        function nitinfo() {
+            document.getElementById('shownitinfo').classList.remove('hidden');
+        }
+
+        function hidenitinfo() {
+            document.getElementById('shownitinfo').classList.add('hidden');
+        }
+        function alkainfo() {
+            document.getElementById('showalkainfo').classList.remove('hidden');
+        }
+
+        function hidealkainfo() {
+            document.getElementById('showalkainfo').classList.add('hidden');
+        }
+        function saltinfo() {
+            document.getElementById('showsaltinfo').classList.remove('hidden');
+        }
+
+        function hidesaltinfo() {
+            document.getElementById('showsaltinfo').classList.add('hidden');
+        }
+        function pHinfo() {
+            document.getElementById('showpHinfo').classList.remove('hidden');
+        }
+
+        function hidepHinfo() {
+            document.getElementById('showpHinfo').classList.add('hidden');
+        }
+        function doinfo() {
+            document.getElementById('showdoinfo').classList.remove('hidden');
+        }
+
+        function hidedoinfo() {
+            document.getElementById('showdoinfo').classList.add('hidden');
+        }
+
+        function showGrowthrates() {
+            document.getElementById('showGrowthrates').classList.remove('hidden');
+        }
+
+        function hideGrowthrates() {
+            document.getElementById('showGrowthrates').classList.add('hidden');
+        }
+        
         function showEditShrimpForm(pondId, pondName) {
             document.getElementById('pond_id').value = pondId;
             document.getElementById('modal_title').textContent = 'รายละเอียดบ่อกุ้ง: ' + pondName;

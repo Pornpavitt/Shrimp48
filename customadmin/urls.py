@@ -3,7 +3,7 @@ from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.contrib.auth import views as auth_views
 urlpatterns = [
     # path('', views.admin_login , name='login'),
     path('dashboard/', views.dashboard , name='dashboard'),
@@ -52,7 +52,9 @@ urlpatterns = [
     path('water_quality/', views.Water_quality, name="water_quality"),
     path('add_water_quality/', views.add_water_quality, name="add_water_quality"),
     path('edit_water_quality/<water_id>', views.edit_water_quality, name='edit_water_quality'),
-    path('delete_water_quality/<water_id>', views.delete_water_quality, name="delete_water_quality"),
+    # path('delete_water_quality/<water_id>', views.delete_water_quality, name="delete_water_quality"),
+    
+    path('logout/', auth_views.LogoutView.as_view(), name='logout')
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

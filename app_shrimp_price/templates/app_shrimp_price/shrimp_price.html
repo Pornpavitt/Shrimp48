@@ -133,92 +133,117 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // ตรวจสอบว่ามีข้อมูล
-        console.log('Dates:', {{ shrimp_dates| safe }});
-    console.log('Min Prices:', {{ shrimp_prices_min| safe }});
-    console.log('Max Prices:', {{ shrimp_prices_max| safe }});
-    console.log('Predict Prices:', {{ shrimp_prices_predict| safe }});
-
+document.addEventListener('DOMContentLoaded', function () {
+    // ดึงข้อมูลจาก template
     const shrimpDates = {{ shrimp_dates| safe }} || [];
     const shrimpPricesMin = {{ shrimp_prices_min| safe }} || [];
     const shrimpPricesMax = {{ shrimp_prices_max| safe }} || [];
     const pricePredict = {{ shrimp_prices_predict| safe }} || [];
-
-    // ตรวจสอบว่า canvas element มีอยู่จริง
-    const canvas = document.getElementById('shrimpPriceChart');
+    
+    // ค้นหา canvas element โดยใช้ query selector แทนการระบุ ID โดยตรง
+    // จะใช้ canvas element แรกที่พบในหน้า
+    const canvas = document.querySelector('canvas');
+    
+    // ตรวจสอบว่าพบ canvas หรือไม่
     if (!canvas) {
-        console.error('Canvas element not found');
+        console.error('ไม่พบ canvas element ในหน้า');
         return;
     }
-
+    
+    console.log('พบ canvas element: ', canvas);
+    
     const ctx = canvas.getContext('2d');
     if (!ctx) {
-        console.error('Could not get canvas context');
+        console.error('ไม่สามารถรับ canvas context ได้');
         return;
     }
-
+    
+    console.log('ข้อมูลที่โหลด:', {
+        dates: shrimpDates.length,
+        min: shrimpPricesMin.length,
+        max: shrimpPricesMax.length,
+        predict: pricePredict.length
+    });
+    
+    // สร้างชุดข้อมูลทำนาย
+    const adjustedPredict = Array(shrimpDates.length).fill(null);
+    
+    // สมมติให้ข้อมูลทำนายอยู่ต่อจากข้อมูลจริงล่าสุด
+    let lastDataIndex = Math.max(0, shrimpPricesMin.length - 1);
+    
+    // กำหนดวิธีการจัดวางข้อมูลทำนาย
+    for (let i = 0; i < pricePredict.length; i++) {
+        // ถ้าเป็นการทำนายในอนาคต (ต่อจากข้อมูลจริง)
+        if (lastDataIndex + 1 + i < adjustedPredict.length) {
+            adjustedPredict[lastDataIndex + 1 + i] = pricePredict[i];
+        }
+    }
+    
     // สร้างกราฟ
-    const shrimpPriceChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: shrimpDates,
-            datasets: [
-                {
-                    label: 'ราคาต่ำสุด',
-                    data: shrimpPricesMin,
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true
-                },
-                {
-                    label: 'ราคาสูงสุด',
-                    data: shrimpPricesMax,
-                    borderColor: 'rgba(16, 185, 129, 1)',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true
-                },
-                {
-                    label: 'ราคาทำนาย',
-                    data: pricePredict,
-                    borderColor: 'rgba(239, 68, 68, 1)',
-                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true,
-                    borderDash: [5, 5]
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'top',
-                }
+    try {
+        const shrimpPriceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: shrimpDates,
+                datasets: [
+                    {
+                        label: 'ราคาต่ำสุด',
+                        data: shrimpPricesMin,
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'ราคาสูงสุด',
+                        data: shrimpPricesMax,
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'ราคาทำนาย',
+                        data: adjustedPredict,
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        borderDash: [5, 5],
+                        spanGaps: true
+                    }
+                ]
             },
-            scales: {
-                x: {
-                    grid: {
-                        display: false
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
                     }
                 },
-                y: {
-                    beginAtZero: false,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
                     }
                 }
             }
-        }
-    });
-
-    console.log('Chart created:', shrimpPriceChart);
+        });
+        console.log('สร้างกราฟสำเร็จ');
+    } catch (error) {
+        console.error('เกิดข้อผิดพลาดในการสร้างกราฟ:', error);
+    }
 });
 </script>
 {% endblock %}

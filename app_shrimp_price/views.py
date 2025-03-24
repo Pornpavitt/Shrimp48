@@ -106,11 +106,17 @@ def shrimpprice(request):
                 error_message = "วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด"
             else:
                 shrimp_prices = ShrimpPrices.objects.filter(date__range=[start_datetime, end_datetime])
-            for price in shrimp_prices:
-                shrimp_dates.append(price.date.strftime('%Y-%m-%d'))
-                shrimp_prices_min.append(float(price.price_min) if price.price_min else 0)
-                shrimp_prices_max.append(float(price.price_max) if price.price_max else 0)
-                shrimp_prices_predict.append(float(price.predict) if price.predict else 0)
+                for price in shrimp_prices:
+                    shrimp_dates.append(price.date.strftime('%Y-%m-%d'))
+                    
+                    if price.price_min is not None:
+                        shrimp_prices_min.append(float(price.price_min))
+
+                    if price.price_max is not None:
+                        shrimp_prices_max.append(float(price.price_max))
+
+                    if price.predict is not None:
+                        shrimp_prices_predict.append(float(price.predict))
         except ValueError:
             error_message = "รูปแบบวันที่ไม่ถูกต้อง"
             shrimp_prices = ShrimpPrices.objects.none()

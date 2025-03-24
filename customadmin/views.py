@@ -510,9 +510,3 @@ def edit_water_quality(request, water_id):
         return render(request, 'customadmin/edit_water_quality.html', {"Water_quality": Water_quality})
 
 
-@staff_member_required
-def delete_water_quality(request, water_id):
-    Water_quality = water_quality.objects.get(id=water_id)
-    Water_quality.deleted_at = datetime.now()
-    Water_quality.save()
-    return redirect('water_quality')
