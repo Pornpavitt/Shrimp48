@@ -157,11 +157,12 @@ def cal_food (w,q):
 def pool_detail(request, pond_id):
     pond = get_object_or_404(ShrimpPonds, id=pond_id)
     pond_details = ShrimpPondsDetail.objects.filter(pond_id=pond_id).order_by('-created_at')
-
+    water = water_quality.objects.filter(deleted_at=None)
     predicted_growth_rate_dateG = None
     predicted_growth_rate_weightG = None
     predicted_survival_rate = None
     predicted_growth_rate = None
+    foodqura=None
     
     details = ShrimpPondsDetail.objects.filter(pond_id=pond_id).order_by('-created_at')[:2]
     if len(details) > 0:
@@ -207,8 +208,15 @@ def pool_detail(request, pond_id):
             'value': first_detail.TAN - second_detail.TAN if second_detail else 0,
             'color': get_color(first_detail.TAN, second_detail.TAN) if second_detail else 'gray'
         }
+        data_growth = {
+            'value': first_detail.growth_rate - second_detail.growth_rate if second_detail else 0,
+            'color': get_color(first_detail.growth_rate,second_detail.growth_rate) if second_detail else 'gray'
+        }
+        last_growth = {
+            'value' : first_detail.growth_rate if first_detail else 0,
+        }
     else:
-        data_dissolvedOxygen = data_pH = data_salinity = data_alkalinity = data_nitrite = data_TAN = None
+        data_dissolvedOxygen = data_pH = data_salinity = data_alkalinity = data_nitrite = data_TAN = data_growth = last_growth = None
 
     if request.method == 'POST':
         if 'create_shrimp_pool_detail' in request.POST:
@@ -315,7 +323,10 @@ def pool_detail(request, pond_id):
         'data_alkalinity': data_alkalinity,
         'data_nitrite': data_nitrite,
         'data_TAN': data_TAN,
-        'foodqura':foodqura
+        'foodqura':foodqura,
+        'data_growth':data_growth,
+        'water':water,
+        'last_growth':last_growth
         
 
     }

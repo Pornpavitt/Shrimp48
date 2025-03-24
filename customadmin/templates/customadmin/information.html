@@ -40,7 +40,14 @@
                     <td class="px-6 py-4 whitespace-nowrap">กำลังแสดงอยู่ในหน้าเว็ปไซต์</td>
                     {% endif %}
                     <td class="px-6 py-4 whitespace-nowrap">{{ informations.information_name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ informations.information_description}}</td>
+                    <td class="px-6 py-4 max-w-xs truncate">
+                        <div class="tooltip relative">
+                            <span class="line-clamp-2">{{ informations.information_description }}</span>
+                            <div class="tooltip-text hidden absolute bg-gray-800 text-white text-sm rounded p-2 z-10 w-64 left-0 mt-1">
+                                {{ informations.information_description }}
+                            </div>
+                        </div>
+                    </td>
                     {% if informations.information_image %}
                     <td class="px-6 py-4 whitespace-nowrap w-2"><img src="{{ informations.information_image.url }}"
                             alt="Food Image" class="object-fill"></td>

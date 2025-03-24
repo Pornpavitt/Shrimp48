@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http.response import HttpResponse,HttpResponseRedirect
-from app_model.models import ShrimpDiseases,ShrimpFoods,ShrimpSpecies,ShrimpPrices,User
+from app_model.models import ShrimpDiseases,ShrimpFoods,ShrimpSpecies,ShrimpPrices,User,Information
 from django.db.models import Max
 from app_users.forms import RegisterForm
 from django.urls import reverse
@@ -10,6 +10,7 @@ def home(request):
     species = ShrimpSpecies.objects.filter(allow_show = 1,deleted_at = None)
     food = ShrimpFoods.objects.filter(allow_show = 1,deleted_at = None)
     disease = ShrimpDiseases.objects.filter(allow_show = 1,deleted_at = None)
+    infor = Information.objects.filter(allow_show = 1,deleted_at = None)
     latest_date = ShrimpPrices.objects.filter(
         deleted_at=None, 
         price_specie="กุ้งขาว (70 ตัว/กก.)" 
@@ -25,7 +26,7 @@ def home(request):
             return HttpResponseRedirect(reverse("home"))
     else:
         form = RegisterForm()
-    context = {'species':species, 'food':food, 'disease':disease, 'shrimpprice' :shrimpprice,'user':user,'form' : form}
+    context = {'species':species, 'food':food, 'disease':disease, 'shrimpprice' :shrimpprice,'user':user,'form' : form,'infor' : infor}
     
     return render(request, 'app_general/home.html',context)
 
